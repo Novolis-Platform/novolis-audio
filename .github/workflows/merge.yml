@@ -1,0 +1,17 @@
+name: Merge
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'build/version.json'
+      - 'build/version.props'
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate version files
+        run: test -f build/version.json && test -f build/version.props

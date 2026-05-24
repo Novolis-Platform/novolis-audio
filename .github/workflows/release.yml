@@ -1,0 +1,11 @@
+name: Release
+on:
+  release:
+    types: [published]
+jobs:
+  ci:
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-release-publish.yml@main
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write

@@ -1,0 +1,9 @@
+name: Feature request
+description: Suggest an idea
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What would you like?
+    validations:
+      required: true

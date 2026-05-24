@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)Novolis.TemplateDotnet.Documentation.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)Novolis.TemplateDotnet.Documentation.props')" />
+  <PropertyGroup Label="Novolis API documentation (fallback without governance sibling)">
+    <GenerateDocumentationFile Condition="'$(GenerateDocumentationFile)' == ''">true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>
