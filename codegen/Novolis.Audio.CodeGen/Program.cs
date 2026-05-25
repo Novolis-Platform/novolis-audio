@@ -17,7 +17,7 @@ internal static class Program
         {
             return cmd switch
             {
-                "generate" => new AudioCodegenPipeline(repoRoot).GenerateAll(),
+                "generate" => Generate(repoRoot),
                 "verify" => AudioManifestVerifier.Verify(repoRoot),
                 _ => Unknown(cmd),
             };
@@ -27,6 +27,16 @@ internal static class Program
             Console.Error.WriteLine(ex.Message);
             return 1;
         }
+    }
+
+    private static int Generate(string repoRoot)
+    {
+        if (VoiceModelVerifier.Verify(repoRoot) != 0)
+            return 1;
+
+        var pipeline = new AudioCodegenPipeline(repoRoot);
+        pipeline.GenerateAllVoiceAndBindings();
+        return 0;
     }
 
     private static int Unknown(string cmd)
@@ -42,7 +52,7 @@ internal static class Program
             Novolis.Audio — miniaudio / novolis_audio Roslyn codegen
 
             Commands:
-              generate  — emit interop + façades
+              generate  — emit interop + façades + voice model catalog
               verify    — fail if manifest symbols missing from novolis_audio.h
 
             Maintainer pipeline: dotnet run --project codegen/Novolis.Audio.Pipeline -- run maintainer

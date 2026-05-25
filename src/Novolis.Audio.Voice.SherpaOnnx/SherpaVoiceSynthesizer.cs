@@ -18,7 +18,7 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var paths = SherpaVoiceModelPaths.TryResolve(options.ModelDirectory);
+        var paths = SherpaVoiceModelPaths.TryResolve(options.ModelDirectory, options.ModelProfile);
         if (paths is null)
             return _fallback.SynthesizeAsync(text, options, cancellationToken);
 

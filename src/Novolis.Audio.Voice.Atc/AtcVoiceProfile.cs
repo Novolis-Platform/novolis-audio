@@ -18,6 +18,7 @@ public static class AtcVoiceProfile
             v.Synthesis = new VoiceSynthesisOptions
             {
                 Profile = Profile,
+                ModelProfile = VoiceModelCatalog.DefaultProfile,
                 SpeakingRate = options.SpeakingRate,
             };
             if (options.UsePhraseology)

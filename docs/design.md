@@ -31,6 +31,14 @@ Stable C exports in `codegen/vendor/novolis_audio/include/novolis_audio.h`. The 
 3. Run `dotnet run --project codegen/Novolis.Audio.Pipeline -- run generate`.
 4. Commit manifests + `*.g.cs`.
 
+## Voice model catalog (manifest + codegen)
+
+Bundled Piper models are **not** listed file-by-file in codegen. [`NovolisAudioVoiceModelsManifest.cs`](../codegen/Novolis.Audio.Manifests/NovolisAudioVoiceModelsManifest.cs) declares profile ids, repo folders, required top-level files, and sample rate; the pipeline verifies `models/` and emits [`VoiceModelCatalog.g.cs`](../src/Novolis.Audio.Voice.Abstractions/VoiceModelCatalog.g.cs) (`VoiceModelProfile`, `VoiceModelEngine`, `BundledVoiceModel`, `VoiceModelCatalog`).
+
+```bash
+dotnet run --project codegen/Novolis.Audio.Pipeline -- run generate
+```
+
 ## Voice / PCM pipeline (separate from game SFX)
 
 Game playback (`Novolis.Audio` / miniaudio) and voice/TTS use **different package families**:

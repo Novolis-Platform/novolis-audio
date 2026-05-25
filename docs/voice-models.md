@@ -4,6 +4,8 @@ Novolis voice uses [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx) offline 
 
 ## Bundled model (in this repo)
 
+Profile metadata is declared in [`NovolisAudioVoiceModelsManifest.cs`](../codegen/Novolis.Audio.Manifests/NovolisAudioVoiceModelsManifest.cs) and emitted as [`VoiceModelCatalog.g.cs`](../src/Novolis.Audio.Voice.Abstractions/VoiceModelCatalog.g.cs) (`VoiceModelProfile`, `VoiceModelEngine`, `BundledVoiceModel`).
+
 **Piper** `en-us-piper-amy` lives under [`models/en-us-piper-amy/`](../models/en-us-piper-amy/) (Git LFS for `*.onnx`). Clone with LFS:
 
 ```bash

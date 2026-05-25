@@ -18,6 +18,17 @@ public class VoiceStackTests
     }
 
     [Test]
+    public async Task VoiceModelCatalog_lists_bundled_en_us_piper_amy()
+    {
+        await Assert.That(VoiceModelCatalog.TryGet(VoiceModelCatalog.EnUsPiperAmy, out var model)).IsTrue();
+        await Assert.That(model.Profile.Id).IsEqualTo("en-us-piper-amy");
+        await Assert.That(model.RepoFolder).IsEqualTo("en-us-piper-amy");
+        await Assert.That(model.OnnxFileName).IsEqualTo("en_US-amy-low.onnx");
+        await Assert.That(model.SampleRateHz).IsEqualTo(16_000);
+        await Assert.That(model.Engine).IsEqualTo(VoiceModelEngine.SherpaOnnxVitsPiper);
+    }
+
+    [Test]
     public async Task Voice_projects_do_not_reference_miniaudio()
     {
         var forbidden = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -48,7 +59,7 @@ public class VoiceStackTests
     [Test]
     public async Task Sherpa_synthesizer_produces_audio_when_models_present()
     {
-        var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null);
+        var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null, VoiceModelCatalog.EnUsPiperAmy);
         if (paths is null)
             return;
 
