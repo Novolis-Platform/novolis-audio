@@ -21,7 +21,7 @@
   <ItemGroup>
     <Content Include="..\..\models\en-us-piper-amy\**\*"
              Condition="Exists('..\..\models\en-us-piper-amy\tokens.txt')">
-      <Link>models\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>models\$(BundledModelFolderName)\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>

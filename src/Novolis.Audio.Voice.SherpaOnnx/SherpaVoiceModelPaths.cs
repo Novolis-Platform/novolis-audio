@@ -49,6 +49,9 @@ public sealed class SherpaVoiceModelPaths
         if (!File.Exists(tokens))
             return null;
 
+        if (!VoiceModelMaterialization.IsValidSherpaModelRoot(root))
+            return null;
+
         var onnx = Directory.GetFiles(root, "*.onnx")
             .Where(VoiceModelMaterialization.IsMaterializedOnnx)
             .OrderBy(static f => f, StringComparer.OrdinalIgnoreCase)

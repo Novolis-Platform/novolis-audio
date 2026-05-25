@@ -19,6 +19,23 @@ public static class VoiceModelMaterialization
         return new FileInfo(path).Length >= MinOnnxBytes;
     }
 
+    /// <summary>True when <paramref name="modelRoot"/> has tokens, materialized ONNX, and espeak-ng-data.</summary>
+    public static bool IsValidSherpaModelRoot(string modelRoot)
+    {
+        if (!Directory.Exists(modelRoot))
+            return false;
+
+        if (!File.Exists(Path.Combine(modelRoot, "tokens.txt")))
+            return false;
+
+        var onnx = Directory.GetFiles(modelRoot, "*.onnx").FirstOrDefault(IsMaterializedOnnx);
+        if (onnx is null)
+            return false;
+
+        var phontab = Path.Combine(modelRoot, "espeak-ng-data", "phontab");
+        return File.Exists(phontab);
+    }
+
     /// <summary>True when the file content is a Git LFS pointer (checkout without <c>lfs: true</c>).</summary>
     public static bool IsGitLfsPointer(string path)
     {
