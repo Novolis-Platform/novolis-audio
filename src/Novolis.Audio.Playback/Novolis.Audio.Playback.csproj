@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Playback</RootNamespace>
+    <AssemblyName>Novolis.Audio.Playback</AssemblyName>
+    <PackageId>Novolis.Audio.Playback</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>PCM playback abstractions (decoupled from miniaudio runtime).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Abstractions</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Abstractions</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Text-to-speech contracts and null synthesizer for CI.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -6,7 +6,9 @@ Guidance for AI agents in **novolis-audio**.
 
 Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Universal API in `Novolis.Audio.Abstractions`; native playback via `Novolis.Audio.Runtime`.
 
-**Consumer entry:** `Novolis.Audio` or `MiniaudioAudioEngine` + abstractions.
+**Consumer entry (game SFX):** `Novolis.Audio` or `MiniaudioAudioEngine` + abstractions.
+
+**Consumer entry (voice/TTS):** `Novolis.Audio.Voice` (+ optional `Novolis.Audio.Voice.Atc`).
 
 ## Layout
 
@@ -16,6 +18,8 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 | `codegen/Novolis.Audio.Pipeline/` | Maintainer steps (vendor, native, codegen) |
 | `src/Novolis.Audio.Bindings/Interop/*.g.cs` | Generated — do not hand-edit |
 | `src/Novolis.Audio.Runtime/**/**.g.cs` | Generated façades |
+| `src/Novolis.Audio.Core/` | PCM + WAV |
+| `src/Novolis.Audio.Voice*/` | TTS facade, phraseology, Sherpa stub, ATC profile |
 | `codegen/native/novolis-audio-platform/` | CMake → `novolis_audio` DLL |
 
 ## Commands

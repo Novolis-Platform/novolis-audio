@@ -14,7 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Novolis.Audio\Novolis.Audio.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Abstractions\Novolis.Audio.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Phraseology\Novolis.Audio.Voice.Phraseology.csproj" />
   </ItemGroup>
 
 </Project>

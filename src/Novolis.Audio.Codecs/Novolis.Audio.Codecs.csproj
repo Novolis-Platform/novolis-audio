@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Codecs</RootNamespace>
+    <AssemblyName>Novolis.Audio.Codecs</AssemblyName>
+    <PackageId>Novolis.Audio.Codecs</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Audio codec contracts; WAV encoding lives in Core.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

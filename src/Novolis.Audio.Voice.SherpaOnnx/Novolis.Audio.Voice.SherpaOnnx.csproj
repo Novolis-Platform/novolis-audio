@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.SherpaOnnx</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.SherpaOnnx</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.SherpaOnnx</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Sherpa-ONNX voice synthesizer (stub until models are wired).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Phraseology</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Phraseology</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Phraseology</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>ICAO-style phraseology normalization for voice pipelines.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
