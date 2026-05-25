@@ -37,16 +37,12 @@
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
 
-  <!-- NuGet pack treats extensionless files as directories; omit %(Extension) in PackagePath. -->
+  <!-- NuGet pack treats extensionless files as directories; omit trailing %(Extension). -->
   <Target Name="_FixExtensionlessVoiceModelPackagePaths" BeforeTargets="_GetPackageFiles">
     <ItemGroup>
-      <_VoicePackNone Include="@(None)" Condition="'%(PackageCopyToOutput)' == 'true'" />
-      <None Remove="@(_VoicePackNone)" />
-      <None Include="@(_VoicePackNone)">
-        <Pack>true</Pack>
-        <PackageCopyToOutput>true</PackageCopyToOutput>
-        <PackagePath Condition="'%(Extension)' != ''">contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
-        <PackagePath Condition="'%(Extension)' == ''">contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)</PackagePath>
+      <None Update="@(None)"
+                Condition="$([System.String]::Copy('%(Identity)').Contains('models\$(BundledModelFolderName)')) and '%(Extension)' == ''">
+        <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)</PackagePath>
       </None>
     </ItemGroup>
   </Target>
