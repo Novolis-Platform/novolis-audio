@@ -14,5 +14,6 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
     <PackageVersion Include="NAudio" Version="2.3.0" />
+    <PackageVersion Include="org.k2fsa.sherpa.onnx" Version="1.12.40" />
   </ItemGroup>
 </Project>

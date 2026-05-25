@@ -1,6 +1,8 @@
 bin/
 obj/
 artifacts/
+models/*.tar.bz2
+models/_extract/
 .vs/
 *.user
 *.suo

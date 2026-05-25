@@ -6,6 +6,7 @@ namespace Novolis.Audio.Voice.Atc;
 /// <summary>Preconfigured ATC voice profile.</summary>
 public static class AtcVoiceProfile
 {
+    /// <summary>ATC voice profile id.</summary>
     public static readonly VoiceProfile Profile = new("atc");
 
     /// <summary>Applies ATC defaults to a <see cref="VoiceServiceBuilder"/>.</summary>
@@ -17,6 +18,7 @@ public static class AtcVoiceProfile
             v.Synthesis = new VoiceSynthesisOptions
             {
                 Profile = Profile,
+                ModelProfile = VoiceModelCatalog.DefaultProfile,
                 SpeakingRate = options.SpeakingRate,
             };
             if (options.UsePhraseology)

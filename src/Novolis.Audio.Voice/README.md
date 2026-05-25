@@ -35,7 +35,7 @@ services.AddNovolisVoice();
 | Package | When to use |
 |---------|-------------|
 | `Novolis.Audio.Voice.Atc` | ATC phraseology preset |
-| `Novolis.Audio.Voice.SherpaOnnx` | Sherpa synthesizer stub |
+| `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio` | Game SFX (miniaudio) — separate stack |
 
 ## Support

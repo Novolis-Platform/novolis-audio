@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Novolis.Audio.Core;
 using Novolis.Audio.Effects;
 using Novolis.Audio.Playback;
+using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Voice;
 
@@ -9,28 +10,27 @@ namespace Novolis.Audio.Voice;
 public static class VoiceServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers <see cref="IVoiceService"/> with null synthesizer, identity effects, and null playback.
+    /// Registers <see cref="IVoiceService"/> with Sherpa synthesizer (silent fallback without models),
+    /// identity effects, and NAudio playback.
     /// </summary>
     public static IServiceCollection AddNovolisVoice(this IServiceCollection services)
     {
-        services.AddSingleton<IVoiceSynthesizer, NullVoiceSynthesizer>();
+        services.AddSingleton<IVoiceSynthesizer, SherpaVoiceSynthesizer>();
         services.AddSingleton<IAudioEffectPipeline, IdentityEffectPipeline>();
-        services.AddSingleton<IAudioPlayback, NullAudioPlayback>();
+        services.AddSingleton<IAudioPlayback, NaudioPcmPlayback>();
         services.AddSingleton<IWavEncoder, WavEncoder>();
         services.AddSingleton<VoiceServiceOptions>(_ => new VoiceServiceOptions());
         services.AddSingleton<IVoiceService>(sp =>
-        {
-            return new VoiceService(
+            new VoiceService(
                 sp.GetRequiredService<IVoiceSynthesizer>(),
                 sp.GetRequiredService<IAudioEffectPipeline>(),
                 sp.GetRequiredService<IAudioPlayback>(),
                 sp.GetRequiredService<IWavEncoder>(),
-                sp.GetRequiredService<VoiceServiceOptions>());
-        });
+                sp.GetRequiredService<VoiceServiceOptions>()));
         return services;
     }
 
-    /// <summary>Registers a custom <see cref="VoiceService"/> factory.</summary>
+    /// <summary>Registers a custom <see cref="IVoiceService"/> factory.</summary>
     public static IServiceCollection AddNovolisVoice(
         this IServiceCollection services,
         Func<IServiceProvider, IVoiceService> factory)

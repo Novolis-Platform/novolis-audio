@@ -53,4 +53,7 @@ public static class PipelinePaths
 
     public static string NativeShimOutDir(string repoRoot) =>
         Path.Combine(NativeRoot(repoRoot), "novolis-audio-platform", "out");
+
+    public static string ModelsRoot(string repoRoot) =>
+        Path.Combine(repoRoot, "models");
 }

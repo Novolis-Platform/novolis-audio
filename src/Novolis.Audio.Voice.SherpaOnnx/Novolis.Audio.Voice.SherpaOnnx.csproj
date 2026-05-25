@@ -10,8 +10,22 @@
     <AssemblyName>Novolis.Audio.Voice.SherpaOnnx</AssemblyName>
     <PackageId>Novolis.Audio.Voice.SherpaOnnx</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Sherpa-ONNX voice synthesizer (stub until models are wired).</Description>
+    <Description>Sherpa-ONNX offline TTS with bundled Piper en-us-piper-amy model.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="org.k2fsa.sherpa.onnx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\models\en-us-piper-amy\**\*"
+             Condition="Exists('..\..\models\en-us-piper-amy\tokens.txt')">
+      <Link>models\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>contentFiles/any/any/models/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />

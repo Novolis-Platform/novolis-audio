@@ -14,7 +14,7 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 
 | Path | Role |
 |------|------|
-| `codegen/Novolis.Audio.Manifests/` | C# manifests (source of truth) |
+| `codegen/Novolis.Audio.Manifests/` | C# manifests (miniaudio bindings + voice model catalog) |
 | `codegen/Novolis.Audio.Pipeline/` | Maintainer steps (vendor, native, codegen) |
 | `src/Novolis.Audio.Bindings/Interop/*.g.cs` | Generated — do not hand-edit |
 | `src/Novolis.Audio.Runtime/**/**.g.cs` | Generated façades |

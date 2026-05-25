@@ -1,6 +1,6 @@
 namespace Novolis.Audio.CodeGen;
 
-internal static class RepoPaths
+public static class RepoPaths
 {
     public static string BindingsDir(string repoRoot) =>
         Path.Combine(repoRoot, "src", "Novolis.Audio.Bindings");
@@ -10,4 +10,10 @@ internal static class RepoPaths
 
     public static string InteropDir(string repoRoot) =>
         Path.Combine(BindingsDir(repoRoot), "Interop");
+
+    public static string VoiceAbstractionsDir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Audio.Voice.Abstractions");
+
+    public static string VoiceModelCatalogPath(string repoRoot) =>
+        Path.Combine(VoiceAbstractionsDir(repoRoot), "VoiceModelCatalog.g.cs");
 }
