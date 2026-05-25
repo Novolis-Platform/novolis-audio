@@ -13,7 +13,7 @@ public static class AtcVoiceProfile
     public static VoiceServiceBuilder Apply(VoiceServiceBuilder builder, AtcVoiceOptions? options = null)
     {
         options ??= new AtcVoiceOptions();
-        return builder.Configure(v =>
+        builder = builder.Configure(v =>
         {
             v.Synthesis = new VoiceSynthesisOptions
             {
@@ -27,5 +27,11 @@ public static class AtcVoiceProfile
                 v.NormalizeText = normalizer.Normalize;
             }
         });
+
+        if (options.ApplyRadioEffects &&
+            string.Equals(options.EffectChainId, "atc-radio", StringComparison.Ordinal))
+            builder = builder.UseEffects(AtcRadioEffects.Create(options));
+
+        return builder;
     }
 }

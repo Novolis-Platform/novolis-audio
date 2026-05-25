@@ -1,7 +1,7 @@
 {
   "stepId": "step_03_voice_verify_models",
   "status": "Skipped",
-  "startedUtc": "2026-05-25T21:32:21.2850889+00:00",
+  "startedUtc": "2026-05-25T22:30:12.8736375+00:00",
   "durationMs": 0,
   "pipelineVersion": "1",
   "inputs": {

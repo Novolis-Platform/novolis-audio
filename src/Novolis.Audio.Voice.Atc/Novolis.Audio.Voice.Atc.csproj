@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Effects\Novolis.Audio.Effects.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Phraseology\Novolis.Audio.Voice.Phraseology.csproj" />
   </ItemGroup>

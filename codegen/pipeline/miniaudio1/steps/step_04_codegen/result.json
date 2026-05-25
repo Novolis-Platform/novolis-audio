@@ -1,8 +1,8 @@
 {
   "stepId": "step_04_codegen",
-  "status": "Skipped",
-  "startedUtc": "2026-05-25T21:32:21.2876363+00:00",
-  "durationMs": 0,
+  "status": "Succeeded",
+  "startedUtc": "2026-05-25T22:30:12.8769736+00:00",
+  "durationMs": 490,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Audio.Manifests/AudioBindingManifestSource.cs": "db55d4bfcd0ba8f931e1612cc02202e361fa91828f7f578e6495120d0f313e2b",
@@ -31,9 +31,8 @@
     },
     {
       "path": "src/Novolis.Audio.Voice.Abstractions/VoiceModelCatalog.g.cs",
-      "sha256": "354d991e573423aa6b5cbe9e58e0ae191480cf9ca2ba79b40f47d51f0b970a46",
-      "bytes": 3167
+      "sha256": "d9b2394cafd7fdc0d3ba441c7889add83b45814fc549c9be0d307b761780fced",
+      "bytes": 3216
     }
-  ],
-  "skipReason": "outputs up to date"
+  ]
 }

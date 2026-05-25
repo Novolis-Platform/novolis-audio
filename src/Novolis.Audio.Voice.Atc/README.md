@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.Atc
 
-ATC voice profile preset (phraseology + synthesis options). Future domains: `Voice.Bridge`, `Voice.Dispatch`, `Voice.Naval`.
+ATC voice profile preset: ICAO phraseology, faster default speaking rate, and an **atc-radio** PCM chain (band-limit, drive/limiter, gain, hiss).
 
 ## Install
 
@@ -17,6 +17,10 @@ using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.Atc;
 
 IVoiceService voice = AtcVoiceProfile.Apply(new VoiceServiceBuilder()).BuildService();
+
+// Tune urgency / radio edge
+var urgent = new AtcVoiceOptions { SpeakingRate = 1.18f, Drive = 3.2f, OutputGainDb = 6f };
+voice = AtcVoiceProfile.Apply(new VoiceServiceBuilder(), urgent).BuildService();
 ```
 
 ## DI
