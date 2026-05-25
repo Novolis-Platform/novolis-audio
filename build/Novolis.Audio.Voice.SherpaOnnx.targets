@@ -6,18 +6,30 @@
     <_NovolisVoiceModelsOut>$(OutDir)models\$(_NovolisVoiceModelProfileDir)\</_NovolisVoiceModelsOut>
     <_NovolisVoiceModelZipInPackage>$(MSBuildThisFileDirectory)..\contentFiles\any\any\models\$(_NovolisVoiceModelZipName)</_NovolisVoiceModelZipInPackage>
     <_NovolisVoiceModelZipInOutput>$(OutDir)models\$(_NovolisVoiceModelZipName)</_NovolisVoiceModelZipInOutput>
+    <_NovolisVoicePhontab>$(_NovolisVoiceModelsOut)espeak-ng-data\phontab</_NovolisVoicePhontab>
   </PropertyGroup>
 
   <Target Name="ExtractNovolisBundledVoiceModels"
           AfterTargets="ResolveReferences"
-          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true' and !Exists('$(_NovolisVoiceModelsOut)tokens.txt')">
+          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
     <PropertyGroup>
       <_NovolisVoiceModelZip Condition="Exists('$(_NovolisVoiceModelZipInOutput)')">$(_NovolisVoiceModelZipInOutput)</_NovolisVoiceModelZip>
       <_NovolisVoiceModelZip Condition="'$(_NovolisVoiceModelZip)' == '' and Exists('$(_NovolisVoiceModelZipInPackage)')">$(_NovolisVoiceModelZipInPackage)</_NovolisVoiceModelZip>
+      <_NovolisVoiceNeedsExtract Condition="!Exists('$(_NovolisVoiceModelsOut)tokens.txt')">true</_NovolisVoiceNeedsExtract>
+      <_NovolisVoiceNeedsExtract Condition="Exists('$(_NovolisVoicePhontab)') and !$([System.IO.File]::Exists('$(_NovolisVoicePhontab)'))">true</_NovolisVoiceNeedsExtract>
     </PropertyGroup>
+
     <Error Condition="'$(_NovolisVoiceModelZip)' == ''"
-           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled model zip (restore a current 2026.1.* package from GitHub Packages)." />
-    <MakeDir Directories="$(_NovolisVoiceModelsOut)" />
-    <Exec Command="powershell -NoProfile -Command &quot;Expand-Archive -LiteralPath '$(_NovolisVoiceModelZip)' -DestinationPath '$(_NovolisVoiceModelsOut)' -Force&quot;" />
+           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled model zip (restore Novolis.Audio.Voice.SherpaOnnx 2026.1.3+ from GitHub Packages)." />
+
+    <RemoveDir Directories="$(_NovolisVoiceModelsOut)"
+               Condition="'$(_NovolisVoiceNeedsExtract)' == 'true' and Exists('$(_NovolisVoiceModelsOut)')" />
+    <MakeDir Directories="$(_NovolisVoiceModelsOut)"
+             Condition="'$(_NovolisVoiceNeedsExtract)' == 'true'" />
+    <Exec Condition="'$(_NovolisVoiceNeedsExtract)' == 'true'"
+          Command="powershell -NoProfile -Command &quot;Expand-Archive -LiteralPath '$(_NovolisVoiceModelZip)' -DestinationPath '$(_NovolisVoiceModelsOut)' -Force&quot;" />
+
+    <Error Condition="!Exists('$(_NovolisVoiceModelsOut)tokens.txt') or !Exists('$(_NovolisVoicePhontab)')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: model extract failed (expected tokens.txt and espeak-ng-data/phontab under $(_NovolisVoiceModelsOut))." />
   </Target>
 </Project>
