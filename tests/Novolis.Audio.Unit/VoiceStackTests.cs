@@ -60,7 +60,7 @@ public class VoiceStackTests
     public async Task Sherpa_synthesizer_produces_audio_when_models_present()
     {
         var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null, VoiceModelCatalog.EnUsPiperAmy);
-        if (paths is null)
+        if (paths is null || !VoiceModelMaterialization.IsMaterializedOnnx(paths.ModelFile))
             return;
 
         using var synth = new SherpaVoiceSynthesizer();

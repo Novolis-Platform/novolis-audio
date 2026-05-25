@@ -1,4 +1,5 @@
 using Novolis.Audio.Manifests;
+using Novolis.Audio.Voice;
 
 namespace Novolis.Audio.CodeGen;
 
@@ -40,8 +41,21 @@ public static class VoiceModelVerifier
             }
 
             var onnxPath = Path.Combine(modelDir, entry.OnnxFileName);
-            if (File.Exists(onnxPath))
+            if (!File.Exists(onnxPath))
+            {
+                log?.WriteLine($"ERROR: missing ONNX file {onnxPath}");
+                errors++;
+            }
+            else if (!VoiceModelMaterialization.IsMaterializedOnnx(onnxPath))
+            {
+                log?.WriteLine(
+                    $"ERROR: {onnxPath} is not materialized (Git LFS pointer?). Run: git lfs install && git lfs pull");
+                errors++;
+            }
+            else
+            {
                 log?.WriteLine($"voice-model: OK {entry.Id} ({entry.OnnxFileName})");
+            }
         }
 
         if (errors == 0)

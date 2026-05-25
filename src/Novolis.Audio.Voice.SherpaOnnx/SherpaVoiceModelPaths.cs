@@ -49,7 +49,10 @@ public sealed class SherpaVoiceModelPaths
         if (!File.Exists(tokens))
             return null;
 
-        var onnx = Directory.GetFiles(root, "*.onnx").OrderBy(static f => f, StringComparer.OrdinalIgnoreCase).FirstOrDefault();
+        var onnx = Directory.GetFiles(root, "*.onnx")
+            .Where(VoiceModelMaterialization.IsMaterializedOnnx)
+            .OrderBy(static f => f, StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault();
         if (onnx is null)
             return null;
 

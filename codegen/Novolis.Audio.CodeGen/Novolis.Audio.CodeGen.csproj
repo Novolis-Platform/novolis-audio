@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Manifests\Novolis.Audio.Manifests.csproj" />
     <ProjectReference Include="..\Novolis.Audio.CodeGen.Abstractions\Novolis.Audio.CodeGen.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
