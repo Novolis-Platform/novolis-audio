@@ -1,7 +1,7 @@
 {
   "year": 2026,
   "major": 1,
-  "minor": 3,
+  "minor": 4,
   "dotnetBaseline": "net10.0",
   "publicPackage": true
 }

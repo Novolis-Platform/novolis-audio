@@ -25,24 +25,31 @@ public sealed class NaudioPcmPlayback : IAudioPlayback, IDisposable
     private static void PlayBlocking(PcmBuffer buffer, CancellationToken cancellationToken)
     {
         var format = new WaveFormat(buffer.Format.SampleRate, 16, buffer.Format.Channels);
-        using var waveOut = new WaveOutEvent();
-        var provider = new BufferedWaveProvider(format)
-        {
-            BufferDuration = TimeSpan.FromSeconds(Math.Max(2, buffer.Duration.TotalSeconds + 1)),
-        };
-        provider.AddSamples(buffer.Samples.Span.ToArray(), 0, buffer.Samples.Length);
+        var pcm = buffer.Samples.ToArray();
 
-        using var waitHandle = new ManualResetEventSlim(false);
-        waveOut.PlaybackStopped += (_, _) => waitHandle.Set();
-        waveOut.Init(provider);
+        using var waveOut = new WaveOutEvent();
+        using var finished = new ManualResetEventSlim(false);
+        Exception? playbackError = null;
+        waveOut.PlaybackStopped += (_, args) =>
+        {
+            playbackError = args.Exception;
+            finished.Set();
+        };
+
+        using var source = new RawSourceWaveStream(pcm, 0, pcm.Length, format);
+        waveOut.Init(source);
         waveOut.Play();
 
-        while (waveOut.PlaybackState == PlaybackState.Playing)
+        var timeout = buffer.Duration + TimeSpan.FromSeconds(2);
+        if (!finished.Wait(timeout, cancellationToken))
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (!waitHandle.Wait(50, cancellationToken))
-                continue;
-            break;
+            waveOut.Stop();
+            finished.Wait(TimeSpan.FromSeconds(1), CancellationToken.None);
         }
+
+        waveOut.Stop();
+
+        if (playbackError is not null)
+            throw new InvalidOperationException("PCM playback failed.", playbackError);
     }
 }
