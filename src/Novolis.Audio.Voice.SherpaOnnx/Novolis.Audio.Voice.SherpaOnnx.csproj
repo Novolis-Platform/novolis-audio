@@ -11,6 +11,7 @@
     <PackageId>Novolis.Audio.Voice.SherpaOnnx</PackageId>
     <IsPackable>true</IsPackable>
     <Description>Sherpa-ONNX offline TTS with bundled Piper en-us-piper-amy model.</Description>
+    <BundledModelFolderName>en-us-piper-amy</BundledModelFolderName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,8 @@
              Condition="Exists('..\..\models\en-us-piper-amy\tokens.txt')">
       <Link>models\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>contentFiles/any/any/models/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>
     </Content>
   </ItemGroup>
