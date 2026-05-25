@@ -8,10 +8,16 @@ on:
       - 'docs/**'
       - '**.md'
   workflow_dispatch:
+    inputs:
+      skip_publish:
+        type: boolean
+        default: false
 jobs:
   ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Validate version files
-        run: test -f build/version.json && test -f build/version.props
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-merge-publish.yml@main
+    secrets: inherit
+    with:
+      skip_publish: ${{ inputs.skip_publish == true }}
+    permissions:
+      contents: read
+      packages: write
