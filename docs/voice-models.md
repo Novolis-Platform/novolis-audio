@@ -1,22 +1,21 @@
 # Voice models (Sherpa ONNX)
 
-Novolis voice uses [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx) offline TTS. Models are **not** bundled in NuGet; download them locally.
+Novolis voice uses [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx) offline TTS.
 
-## Default model (English)
+## Bundled model (in this repo)
 
-**Piper** `vits-piper-en_US-amy-low` — suitable for ATC-style English.
+**Piper** `en-us-piper-amy` lives under [`models/en-us-piper-amy/`](../models/en-us-piper-amy/) (Git LFS for `*.onnx`). Clone with LFS:
 
 ```bash
-# Linux / macOS
-curl -SL -O https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-amy-low.tar.bz2
-tar xf vits-piper-en_US-amy-low.tar.bz2
+git lfs install
+git clone https://github.com/Novolis-Platform/novolis-audio.git
 ```
 
-On Windows, download the same archive from the [tts-models release](https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models) and extract.
+`Novolis.Audio.Voice.SherpaOnnx` copies the model to build output and packs it in the NuGet package under `models/en-us-piper-amy/`.
 
-## Directory layout
+## Override with another model
 
-Point `NOVOLIS_VOICE_MODEL_DIR` at the extracted folder (or pass `VoiceSynthesisOptions.ModelDirectory`):
+Point `NOVOLIS_VOICE_MODEL_DIR` at an alternate extracted folder (or pass `VoiceSynthesisOptions.ModelDirectory`):
 
 ```text
 %NOVOLIS_VOICE_MODEL_DIR%/
@@ -25,7 +24,14 @@ Point `NOVOLIS_VOICE_MODEL_DIR` at the extracted folder (or pass `VoiceSynthesis
   espeak-ng-data/
 ```
 
-If the archive extracts to a subfolder (e.g. `vits-piper-en_US-amy-low/`), set the env var to that subfolder — the resolver finds `tokens.txt` automatically.
+## Download manually (optional)
+
+```bash
+curl -SL -O https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-amy-low.tar.bz2
+tar xf vits-piper-en_US-amy-low.tar.bz2
+```
+
+Or run `pwsh -File scripts/fetch-piper-model.ps1` from the repo root.
 
 ## Verify
 

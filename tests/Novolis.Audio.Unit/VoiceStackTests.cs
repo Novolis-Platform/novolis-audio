@@ -48,15 +48,14 @@ public class VoiceStackTests
     [Test]
     public async Task Sherpa_synthesizer_produces_audio_when_models_present()
     {
-        var modelDir = Environment.GetEnvironmentVariable(SherpaVoiceModelPaths.EnvModelDirectory);
-        var tokensPath = modelDir is null ? null : Path.Combine(modelDir, "tokens.txt");
-        if (string.IsNullOrWhiteSpace(modelDir) || tokensPath is null || !File.Exists(tokensPath))
+        var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null);
+        if (paths is null)
             return;
 
         using var synth = new SherpaVoiceSynthesizer();
         var pcm = await synth.SynthesizeAsync(
             "Tower, ready for departure.",
-            new VoiceSynthesisOptions { ModelDirectory = modelDir },
+            new VoiceSynthesisOptions(),
             CancellationToken.None);
 
         await Assert.That(pcm.Samples.Length).IsGreaterThan(1000);

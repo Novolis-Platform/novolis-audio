@@ -56,7 +56,7 @@ await voice.SpeakAsync("Tower, ready for departure.");
 await voice.WriteToFileAsync("Cleared for takeoff.", new FileInfo("atc.wav"));
 ```
 
-Set `NOVOLIS_VOICE_MODEL_DIR` for real TTS — see [docs/voice-models.md](docs/voice-models.md). Without models, synthesis falls back to short silence (CI-safe).
+English Piper TTS model is bundled under `models/en-us-piper-amy/` (Git LFS). Clone with `git lfs install` first. Override via `NOVOLIS_VOICE_MODEL_DIR` — see [docs/voice-models.md](docs/voice-models.md).
 
 ## Maintainer pipeline
 
