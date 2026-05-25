@@ -1,6 +1,9 @@
 namespace Novolis.Audio.Core;
 
 /// <summary>Describes PCM frame layout.</summary>
+/// <param name="SampleRate">Samples per second per channel.</param>
+/// <param name="Channels">Channel count (1 = mono).</param>
+/// <param name="SampleFormat">Sample encoding.</param>
 public readonly record struct PcmFormat(
     int SampleRate,
     int Channels,

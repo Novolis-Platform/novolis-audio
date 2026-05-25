@@ -4,6 +4,8 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 
 ## Packages
 
+### Game SFX (miniaudio)
+
 | Package | Role |
 |---------|------|
 | `Novolis.Audio` | Meta package (abstractions + runtime) |
@@ -13,9 +15,23 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Native` | RID native binaries (transitive) |
 | `Novolis.Audio.Manifests` | C# binding manifests (maintainers) |
 
-Native playback uses a **miniaudio**-backed C shim (`novolis_audio.dll` / `libnovolis_audio.so`) with manifest-driven codegen (same pattern as `novolis-raylib`).
+### Voice / PCM (TTS)
 
-## Quick start
+| Package | Role |
+|---------|------|
+| `Novolis.Audio.Core` | PCM buffers, WAV read/write |
+| `Novolis.Audio.Codecs` | Codec contracts (WAV in Core today) |
+| `Novolis.Audio.Effects` | PCM effect chains |
+| `Novolis.Audio.Playback` | PCM playback (`NaudioPcmPlayback`) |
+| `Novolis.Audio.Voice` | **`SpeakAsync` / `WriteToFileAsync` facade** |
+| `Novolis.Audio.Voice.Abstractions` | TTS contracts |
+| `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
+| `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
+| `Novolis.Audio.Voice.Atc` | ATC profile preset |
+
+Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack).
+
+## Quick start (game SFX)
 
 ```csharp
 using Novolis.Audio;
@@ -29,7 +45,18 @@ var sound = engine.LoadSound("click.wav");
 engine.Play(sound);
 ```
 
-Headless tests: `new NullAudioEngine()`.
+## Quick start (voice)
+
+```csharp
+using Novolis.Audio.Voice;
+
+IVoiceService voice = new VoiceServiceBuilder().BuildService();
+
+await voice.SpeakAsync("Tower, ready for departure.");
+await voice.WriteToFileAsync("Cleared for takeoff.", new FileInfo("atc.wav"));
+```
+
+Set `NOVOLIS_VOICE_MODEL_DIR` for real TTS — see [docs/voice-models.md](docs/voice-models.md). Without models, synthesis falls back to short silence (CI-safe).
 
 ## Maintainer pipeline
 
@@ -38,10 +65,9 @@ dotnet run --project codegen/Novolis.Audio.Pipeline -- run maintainer
 dotnet build Novolis.Audio.slnx -c Release
 ```
 
-Profiles: `generate`, `maintainer`, `agent-verify` — see `codegen/Novolis.Audio.Pipeline/Program.cs`.
-
 ## Docs
 
 - [docs/getting-started.md](docs/getting-started.md)
 - [docs/design.md](docs/design.md)
+- [docs/voice-models.md](docs/voice-models.md)
 - [docs/release.md](docs/release.md)

@@ -13,6 +13,7 @@ public sealed class VoiceService : IVoiceService
     private readonly IWavEncoder _wavEncoder;
     private readonly VoiceServiceOptions _options;
 
+    /// <summary>Creates a voice service with the given pipeline components.</summary>
     public VoiceService(
         IVoiceSynthesizer synthesizer,
         IAudioEffectPipeline effects,

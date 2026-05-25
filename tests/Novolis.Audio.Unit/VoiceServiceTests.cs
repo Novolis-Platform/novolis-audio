@@ -7,7 +7,10 @@ public class VoiceServiceTests
     [Test]
     public async Task WriteToFileAsync_writes_valid_wav_header()
     {
-        var voice = new VoiceServiceBuilder().BuildService();
+        var voice = new VoiceServiceBuilder()
+            .UseNullSynthesizer()
+            .UseNullPlayback()
+            .BuildService();
         var path = Path.Combine(Path.GetTempPath(), $"novolis-voice-{Guid.NewGuid():N}.wav");
         try
         {
@@ -28,7 +31,10 @@ public class VoiceServiceTests
     [Test]
     public async Task SpeakAsync_completes_with_null_playback()
     {
-        var voice = new VoiceServiceBuilder().BuildService();
+        var voice = new VoiceServiceBuilder()
+            .UseNullSynthesizer()
+            .UseNullPlayback()
+            .BuildService();
         await voice.SpeakAsync("SAS one two three, cleared for takeoff runway two two.");
     }
 }

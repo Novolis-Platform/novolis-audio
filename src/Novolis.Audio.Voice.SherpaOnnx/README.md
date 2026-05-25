@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.SherpaOnnx
 
-Sherpa-ONNX TTS adapter (scaffold: delegates to `NullVoiceSynthesizer` until models are wired).
+Sherpa-ONNX offline TTS (Piper/VITS). Falls back to silence when `NOVOLIS_VOICE_MODEL_DIR` is unset.
 
 ## Install
 

@@ -3,6 +3,7 @@ namespace Novolis.Audio.Core;
 /// <summary>Immutable PCM frame container.</summary>
 public sealed class PcmBuffer
 {
+    /// <summary>Creates a buffer from raw interleaved sample bytes.</summary>
     public PcmBuffer(PcmFormat format, ReadOnlyMemory<byte> samples, int frameCount)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(frameCount);
@@ -15,12 +16,16 @@ public sealed class PcmBuffer
         FrameCount = frameCount;
     }
 
+    /// <summary>Format of the contained samples.</summary>
     public PcmFormat Format { get; }
 
+    /// <summary>Interleaved PCM sample bytes.</summary>
     public ReadOnlyMemory<byte> Samples { get; }
 
+    /// <summary>Number of frames (not bytes).</summary>
     public int FrameCount { get; }
 
+    /// <summary>Duration at the format sample rate.</summary>
     public TimeSpan Duration =>
         TimeSpan.FromSeconds((double)FrameCount / Format.SampleRate);
 

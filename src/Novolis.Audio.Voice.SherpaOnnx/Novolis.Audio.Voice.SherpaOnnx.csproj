@@ -14,6 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="org.k2fsa.sherpa.onnx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
 
