@@ -11,6 +11,8 @@
     <Project Path="src/Novolis.Audio.Abstractions/Novolis.Audio.Abstractions.csproj" />
     <Project Path="src/Novolis.Audio.Runtime/Novolis.Audio.Runtime.csproj" />
     <Project Path="src/Novolis.Audio/Novolis.Audio.csproj" />
+    <Project Path="src/Novolis.Audio.Host.Abstractions/Novolis.Audio.Host.Abstractions.csproj" />
+    <Project Path="src/Novolis.Audio.Host.NAudio/Novolis.Audio.Host.NAudio.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Audio.Unit/Novolis.Audio.Unit.csproj" />

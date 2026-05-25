@@ -11,5 +11,8 @@
     <PackageVersion Include="Novolis.CodeGen.Bindings" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Bindings.Roslyn" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Pipeline" Version="2026.1.*" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
+    <PackageVersion Include="NAudio" Version="2.3.0" />
   </ItemGroup>
 </Project>

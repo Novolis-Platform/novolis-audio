@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Novolis.Audio.Host.Abstractions</PackageId>
+    <Description>Game host audio output contract (master volume, device probe).</Description>
+    <RootNamespace>Novolis.Audio.Host</RootNamespace>
+    <AssemblyName>Novolis.Audio.Host.Abstractions</AssemblyName>
+  </PropertyGroup>
+</Project>
