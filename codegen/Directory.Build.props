@@ -1,5 +1,7 @@
 <Project>
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props')" />
   <PropertyGroup>
     <IsPackable Condition="'$(MSBuildProjectName)' != 'Novolis.Audio.Manifests'">false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>

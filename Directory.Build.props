@@ -36,10 +36,4 @@
           Condition="Exists('$(MSBuildThisFileDirectory)..\novolis-governance\build\Novolis.GitHubPackages.props')" />
   <Import Project="$(MSBuildThisFileDirectory)build\Novolis.Documentation.props"
           Condition="Exists('$(MSBuildThisFileDirectory)build\Novolis.Documentation.props')" />
-  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
-  </ItemGroup>
 </Project>

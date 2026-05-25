@@ -1,4 +1,6 @@
 <Project>
   <Import Project="$(MSBuildThisFileDirectory)..\build\Novolis.Audio.Documentation.props"
           Condition="Exists('$(MSBuildThisFileDirectory)..\build\Novolis.Audio.Documentation.props')" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props')" />
 </Project>
