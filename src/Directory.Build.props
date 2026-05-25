@@ -1,0 +1,4 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\build\Novolis.Audio.Documentation.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\build\Novolis.Audio.Documentation.props')" />
+</Project>

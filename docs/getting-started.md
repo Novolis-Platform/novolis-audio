@@ -1,14 +1,41 @@
 # Getting started
 
-Repository scaffold from [novolis-template-dotnet](https://github.com/Novolis-Platform/novolis-template-dotnet).
+## Install
 
-## Documentation defaults
+```xml
+<PackageReference Include="Novolis.Audio" Version="2026.1.*" />
+```
 
-New packable projects should:
+Sources: nuget.org + GitHub Packages (`Novolis.*`).
 
-1. Import `build/Novolis.Documentation.props` (or a repo-specific `build/*.Documentation.props` that imports [Novolis.Documentation.props](https://github.com/Novolis-Platform/novolis-governance/blob/main/build/Novolis.Documentation.props)).
-2. Add `README.md` next to each packable `.csproj` and set `PackageReadmeFile`.
-3. Document all public API with XML comments before removing transitional `CS1591` suppressions.
+## Play a sound
 
-See [documentation-policy.md](https://github.com/Novolis-Platform/novolis-governance/blob/main/docs/documentation-policy.md).
+```csharp
+using Novolis.Audio;
+using Novolis.Audio.Runtime;
 
+using var engine = new MiniaudioAudioEngine();
+if (!engine.Start())
+    throw new InvalidOperationException("Audio device failed to start.");
+
+var clip = engine.LoadSound("assets/click.wav");
+engine.Play(clip);
+```
+
+## Headless / CI
+
+```csharp
+using var engine = new NullAudioEngine();
+engine.Start();
+```
+
+## Maintainer setup
+
+```bash
+git clone https://github.com/Novolis-Platform/novolis-audio.git
+cd novolis-audio
+dotnet run --project codegen/Novolis.Audio.Pipeline -- run maintainer
+dotnet build Novolis.Audio.slnx -c Release
+```
+
+Native shim: `novolis_audio` (miniaudio) built under `codegen/native/novolis-audio-platform/`. Windows `novolis_audio.dll` is checked in under `src/Novolis.Audio.Native/runtimes/win-x64/native/` for CI.

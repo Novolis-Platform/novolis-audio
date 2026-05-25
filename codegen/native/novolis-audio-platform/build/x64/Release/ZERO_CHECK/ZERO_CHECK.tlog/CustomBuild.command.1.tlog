@@ -1,0 +1,10 @@
+^D:\NOVOLIS\NOVOLIS-AUDIO\CODEGEN\NATIVE\NOVOLIS-AUDIO-PLATFORM\BUILD\CMAKEFILES\ABDCA8FC2D63A664F4CEC5687E379BDA\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/novolis/novolis-audio/codegen/native/novolis-audio-platform -BD:/novolis/novolis-audio/codegen/native/novolis-audio-platform/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/novolis/novolis-audio/codegen/native/novolis-audio-platform/build/novolis_audio_platform.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

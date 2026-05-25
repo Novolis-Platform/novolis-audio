@@ -1,0 +1,33 @@
+<Project>
+  <PropertyGroup>
+    <AudioCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Audio.Pipeline\Novolis.Audio.Pipeline.csproj</AudioCodegenProject>
+    <AudioCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</AudioCodegenRepoRoot>
+    <RunAudioCodegen Condition="'$(RunAudioCodegen)' == ''">true</RunAudioCodegen>
+  </PropertyGroup>
+
+  <Target Name="DisableAudioCodegenForPack" BeforeTargets="GenerateAudioBindings" Condition="'$(IsPacking)' == 'true'">
+    <PropertyGroup>
+      <RunAudioCodegen>false</RunAudioCodegen>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <AudioCodegenInput Include="$(AudioCodegenRepoRoot)codegen\Novolis.Audio.Manifests\**\*.cs" />
+    <AudioCodegenInput Include="$(AudioCodegenRepoRoot)codegen\Novolis.Audio.CodeGen\**\*.cs" />
+    <AudioCodegenInput Include="$(AudioCodegenRepoRoot)codegen\Novolis.Audio.CodeGen.Abstractions\**\*.cs" />
+    <AudioCodegenOutput Include="$(AudioCodegenRepoRoot)src\Novolis.Audio.Bindings\Interop\*.g.cs" />
+    <AudioCodegenOutput Include="$(AudioCodegenRepoRoot)src\Novolis.Audio.Runtime\Device\*.g.cs" />
+    <AudioCodegenOutput Include="$(AudioCodegenRepoRoot)src\Novolis.Audio.Runtime\Sound\*.g.cs" />
+  </ItemGroup>
+
+  <Target Name="GenerateAudioBindings"
+          BeforeTargets="CoreCompile"
+          Condition="'$(RunAudioCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+          Inputs="@(AudioCodegenInput)"
+          Outputs="@(AudioCodegenOutput)">
+    <Exec Command="dotnet run --project &quot;$(AudioCodegenProject)&quot; -- run generate"
+          WorkingDirectory="$(AudioCodegenRepoRoot)"
+          StandardOutputImportance="high"
+          StandardErrorImportance="high" />
+  </Target>
+</Project>

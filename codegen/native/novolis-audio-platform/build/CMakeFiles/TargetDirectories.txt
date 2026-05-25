@@ -1,0 +1,3 @@
+D:/novolis/novolis-audio/codegen/native/novolis-audio-platform/build/CMakeFiles/novolis_audio.dir
+D:/novolis/novolis-audio/codegen/native/novolis-audio-platform/build/CMakeFiles/ALL_BUILD.dir
+D:/novolis/novolis-audio/codegen/native/novolis-audio-platform/build/CMakeFiles/ZERO_CHECK.dir

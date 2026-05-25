@@ -1,7 +1,7 @@
 <Project>
   
     <PropertyGroup>
-    <NovolisGitHubRepository>novolis-template-dotnet</NovolisGitHubRepository>
+    <NovolisGitHubRepository>novolis-audio</NovolisGitHubRepository>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)build\version.props"
           Condition="Exists('$(MSBuildThisFileDirectory)build\version.props')" />

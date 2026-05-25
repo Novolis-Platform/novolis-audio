@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\novolis\novolis-audio\codegen\native\novolis-audio-platform\build\CMakeFiles\abdca8fc2d63a664f4cec5687e379bda\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A1D7F1D0-BEF7-3E02-B735-75878F2CAA69}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

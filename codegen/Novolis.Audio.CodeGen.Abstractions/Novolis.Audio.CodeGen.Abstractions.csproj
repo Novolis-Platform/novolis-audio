@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.CodeGen</RootNamespace>
+    <AssemblyName>Novolis.Audio.CodeGen.Abstractions</AssemblyName>
+    <Description>Shared audio codegen contracts.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <PackageReference Include="Novolis.CodeGen.Pipeline" />
+  </ItemGroup>
+
+</Project>

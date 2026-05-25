@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/codegen/">
+    <Project Path="codegen/Novolis.Audio.CodeGen.Abstractions/Novolis.Audio.CodeGen.Abstractions.csproj" />
+    <Project Path="codegen/Novolis.Audio.CodeGen/Novolis.Audio.CodeGen.csproj" />
+    <Project Path="codegen/Novolis.Audio.Pipeline/Novolis.Audio.Pipeline.csproj" />
+    <Project Path="codegen/Novolis.Audio.Manifests/Novolis.Audio.Manifests.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Novolis.Audio.Native/Novolis.Audio.Native.csproj" />
+    <Project Path="src/Novolis.Audio.Bindings/Novolis.Audio.Bindings.csproj" />
+    <Project Path="src/Novolis.Audio.Abstractions/Novolis.Audio.Abstractions.csproj" />
+    <Project Path="src/Novolis.Audio.Runtime/Novolis.Audio.Runtime.csproj" />
+    <Project Path="src/Novolis.Audio/Novolis.Audio.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Novolis.Audio.Unit/Novolis.Audio.Unit.csproj" />
+  </Folder>
+</Solution>

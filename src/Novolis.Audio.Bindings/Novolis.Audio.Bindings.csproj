@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.CodeGen.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+    <RootNamespace>Novolis.Audio</RootNamespace>
+    <AssemblyName>Novolis.Audio.Bindings</AssemblyName>
+    <PackageId>Novolis.Audio.Bindings</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Generated novolis_audio P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
+    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\miniaudio1\steps\step_02_native\artifacts</PipelineStep02>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="$(PipelineStep02)\novolis_audio.dll"
+          Link="novolis_audio.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(PipelineStep02)\novolis_audio.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\novolis-audio-platform\out\novolis_audio.dll"
+          Link="novolis_audio.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="!Exists('$(PipelineStep02)\novolis_audio.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\novolis-audio-platform\out\novolis_audio.dll')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Native\Novolis.Audio.Native.csproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <Version>$(NovolisPlatformVersion)</Version>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Audio.Runtime" />
+  </ItemGroup>
+
+</Project>

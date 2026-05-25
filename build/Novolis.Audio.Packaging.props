@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup Label="Novolis.Audio NuGet metadata">
+    <Authors>Novolis</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Novolis-Platform/novolis-audio</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>audio;miniaudio;interop;gamedev;cross-platform</PackageTags>
+  </PropertyGroup>
+</Project>

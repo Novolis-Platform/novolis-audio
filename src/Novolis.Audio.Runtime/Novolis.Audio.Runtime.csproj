@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio</RootNamespace>
+    <AssemblyName>Novolis.Audio.Runtime</AssemblyName>
+    <PackageId>Novolis.Audio.Runtime</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Generated audio facades and MiniaudioAudioEngine host adapter.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Abstractions\Novolis.Audio.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Bindings\Novolis.Audio.Bindings.csproj" />
+  </ItemGroup>
+
+</Project>

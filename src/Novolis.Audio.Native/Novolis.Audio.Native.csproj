@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <PackageId>Novolis.Audio.Native</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>novolis_audio (miniaudio) native binaries per RID (transitive; do not reference directly).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_audio.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_audio.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_audio.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_audio.so')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_audio.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_audio.dylib')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Native.targets" Pack="true" PackagePath="buildTransitive/Novolis.Audio.Native.targets" />
+  </ItemGroup>
+
+</Project>

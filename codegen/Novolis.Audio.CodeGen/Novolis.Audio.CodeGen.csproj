@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Novolis.Audio.CodeGen</RootNamespace>
+    <AssemblyName>Novolis.Audio.CodeGen</AssemblyName>
+    <Description>Roslyn novolis_audio bindings codegen.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Manifests\Novolis.Audio.Manifests.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.CodeGen.Abstractions\Novolis.Audio.CodeGen.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

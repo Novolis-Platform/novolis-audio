@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Novolis.Audio</RootNamespace>
+    <AssemblyName>Novolis.Audio</AssemblyName>
+    <PackageId>Novolis.Audio</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Cross-platform audio (miniaudio native + manifest codegen). Install this meta package.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Abstractions\Novolis.Audio.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Runtime\Novolis.Audio.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

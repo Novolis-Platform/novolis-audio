@@ -1,0 +1,7 @@
+{
+  "miniaudio": "0.11.22",
+  "novolisAudio": "1.0.0",
+  "vendor": {
+    "miniaudioHeader": "https://raw.githubusercontent.com/mackron/miniaudio/master/miniaudio.h"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "stepId": "step_03_verify_manifest",
+  "status": "Skipped",
+  "startedUtc": "2026-05-25T00:05:09.2107028+00:00",
+  "durationMs": 0,
+  "pipelineVersion": "1",
+  "inputs": {
+    "codegen/Novolis.Audio.Manifests/AudioBindingManifestSource.cs": "db55d4bfcd0ba8f931e1612cc02202e361fa91828f7f578e6495120d0f313e2b",
+    "codegen/Novolis.Audio.Manifests/AudioManifestInputPaths.cs": "73a9f55a4f4532a4ebcb7e49a39df2b64cd5707b00ef875c1003c4cb63744c0a",
+    "codegen/Novolis.Audio.Manifests/NovolisAudioFacadesManifest.cs": "6e8d5b00ae6810ae3645f0c70cfe15c7279956c7a3678ed21ac6762218fbc9cf",
+    "codegen/Novolis.Audio.Manifests/NovolisAudioInteropManifest.cs": "b1dc048af8bd97b8068ea8984ca7991468522d9aad4a08eae4b25bc70fed7449"
+  },
+  "outputs": [],
+  "skipReason": "outputs up to date"
+}
