@@ -21,8 +21,6 @@
   <!-- None+Pack avoids duplicated espeak-ng-data paths in the nupkg (Content+PackagePath bug). -->
   <ItemGroup Condition="Exists('..\..\models\$(BundledModelFolderName)\tokens.txt')">
     <None Include="..\..\models\$(BundledModelFolderName)\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
       <Pack>true</Pack>
       <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
