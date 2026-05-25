@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <!-- Copies bundled Piper models from this package's contentFiles into the app output. -->
-  <Target Name="CopyNovolisBundledVoiceModels"
+  <PropertyGroup>
+    <_NovolisVoiceModelZipName>en-us-piper-amy.zip</_NovolisVoiceModelZipName>
+    <_NovolisVoiceModelProfileDir>en-us-piper-amy</_NovolisVoiceModelProfileDir>
+    <_NovolisVoiceModelsOut>$(OutDir)models\$(_NovolisVoiceModelProfileDir)\</_NovolisVoiceModelsOut>
+    <_NovolisVoiceModelZipInPackage>$(MSBuildThisFileDirectory)..\contentFiles\any\any\models\$(_NovolisVoiceModelZipName)</_NovolisVoiceModelZipInPackage>
+    <_NovolisVoiceModelZipInOutput>$(OutDir)models\$(_NovolisVoiceModelZipName)</_NovolisVoiceModelZipInOutput>
+  </PropertyGroup>
+
+  <Target Name="ExtractNovolisBundledVoiceModels"
           AfterTargets="ResolveReferences"
-          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
+          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true' and !Exists('$(_NovolisVoiceModelsOut)tokens.txt')">
     <PropertyGroup>
-      <_NovolisVoiceModelsId>Novolis.Audio.Voice.SherpaOnnx</_NovolisVoiceModelsId>
-      <_NovolisVoiceModelsRoot>$(MSBuildThisFileDirectory)..\contentFiles\any\any\models\en-us-piper-amy\</_NovolisVoiceModelsRoot>
-      <_NovolisVoiceModelsOut>$(OutDir)models\en-us-piper-amy\</_NovolisVoiceModelsOut>
+      <_NovolisVoiceModelZip Condition="Exists('$(_NovolisVoiceModelZipInOutput)')">$(_NovolisVoiceModelZipInOutput)</_NovolisVoiceModelZip>
+      <_NovolisVoiceModelZip Condition="'$(_NovolisVoiceModelZip)' == '' and Exists('$(_NovolisVoiceModelZipInPackage)')">$(_NovolisVoiceModelZipInPackage)</_NovolisVoiceModelZip>
     </PropertyGroup>
-    <ItemGroup Condition="Exists('$(_NovolisVoiceModelsRoot)tokens.txt')">
-      <_NovolisVoiceModelFile Include="$(_NovolisVoiceModelsRoot)**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(_NovolisVoiceModelFile)"
-          DestinationFiles="@(_NovolisVoiceModelFile->'$(_NovolisVoiceModelsOut)%(RecursiveDir)%(Filename)%(Extension)')"
-          SkipUnchangedFiles="true"
-          Condition="'@(_NovolisVoiceModelFile)' != ''" />
+    <Error Condition="'$(_NovolisVoiceModelZip)' == ''"
+           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled model zip (restore a current 2026.1.* package from GitHub Packages)." />
+    <MakeDir Directories="$(_NovolisVoiceModelsOut)" />
+    <Exec Command="powershell -NoProfile -Command &quot;Expand-Archive -LiteralPath '$(_NovolisVoiceModelZip)' -DestinationPath '$(_NovolisVoiceModelsOut)' -Force&quot;" />
   </Target>
 </Project>

@@ -13,7 +13,7 @@ git lfs install
 git clone https://github.com/Novolis-Platform/novolis-audio.git
 ```
 
-`Novolis.Audio.Voice.SherpaOnnx` copies the model to build output and packs it in the NuGet package under `models/en-us-piper-amy/`.
+`Novolis.Audio.Voice.SherpaOnnx` packs `models/en-us-piper-amy.zip` in the NuGet package and extracts it to `models/en-us-piper-amy/` in the app output directory (via `buildTransitive/Novolis.Audio.Voice.SherpaOnnx.targets`). Requires `Novolis.Audio.Voice.SherpaOnnx` `2026.1.3+` on GitHub Packages.
 
 ## Override with another model
 

@@ -12,17 +12,22 @@
     <IsPackable>true</IsPackable>
     <Description>Sherpa-ONNX offline TTS with bundled Piper en-us-piper-amy model.</Description>
     <BundledModelFolderName>en-us-piper-amy</BundledModelFolderName>
+    <VoiceModelZip>$(MSBuildThisFileDirectory)..\..\artifacts\voice-model-en-us-piper-amy.zip</VoiceModelZip>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="org.k2fsa.sherpa.onnx" />
   </ItemGroup>
 
-  <!-- None+Pack avoids duplicated espeak-ng-data paths in the nupkg (Content+PackagePath bug). -->
-  <ItemGroup Condition="Exists('..\..\models\$(BundledModelFolderName)\tokens.txt')">
-    <None Include="..\..\models\$(BundledModelFolderName)\**\*">
+  <Target Name="CreateVoiceModelZip" BeforeTargets="PrepareForBuild"
+          Condition="Exists('..\..\models\$(BundledModelFolderName)\tokens.txt') and !Exists('$(VoiceModelZip)')">
+    <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-voice-model-archive.ps1&quot;" />
+  </Target>
+
+  <ItemGroup Condition="Exists('$(VoiceModelZip)')">
+    <None Include="$(VoiceModelZip)">
       <Pack>true</Pack>
-      <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+      <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName).zip</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </None>
   </ItemGroup>
@@ -36,15 +41,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
-
-  <!-- NuGet pack treats extensionless files as directories; omit trailing %(Extension). -->
-  <Target Name="_FixExtensionlessVoiceModelPackagePaths" BeforeTargets="_GetPackageFiles">
-    <ItemGroup>
-      <None Update="@(None)"
-                Condition="$([System.String]::Copy('%(Identity)').Contains('models\$(BundledModelFolderName)')) and '%(Extension)' == ''">
-        <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName)/%(RecursiveDir)%(Filename)</PackagePath>
-      </None>
-    </ItemGroup>
-  </Target>
 
 </Project>
