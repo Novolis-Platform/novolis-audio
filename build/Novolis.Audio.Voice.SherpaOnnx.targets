@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Copies bundled Piper models from this package's contentFiles into the app output. -->
+  <Target Name="CopyNovolisBundledVoiceModels"
+          AfterTargets="ResolveReferences"
+          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
+    <PropertyGroup>
+      <_NovolisVoiceModelsId>Novolis.Audio.Voice.SherpaOnnx</_NovolisVoiceModelsId>
+      <_NovolisVoiceModelsRoot>$(MSBuildThisFileDirectory)..\contentFiles\any\any\models\en-us-piper-amy\</_NovolisVoiceModelsRoot>
+      <_NovolisVoiceModelsOut>$(OutDir)models\en-us-piper-amy\</_NovolisVoiceModelsOut>
+    </PropertyGroup>
+    <ItemGroup Condition="Exists('$(_NovolisVoiceModelsRoot)tokens.txt')">
+      <_NovolisVoiceModelFile Include="$(_NovolisVoiceModelsRoot)**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_NovolisVoiceModelFile)"
+          DestinationFiles="@(_NovolisVoiceModelFile->'$(_NovolisVoiceModelsOut)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true"
+          Condition="'@(_NovolisVoiceModelFile)' != ''" />
+  </Target>
+</Project>
