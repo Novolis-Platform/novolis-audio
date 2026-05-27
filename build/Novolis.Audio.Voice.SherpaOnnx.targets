@@ -2,10 +2,61 @@
 <Project>
   <PropertyGroup>
     <_NovolisBundledVoiceModelIds>en-us-piper-amy;en-us-piper-lessac-low;en-us-piper-kristin-medium</_NovolisBundledVoiceModelIds>
+    <_NovolisVoiceArtifactsDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\artifacts'))</_NovolisVoiceArtifactsDir>
   </PropertyGroup>
 
-  <Target Name="ExtractNovolisBundledVoiceModels"
+  <!-- Zips are created in CreateVoiceModelZips (PrepareForBuild); copy after Build so fresh CI builds include all profiles. -->
+  <Target Name="CopyNovolisVoiceModelZipsToOutput"
           AfterTargets="Build"
+          BeforeTargets="ExtractNovolisBundledVoiceModels"
+          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
+    <PropertyGroup>
+      <_NovolisVoiceModelsOutRoot>$([System.IO.Path]::Combine('$(OutDir.TrimEnd(`\`))', 'models'))</_NovolisVoiceModelsOutRoot>
+    </PropertyGroup>
+    <MakeDir Directories="$(_NovolisVoiceModelsOutRoot)" />
+    <Copy SourceFiles="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-amy.zip"
+          DestinationFiles="$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy.zip"
+          SkipUnchangedFiles="true"
+          Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-amy.zip')" />
+    <Copy SourceFiles="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-lessac-low.zip"
+          DestinationFiles="$(_NovolisVoiceModelsOutRoot)\en-us-piper-lessac-low.zip"
+          SkipUnchangedFiles="true"
+          Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-lessac-low.zip')" />
+    <Copy SourceFiles="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-kristin-medium.zip"
+          DestinationFiles="$(_NovolisVoiceModelsOutRoot)\en-us-piper-kristin-medium.zip"
+          SkipUnchangedFiles="true"
+          Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-kristin-medium.zip')" />
+  </Target>
+
+  <!-- ItemGroup Exists() is evaluated before CreateVoiceModelZips; add pack inputs after zips exist. -->
+  <Target Name="AddNovolisVoiceModelZipsForPack"
+          AfterTargets="CreateVoiceModelZips"
+          BeforeTargets="Pack"
+          Condition="'$(IsPackable)' == 'true'">
+    <ItemGroup>
+      <Content Include="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-amy.zip"
+               Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-amy.zip')">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles/any/any/models/en-us-piper-amy.zip</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+      <Content Include="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-lessac-low.zip"
+               Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-lessac-low.zip')">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles/any/any/models/en-us-piper-lessac-low.zip</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+      <Content Include="$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-kristin-medium.zip"
+               Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-kristin-medium.zip')">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles/any/any/models/en-us-piper-kristin-medium.zip</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ExtractNovolisBundledVoiceModels"
+          AfterTargets="CopyNovolisVoiceModelZipsToOutput"
           Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
     <PropertyGroup>
       <_NovolisVoiceModelsOutRoot>$([System.IO.Path]::Combine('$(OutDir.TrimEnd(`\`))', 'models'))</_NovolisVoiceModelsOutRoot>
@@ -16,9 +67,14 @@
     <Error Condition="'$(_NovolisExtractVoiceModelsScript)' == '' or !Exists('$(_NovolisExtractVoiceModelsScript)')"
            Text="Novolis.Audio.Voice.SherpaOnnx: missing extract script (expected under buildTransitive/scripts or repo scripts/)." />
 
-    <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(_NovolisExtractVoiceModelsScript)&quot; -OutputDir &quot;$(OutDir.TrimEnd('\'))&quot;" />
+    <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(_NovolisExtractVoiceModelsScript)&quot; -OutputDir &quot;$(OutDir.TrimEnd('\'))&quot;"
+          Condition="Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy.zip') or Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-lessac-low.zip') or Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-kristin-medium.zip')" />
 
-    <Error Condition="!Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-amy`, `tokens.txt`))') or !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-lessac-low`, `tokens.txt`))') or !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-kristin-medium`, `tokens.txt`))')"
-           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled models (restore Novolis.Audio.Voice.SherpaOnnx from GitHub Packages or build novolis-audio with all three model zips present)." />
+    <Error Condition="Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy.zip') and !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-amy`, `tokens.txt`))')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: failed to extract en-us-piper-amy (missing tokens.txt after unzip)." />
+    <Error Condition="Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-lessac-low.zip') and !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-lessac-low`, `tokens.txt`))')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: failed to extract en-us-piper-lessac-low (missing tokens.txt after unzip)." />
+    <Error Condition="Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-kristin-medium.zip') and !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-kristin-medium`, `tokens.txt`))')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: failed to extract en-us-piper-kristin-medium (missing tokens.txt after unzip)." />
   </Target>
 </Project>

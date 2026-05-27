@@ -23,43 +23,6 @@
     <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-all-voice-model-archives.ps1&quot;" />
   </Target>
 
-  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-amy.zip')">
-    <None Include="..\..\artifacts\voice-model-en-us-piper-amy.zip">
-      <Pack>true</Pack>
-      <PackagePath>contentFiles/any/any/models/en-us-piper-amy.zip</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </None>
-    <Content Include="..\..\artifacts\voice-model-en-us-piper-amy.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>models\en-us-piper-amy.zip</TargetPath>
-      <Visible>false</Visible>
-    </Content>
-  </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-lessac-low.zip')">
-    <None Include="..\..\artifacts\voice-model-en-us-piper-lessac-low.zip">
-      <Pack>true</Pack>
-      <PackagePath>contentFiles/any/any/models/en-us-piper-lessac-low.zip</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </None>
-    <Content Include="..\..\artifacts\voice-model-en-us-piper-lessac-low.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>models\en-us-piper-lessac-low.zip</TargetPath>
-      <Visible>false</Visible>
-    </Content>
-  </ItemGroup>
-  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip')">
-    <None Include="..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip">
-      <Pack>true</Pack>
-      <PackagePath>contentFiles/any/any/models/en-us-piper-kristin-medium.zip</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </None>
-    <Content Include="..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>models\en-us-piper-kristin-medium.zip</TargetPath>
-      <Visible>false</Visible>
-    </Content>
-  </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\build\Novolis.Audio.Voice.SherpaOnnx.targets"
           Pack="true"
