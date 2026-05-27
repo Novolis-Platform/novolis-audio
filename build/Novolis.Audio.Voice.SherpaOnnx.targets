@@ -16,9 +16,9 @@
     <Error Condition="'$(_NovolisExtractVoiceModelsScript)' == '' or !Exists('$(_NovolisExtractVoiceModelsScript)')"
            Text="Novolis.Audio.Voice.SherpaOnnx: missing extract script (expected under buildTransitive/scripts or repo scripts/)." />
 
-    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(_NovolisExtractVoiceModelsScript)&quot; -OutputDir &quot;$(OutDir.TrimEnd('\'))&quot;" />
+    <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(_NovolisExtractVoiceModelsScript)&quot; -OutputDir &quot;$(OutDir.TrimEnd('\'))&quot;" />
 
-    <Error Condition="!Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy\tokens.txt') or !Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-lessac-low\tokens.txt') or !Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-kristin-medium\tokens.txt')"
+    <Error Condition="!Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-amy`, `tokens.txt`))') or !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-lessac-low`, `tokens.txt`))') or !Exists('$([System.IO.Path]::Combine($(_NovolisVoiceModelsOutRoot), `en-us-piper-kristin-medium`, `tokens.txt`))')"
            Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled models (restore Novolis.Audio.Voice.SherpaOnnx from GitHub Packages or build novolis-audio with all three model zips present)." />
   </Target>
 </Project>
