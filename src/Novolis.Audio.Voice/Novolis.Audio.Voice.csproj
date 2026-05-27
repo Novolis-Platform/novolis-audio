@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Novolis.Audio.Effects\Novolis.Audio.Effects.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Playback\Novolis.Audio.Playback.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Profiles\Novolis.Audio.Voice.Profiles.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
   </ItemGroup>
 

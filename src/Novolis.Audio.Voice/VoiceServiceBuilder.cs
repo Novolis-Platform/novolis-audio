@@ -70,6 +70,12 @@ public sealed class VoiceServiceBuilder
         return this;
     }
 
+    /// <summary>Current synthesis options on this builder (for layered composition).</summary>
+    public VoiceSynthesisOptions SynthesisOptions => _options.Synthesis;
+
+    /// <summary>Current effect pipeline on this builder (for tests and composition).</summary>
+    public IAudioEffectPipeline EffectPipeline => _effects;
+
     /// <summary>Registers a text normalizer (e.g. phraseology) before synthesis.</summary>
     public VoiceServiceBuilder NormalizeWith(Func<string, string> normalize)
     {

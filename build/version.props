@@ -4,8 +4,8 @@
   <PropertyGroup Label="Novolis platform version (YEAR.MAJOR.MINOR; BUILD from CI)">
     <NovolisYear>2026</NovolisYear>
     <NovolisMajor>1</NovolisMajor>
-    <NovolisMinor>2</NovolisMinor>
-    <NovolisPlatformVersion>2026.1.2</NovolisPlatformVersion>
+    <NovolisMinor>3</NovolisMinor>
+    <NovolisPlatformVersion>2026.1.3</NovolisPlatformVersion>
     <NovolisPackageFloatVersion>2026.1.*</NovolisPackageFloatVersion>
     <NovolisLocalBuild Condition="'$(NovolisLocalBuild)' == ''">1</NovolisLocalBuild>
   </PropertyGroup>

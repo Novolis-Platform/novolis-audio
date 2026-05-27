@@ -30,11 +30,22 @@ await voice.WriteToFileAsync(
 services.AddNovolisVoice();
 ```
 
+## Archetypes
+
+```csharp
+using Novolis.Audio.Voice.Profiles;
+
+var builder = VoiceArchetypeApplicator.Apply(
+    new VoiceServiceBuilder(),
+    VoiceArchetypeCatalog.ExcitableFemale);
+```
+
 ## Related packages
 
 | Package | When to use |
 |---------|-------------|
-| `Novolis.Audio.Voice.Atc` | ATC phraseology preset |
+| `Novolis.Audio.Voice.Profiles` | Archetype catalog (lightweight) |
+| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + radio) |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio` | Game SFX (miniaudio) — separate stack |
 

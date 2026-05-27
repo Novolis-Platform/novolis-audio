@@ -18,5 +18,23 @@ public static class NovolisAudioVoiceModelsManifest
             EspeakVoice: "en-us",
             RequiredFiles: ["tokens.txt", "en_US-amy-low.onnx"],
             RequiredDirectories: ["espeak-ng-data"]),
+        new(
+            Id: "en-us-piper-lessac-low",
+            Engine: VoiceModelEngineKind.SherpaOnnxVitsPiper,
+            RepoFolder: "en-us-piper-lessac-low",
+            OnnxFileName: "en_US-lessac-low.onnx",
+            SampleRateHz: 16_000,
+            EspeakVoice: "en-us",
+            RequiredFiles: ["tokens.txt", "en_US-lessac-low.onnx"],
+            RequiredDirectories: ["espeak-ng-data"]),
+        new(
+            Id: "en-us-piper-kristin-medium",
+            Engine: VoiceModelEngineKind.SherpaOnnxVitsPiper,
+            RepoFolder: "en-us-piper-kristin-medium",
+            OnnxFileName: "en_US-kristin-medium.onnx",
+            SampleRateHz: 22_050,
+            EspeakVoice: "en",
+            RequiredFiles: ["tokens.txt", "en_US-kristin-medium.onnx"],
+            RequiredDirectories: ["espeak-ng-data"]),
     ];
 }

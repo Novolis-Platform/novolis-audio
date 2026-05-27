@@ -1,0 +1,15 @@
+# Model card for lessac (low)
+
+* Language: en_US (English, United States)
+* Speakers: 1
+* Quality: low
+* Samplerate: 16,000Hz
+
+## Dataset
+
+* Piper voice: en_US-lessac-low
+* Source: [sherpa-onnx tts-models](https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models)
+
+## Usage in Novolis
+
+Bundled speaker for male voice archetypes (`procedural_male`, `steady_male`).

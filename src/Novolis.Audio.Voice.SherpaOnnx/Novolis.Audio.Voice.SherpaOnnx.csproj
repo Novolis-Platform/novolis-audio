@@ -10,24 +10,37 @@
     <AssemblyName>Novolis.Audio.Voice.SherpaOnnx</AssemblyName>
     <PackageId>Novolis.Audio.Voice.SherpaOnnx</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Sherpa-ONNX offline TTS with bundled Piper en-us-piper-amy model.</Description>
-    <BundledModelFolderName>en-us-piper-amy</BundledModelFolderName>
-    <VoiceModelZip>$(MSBuildThisFileDirectory)..\..\artifacts\voice-model-en-us-piper-amy.zip</VoiceModelZip>
+    <Description>Sherpa-ONNX offline TTS with bundled Piper voice models (amy, lessac, kristin).</Description>
+    <_VoiceModelIds>en-us-piper-amy;en-us-piper-lessac-low;en-us-piper-kristin-medium</_VoiceModelIds>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="org.k2fsa.sherpa.onnx" />
   </ItemGroup>
 
-  <Target Name="CreateVoiceModelZip" BeforeTargets="PrepareForBuild"
-          Condition="Exists('..\..\models\$(BundledModelFolderName)\tokens.txt') and !Exists('$(VoiceModelZip)')">
-    <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-voice-model-archive.ps1&quot;" />
+  <Target Name="CreateVoiceModelZips" BeforeTargets="PrepareForBuild"
+          Condition="Exists('..\..\models\en-us-piper-amy\tokens.txt')">
+    <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-all-voice-model-archives.ps1&quot;" />
   </Target>
 
-  <ItemGroup Condition="Exists('$(VoiceModelZip)')">
-    <None Include="$(VoiceModelZip)">
+  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-amy.zip')">
+    <None Include="..\..\artifacts\voice-model-en-us-piper-amy.zip">
       <Pack>true</Pack>
-      <PackagePath>contentFiles/any/any/models/$(BundledModelFolderName).zip</PackagePath>
+      <PackagePath>contentFiles/any/any/models/en-us-piper-amy.zip</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-lessac-low.zip')">
+    <None Include="..\..\artifacts\voice-model-en-us-piper-lessac-low.zip">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/any/any/models/en-us-piper-lessac-low.zip</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip')">
+    <None Include="..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/any/any/models/en-us-piper-kristin-medium.zip</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </None>
   </ItemGroup>
@@ -36,6 +49,9 @@
     <None Include="..\..\build\Novolis.Audio.Voice.SherpaOnnx.targets"
           Pack="true"
           PackagePath="buildTransitive/Novolis.Audio.Voice.SherpaOnnx.targets" />
+    <None Include="..\..\scripts\extract-bundled-voice-models.ps1"
+          Pack="true"
+          PackagePath="buildTransitive/scripts/extract-bundled-voice-models.ps1" />
   </ItemGroup>
 
   <ItemGroup>

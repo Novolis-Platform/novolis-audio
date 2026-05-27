@@ -8,7 +8,7 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 
 **Consumer entry (game SFX):** `Novolis.Audio` or `MiniaudioAudioEngine` + abstractions.
 
-**Consumer entry (voice/TTS):** `Novolis.Audio.Voice` (+ optional `Novolis.Audio.Voice.Atc`).
+**Consumer entry (voice/TTS):** `Novolis.Audio.Voice` + `Novolis.Audio.Voice.Profiles` (base archetypes) + optional `Novolis.Audio.Voice.Atc` (delivery).
 
 ## Layout
 
@@ -19,7 +19,7 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 | `src/Novolis.Audio.Bindings/Interop/*.g.cs` | Generated — do not hand-edit |
 | `src/Novolis.Audio.Runtime/**/**.g.cs` | Generated façades |
 | `src/Novolis.Audio.Core/` | PCM + WAV |
-| `src/Novolis.Audio.Voice*/` | TTS facade, phraseology, Sherpa stub, ATC profile |
+| `src/Novolis.Audio.Voice*/` | TTS facade, archetypes, phraseology, Sherpa, ATC delivery |
 | `codegen/native/novolis-audio-platform/` | CMake → `novolis_audio` DLL |
 
 ## Commands

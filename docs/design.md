@@ -60,8 +60,9 @@ PcmBuffer (Novolis.Audio.Core)
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa adapter (stub → null synth) |
 | `Novolis.Audio.Voice.Phraseology` | ICAO digit words |
 | `Novolis.Audio.Voice` | `SpeakAsync` / `WriteToFileAsync` facade |
-| `Novolis.Audio.Voice.Atc` | ATC profile preset |
+| `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes (model + rate) |
+| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + `atc-radio` DSP) |
 
 **Consumer entry for voice:** `Novolis.Audio.Voice` (not bundled into the `Novolis.Audio` meta-package).
 
-Domain-specific profiles (`Voice.Bridge`, `Voice.Dispatch`, …) follow the `Voice.Atc` pattern in separate packages.
+Compose **archetype** (`Voice.Profiles`) then **delivery** (`Voice.Atc` for radio/ICAO). Domain-specific delivery packages (`Voice.Radio`, …) can follow the `Voice.Atc` pattern.

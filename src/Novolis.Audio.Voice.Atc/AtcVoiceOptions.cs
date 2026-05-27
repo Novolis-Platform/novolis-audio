@@ -1,13 +1,12 @@
 namespace Novolis.Audio.Voice.Atc;
 
-/// <summary>ATC-specific voice and phraseology options.</summary>
+/// <summary>ATC delivery options (phraseology and radio DSP). Does not select TTS model or base speaking rate.</summary>
 public sealed class AtcVoiceOptions
 {
+    internal const int DefaultEffectSampleRateHz = 16_000;
+
     /// <summary>When true, applies ICAO digit expansion before synthesis.</summary>
     public bool UsePhraseology { get; init; } = true;
-
-    /// <summary>Speaking rate multiplier (&gt;1 = faster, more urgent delivery).</summary>
-    public float SpeakingRate { get; init; } = 1.14f;
 
     /// <summary>When true, applies the <see cref="EffectChainId"/> DSP chain after synthesis.</summary>
     public bool ApplyRadioEffects { get; init; } = true;
@@ -15,8 +14,11 @@ public sealed class AtcVoiceOptions
     /// <summary>Effect chain id. Use <c>atc-radio</c> for band-limit + dynamics + hiss, or <c>none</c> for dry output.</summary>
     public string EffectChainId { get; init; } = "atc-radio";
 
-    /// <summary>PCM sample rate used by band-limit filters (default 16 kHz for bundled Piper).</summary>
-    public int EffectSampleRateHz { get; init; } = 16_000;
+    /// <summary>
+    /// PCM sample rate for band-limit filters. When left at the default, resolved from the builder's
+    /// <see cref="VoiceSynthesisOptions.ModelProfile"/> via <see cref="VoiceModelCatalog"/>.
+    /// </summary>
+    public int EffectSampleRateHz { get; init; } = DefaultEffectSampleRateHz;
 
     /// <summary>High-pass cutoff in Hz (radio low cut).</summary>
     public float HighPassHz { get; init; } = 320f;

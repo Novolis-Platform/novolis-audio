@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Profiles</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Profiles</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Profiles</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Neutral base-voice archetypes (catalog only). Apply via Novolis.Audio.Voice.VoiceArchetypeApplicator.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
+

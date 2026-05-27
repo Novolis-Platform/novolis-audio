@@ -1,6 +1,7 @@
 using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.Atc;
 using Novolis.Audio.Voice.Phraseology;
+using Novolis.Audio.Voice.Profiles;
 using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Unit;
@@ -8,9 +9,9 @@ namespace Novolis.Audio.Unit;
 public class VoiceStackTests
 {
     [Test]
-    public async Task AtcVoiceProfile_uses_atc_profile_id()
+    public async Task AtcVoiceProfile_exposes_delivery_tag()
     {
-        await Assert.That(AtcVoiceProfile.Profile.Id).IsEqualTo("atc");
+        await Assert.That(AtcVoiceProfile.DeliveryTag.Id).IsEqualTo("atc");
         var normalizer = new DefaultPhraseologyNormalizer();
         var normalized = normalizer.Normalize("SAS 123");
         await Assert.That(normalized).Contains("one");
@@ -18,14 +19,15 @@ public class VoiceStackTests
     }
 
     [Test]
-    public async Task VoiceModelCatalog_lists_bundled_en_us_piper_amy()
+    public async Task VoiceModelCatalog_lists_all_bundled_models()
     {
-        await Assert.That(VoiceModelCatalog.TryGet(VoiceModelCatalog.EnUsPiperAmy, out var model)).IsTrue();
-        await Assert.That(model.Profile.Id).IsEqualTo("en-us-piper-amy");
-        await Assert.That(model.RepoFolder).IsEqualTo("en-us-piper-amy");
-        await Assert.That(model.OnnxFileName).IsEqualTo("en_US-amy-low.onnx");
-        await Assert.That(model.SampleRateHz).IsEqualTo(16_000);
-        await Assert.That(model.Engine).IsEqualTo(VoiceModelEngine.SherpaOnnxVitsPiper);
+        await Assert.That(VoiceModelCatalog.All.Count).IsEqualTo(3);
+        await Assert.That(VoiceModelCatalog.TryGet(VoiceModelCatalog.EnUsPiperAmy, out var amy)).IsTrue();
+        await Assert.That(amy.SampleRateHz).IsEqualTo(16_000);
+        await Assert.That(VoiceModelCatalog.TryGet(VoiceModelCatalog.EnUsPiperLessacLow, out var lessac)).IsTrue();
+        await Assert.That(lessac.OnnxFileName).IsEqualTo("en_US-lessac-low.onnx");
+        await Assert.That(VoiceModelCatalog.TryGet(VoiceModelCatalog.EnUsPiperKristinMedium, out var kristin)).IsTrue();
+        await Assert.That(kristin.SampleRateHz).IsEqualTo(22_050);
     }
 
     [Test]
@@ -43,6 +45,7 @@ public class VoiceStackTests
             typeof(SherpaVoiceSynthesizer).Assembly,
             typeof(IPhraseologyNormalizer).Assembly,
             typeof(AtcVoiceProfile).Assembly,
+            typeof(VoiceArchetypeCatalog).Assembly,
         };
 
         foreach (var assembly in voiceAssemblies)
@@ -57,18 +60,41 @@ public class VoiceStackTests
     }
 
     [Test]
-    public async Task Sherpa_synthesizer_produces_audio_when_models_present()
+    public async Task Voice_Profiles_does_not_reference_heavy_voice_stack()
     {
-        var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null, VoiceModelCatalog.EnUsPiperAmy);
-        if (paths is null || !VoiceModelMaterialization.IsMaterializedOnnx(paths.ModelFile))
-            return;
+        var forbidden = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Novolis.Audio.Voice",
+            "Novolis.Audio.Voice.SherpaOnnx",
+            "Novolis.Audio.Effects",
+            "Novolis.Audio.Playback",
+            "Novolis.Audio.Voice.Atc",
+        };
 
-        using var synth = new SherpaVoiceSynthesizer();
-        var pcm = await synth.SynthesizeAsync(
-            "Tower, ready for departure.",
-            new VoiceSynthesisOptions(),
-            CancellationToken.None);
+        foreach (var reference in typeof(VoiceArchetypeCatalog).Assembly.GetReferencedAssemblies())
+        {
+            if (reference.Name is null)
+                continue;
+            await Assert.That(forbidden.Contains(reference.Name)).IsFalse();
+        }
+    }
 
-        await Assert.That(pcm.Samples.Length).IsGreaterThan(1000);
+    [Test]
+    public async Task Sherpa_synthesizer_produces_audio_for_each_bundled_model_when_present()
+    {
+        foreach (var bundled in VoiceModelCatalog.All)
+        {
+            var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null, bundled.Profile);
+            if (paths is null || !VoiceModelMaterialization.IsMaterializedOnnx(paths.ModelFile))
+                continue;
+
+            using var synth = new SherpaVoiceSynthesizer();
+            var pcm = await synth.SynthesizeAsync(
+                "Tower, ready for departure.",
+                new VoiceSynthesisOptions { ModelProfile = bundled.Profile },
+                CancellationToken.None);
+
+            await Assert.That(pcm.Samples.Length).IsGreaterThan(1000);
+        }
     }
 }

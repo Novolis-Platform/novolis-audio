@@ -27,7 +27,8 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Voice.Abstractions` | TTS contracts |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
-| `Novolis.Audio.Voice.Atc` | ATC profile preset |
+| `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes |
+| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + radio DSP) |
 
 Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack).
 
@@ -56,7 +57,7 @@ await voice.SpeakAsync("Tower, ready for departure.");
 await voice.WriteToFileAsync("Cleared for takeoff.", new FileInfo("atc.wav"));
 ```
 
-English Piper TTS model is bundled under `models/en-us-piper-amy/` (Git LFS). Clone with `git lfs install` first. Override via `NOVOLIS_VOICE_MODEL_DIR` — see [docs/voice-models.md](docs/voice-models.md).
+Three English Piper models ship under `models/` (Git LFS for `*.onnx`). Archetypes in `Novolis.Audio.Voice.Profiles` map speakers to temperament — see [docs/voice-models.md](docs/voice-models.md).
 
 ## Maintainer pipeline
 

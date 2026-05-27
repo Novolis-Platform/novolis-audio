@@ -1,37 +1,72 @@
-using Novolis.Audio.Voice;
+using Novolis.Audio.Effects;
 using Novolis.Audio.Voice.Phraseology;
 
 namespace Novolis.Audio.Voice.Atc;
 
-/// <summary>Preconfigured ATC voice profile.</summary>
+/// <summary>ATC delivery layer: ICAO phraseology and optional <c>atc-radio</c> DSP (compose after a base archetype).</summary>
 public static class AtcVoiceProfile
 {
-    /// <summary>ATC voice profile id.</summary>
-    public static readonly VoiceProfile Profile = new("atc");
+    /// <summary>Legacy delivery tag; base <see cref="VoiceProfile"/> id should come from <see cref="Profiles.VoiceArchetypeCatalog"/>.</summary>
+    public static readonly VoiceProfile DeliveryTag = new("atc");
 
-    /// <summary>Applies ATC defaults to a <see cref="VoiceServiceBuilder"/>.</summary>
-    public static VoiceServiceBuilder Apply(VoiceServiceBuilder builder, AtcVoiceOptions? options = null)
+    /// <summary>
+    /// Applies ATC delivery only: phraseology normalizer and radio effects.
+    /// Does not change <see cref="VoiceSynthesisOptions.ModelProfile"/> or speaking rate.
+    /// </summary>
+    public static VoiceServiceBuilder ApplyDelivery(VoiceServiceBuilder builder, AtcVoiceOptions? options = null)
     {
+        ArgumentNullException.ThrowIfNull(builder);
         options ??= new AtcVoiceOptions();
-        builder = builder.Configure(v =>
+
+        if (options.UsePhraseology)
         {
-            v.Synthesis = new VoiceSynthesisOptions
-            {
-                Profile = Profile,
-                ModelProfile = VoiceModelCatalog.DefaultProfile,
-                SpeakingRate = options.SpeakingRate,
-            };
-            if (options.UsePhraseology)
-            {
-                var normalizer = new DefaultPhraseologyNormalizer();
-                v.NormalizeText = normalizer.Normalize;
-            }
-        });
+            var normalizer = new DefaultPhraseologyNormalizer();
+            builder = builder.NormalizeWith(normalizer.Normalize);
+        }
 
         if (options.ApplyRadioEffects &&
             string.Equals(options.EffectChainId, "atc-radio", StringComparison.Ordinal))
-            builder = builder.UseEffects(AtcRadioEffects.Create(options));
+        {
+            var radioOptions = WithModelSampleRate(builder, options);
+            builder = builder.UseEffects(AtcRadioEffects.Create(radioOptions));
+        }
 
         return builder;
+    }
+
+    /// <summary>
+    /// Applies ATC delivery. Prefer composing
+    /// <see cref="VoiceArchetypeApplicator"/> then <see cref="ApplyDelivery"/>.
+    /// </summary>
+    public static VoiceServiceBuilder Apply(VoiceServiceBuilder builder, AtcVoiceOptions? options = null) =>
+        ApplyDelivery(builder, options);
+
+    private static AtcVoiceOptions WithModelSampleRate(VoiceServiceBuilder builder, AtcVoiceOptions options)
+    {
+        var modelProfile = builder.SynthesisOptions.ModelProfile;
+        if (modelProfile.IsEmpty)
+            modelProfile = VoiceModelCatalog.DefaultProfile;
+
+        if (!VoiceModelCatalog.TryGet(modelProfile, out var bundled))
+            return options;
+
+        if (options.EffectSampleRateHz == AtcVoiceOptions.DefaultEffectSampleRateHz)
+        {
+            return new AtcVoiceOptions
+            {
+                UsePhraseology = options.UsePhraseology,
+                ApplyRadioEffects = options.ApplyRadioEffects,
+                EffectChainId = options.EffectChainId,
+                EffectSampleRateHz = bundled.SampleRateHz,
+                HighPassHz = options.HighPassHz,
+                LowPassHz = options.LowPassHz,
+                Drive = options.Drive,
+                MakeupGain = options.MakeupGain,
+                OutputGainDb = options.OutputGainDb,
+                HissLevel = options.HissLevel,
+            };
+        }
+
+        return options;
     }
 }

@@ -33,18 +33,23 @@ engine.Start();
 <PackageReference Include="Novolis.Audio.Voice" Version="2026.1.*" />
 ```
 
-Optional ATC preset:
+Optional archetypes + ATC delivery:
 
 ```xml
+<PackageReference Include="Novolis.Audio.Voice.Profiles" Version="2026.1.*" />
 <PackageReference Include="Novolis.Audio.Voice.Atc" Version="2026.1.*" />
 ```
 
 ```csharp
 using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.Atc;
+using Novolis.Audio.Voice.Profiles;
 
-// Builder: Sherpa TTS + NAudio playback (silent fallback without models)
-IVoiceService voice = new VoiceServiceBuilder().BuildService();
+var builder = VoiceArchetypeApplicator.Apply(
+    new VoiceServiceBuilder(),
+    VoiceArchetypeCatalog.ExcitableFemale);
+AtcVoiceProfile.ApplyDelivery(builder);
+IVoiceService voice = builder.BuildService();
 
 await voice.SpeakAsync("Tower, SAS one two three is ready for departure.");
 await voice.WriteToFileAsync("Cleared for takeoff runway two two.", new FileInfo("atc.wav"));
@@ -64,7 +69,7 @@ See [voice-models.md](voice-models.md).
 
 ```csharp
 services.AddNovolisVoice();       // Sherpa + NAudio
-services.AddNovolisAtcVoice();    // + ICAO phraseology preset
+services.AddNovolisAtcVoice(VoiceArchetypeCatalog.ExcitableFemale);  // archetype + ATC delivery
 ```
 
 ### Headless voice tests

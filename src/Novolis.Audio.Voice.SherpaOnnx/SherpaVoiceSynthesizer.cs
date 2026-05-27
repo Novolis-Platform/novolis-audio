@@ -8,8 +8,7 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
 {
     private readonly NullVoiceSynthesizer _fallback = new();
     private readonly object _gate = new();
-    private OfflineTts? _tts;
-    private SherpaVoiceModelPaths? _loadedPaths;
+    private readonly Dictionary<string, OfflineTts> _engines = new(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
     public Task<PcmBuffer> SynthesizeAsync(
@@ -35,14 +34,14 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
         return Task.FromResult(SherpaAudioConverter.ToPcmBuffer(audio));
     }
 
-    /// <summary>Releases the cached Sherpa engine.</summary>
+    /// <summary>Releases all cached Sherpa engines.</summary>
     public void Dispose()
     {
         lock (_gate)
         {
-            _tts?.Dispose();
-            _tts = null;
-            _loadedPaths = null;
+            foreach (var engine in _engines.Values)
+                engine.Dispose();
+            _engines.Clear();
         }
     }
 
@@ -50,10 +49,9 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
     {
         lock (_gate)
         {
-            if (_tts is not null && _loadedPaths?.ModelDirectory == paths.ModelDirectory)
-                return _tts;
+            if (_engines.TryGetValue(paths.ModelDirectory, out var existing))
+                return existing;
 
-            _tts?.Dispose();
             var config = new OfflineTtsConfig
             {
                 Model = new OfflineTtsModelConfig
@@ -70,9 +68,9 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
                     Provider = "cpu",
                 },
             };
-            _tts = new OfflineTts(config);
-            _loadedPaths = paths;
-            return _tts;
+            var tts = new OfflineTts(config);
+            _engines[paths.ModelDirectory] = tts;
+            return tts;
         }
     }
 }
