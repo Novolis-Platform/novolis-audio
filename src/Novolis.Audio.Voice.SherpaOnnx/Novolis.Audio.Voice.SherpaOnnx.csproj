@@ -29,6 +29,11 @@
       <PackagePath>contentFiles/any/any/models/en-us-piper-amy.zip</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </None>
+    <Content Include="..\..\artifacts\voice-model-en-us-piper-amy.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>models\en-us-piper-amy.zip</TargetPath>
+      <Visible>false</Visible>
+    </Content>
   </ItemGroup>
   <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-lessac-low.zip')">
     <None Include="..\..\artifacts\voice-model-en-us-piper-lessac-low.zip">
@@ -36,6 +41,11 @@
       <PackagePath>contentFiles/any/any/models/en-us-piper-lessac-low.zip</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </None>
+    <Content Include="..\..\artifacts\voice-model-en-us-piper-lessac-low.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>models\en-us-piper-lessac-low.zip</TargetPath>
+      <Visible>false</Visible>
+    </Content>
   </ItemGroup>
   <ItemGroup Condition="Exists('..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip')">
     <None Include="..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip">
@@ -43,6 +53,11 @@
       <PackagePath>contentFiles/any/any/models/en-us-piper-kristin-medium.zip</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </None>
+    <Content Include="..\..\artifacts\voice-model-en-us-piper-kristin-medium.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>models\en-us-piper-kristin-medium.zip</TargetPath>
+      <Visible>false</Visible>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -57,5 +72,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
+
+  <Import Project="..\..\build\Novolis.Audio.Voice.SherpaOnnx.targets" />
 
 </Project>

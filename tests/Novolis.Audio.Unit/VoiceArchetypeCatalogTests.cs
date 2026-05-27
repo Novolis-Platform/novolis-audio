@@ -13,7 +13,7 @@ public class VoiceArchetypeCatalogTests
         await Assert.That(VoiceArchetypeCatalog.All.Count).IsEqualTo(5);
         await Assert.That(VoiceArchetypeCatalog.TryGet("excitable_female", out var excitable)).IsTrue();
         await Assert.That(excitable.Model).IsEqualTo(VoiceModelCatalog.EnUsPiperAmy);
-        await Assert.That(excitable.SpeakingRate).IsEqualTo(1.13f);
+        await Assert.That(excitable.SpeakingRate).IsEqualTo(1.32f);
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class VoiceArchetypeCatalogTests
             VoiceArchetypeCatalog.ProceduralMale);
 
         await Assert.That(builder.SynthesisOptions.ModelProfile).IsEqualTo(VoiceModelCatalog.EnUsPiperLessacLow);
-        await Assert.That(builder.SynthesisOptions.SpeakingRate).IsEqualTo(0.98f);
+        await Assert.That(builder.SynthesisOptions.SpeakingRate).IsEqualTo(1.22f);
         await Assert.That(builder.SynthesisOptions.Profile.Id).IsEqualTo("procedural_male");
         await Assert.That(builder.EffectPipeline.GetType()).IsEqualTo(typeof(IdentityEffectPipeline));
     }
@@ -39,7 +39,7 @@ public class VoiceArchetypeCatalogTests
 
         await Assert.That(builder.SynthesisOptions.ModelProfile).IsEqualTo(VoiceModelCatalog.EnUsPiperAmy);
         await Assert.That(builder.SynthesisOptions.Profile.Id).IsEqualTo("excitable_female");
-        await Assert.That(builder.SynthesisOptions.SpeakingRate).IsEqualTo(1.13f);
+        await Assert.That(builder.SynthesisOptions.SpeakingRate).IsEqualTo(1.32f);
         await Assert.That(builder.EffectPipeline.GetType() == typeof(IdentityEffectPipeline)).IsFalse();
     }
 

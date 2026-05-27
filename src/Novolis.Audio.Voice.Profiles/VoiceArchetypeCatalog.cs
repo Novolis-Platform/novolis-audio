@@ -7,35 +7,35 @@ public static class VoiceArchetypeCatalog
     public static VoiceArchetype ExcitableFemale { get; } = new(
         new VoiceProfile("excitable_female"),
         VoiceModelCatalog.EnUsPiperAmy,
-        SpeakingRate: 1.13f,
+        SpeakingRate: 1.32f,
         Description: "Stressed, professional; brisk but clear");
 
     /// <summary>Seasoned operator; measured, unhurried male.</summary>
     public static VoiceArchetype ProceduralMale { get; } = new(
         new VoiceProfile("procedural_male"),
         VoiceModelCatalog.EnUsPiperLessacLow,
-        SpeakingRate: 0.98f,
+        SpeakingRate: 1.22f,
         Description: "Seasoned operator; measured, unhurried");
 
     /// <summary>Even, reassuring female baseline.</summary>
     public static VoiceArchetype CalmFemale { get; } = new(
         new VoiceProfile("calm_female"),
         VoiceModelCatalog.EnUsPiperKristinMedium,
-        SpeakingRate: 1.00f,
+        SpeakingRate: 1.26f,
         Description: "Even, reassuring baseline");
 
     /// <summary>Confident default male between procedural and excitable pacing.</summary>
     public static VoiceArchetype SteadyMale { get; } = new(
         new VoiceProfile("steady_male"),
         VoiceModelCatalog.EnUsPiperLessacLow,
-        SpeakingRate: 1.04f,
+        SpeakingRate: 1.28f,
         Description: "Confident default male delivery");
 
     /// <summary>Plain reference female with minimal temperament shaping.</summary>
     public static VoiceArchetype NeutralFemale { get; } = new(
         new VoiceProfile("neutral_female"),
         VoiceModelCatalog.EnUsPiperAmy,
-        SpeakingRate: 1.00f,
+        SpeakingRate: 1.24f,
         Description: "Plain reference female");
 
     /// <summary>All bundled archetypes.</summary>

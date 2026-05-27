@@ -2,22 +2,23 @@
 <Project>
   <PropertyGroup>
     <_NovolisBundledVoiceModelIds>en-us-piper-amy;en-us-piper-lessac-low;en-us-piper-kristin-medium</_NovolisBundledVoiceModelIds>
-    <_NovolisVoiceModelsOutRoot>$(OutDir)models</_NovolisVoiceModelsOutRoot>
   </PropertyGroup>
 
   <Target Name="ExtractNovolisBundledVoiceModels"
-          AfterTargets="ResolveReferences"
+          AfterTargets="Build"
           Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
     <PropertyGroup>
-      <_NovolisExtractVoiceModelsScript>$(MSBuildThisFileDirectory)scripts/extract-bundled-voice-models.ps1</_NovolisExtractVoiceModelsScript>
+      <_NovolisVoiceModelsOutRoot>$([System.IO.Path]::Combine('$(OutDir.TrimEnd(`\`))', 'models'))</_NovolisVoiceModelsOutRoot>
+      <_NovolisExtractVoiceModelsScript Condition="Exists('$(MSBuildThisFileDirectory)scripts\extract-bundled-voice-models.ps1')">$(MSBuildThisFileDirectory)scripts\extract-bundled-voice-models.ps1</_NovolisExtractVoiceModelsScript>
+      <_NovolisExtractVoiceModelsScript Condition="'$(_NovolisExtractVoiceModelsScript)' == '' and Exists('$(MSBuildThisFileDirectory)..\scripts\extract-bundled-voice-models.ps1')">$(MSBuildThisFileDirectory)..\scripts\extract-bundled-voice-models.ps1</_NovolisExtractVoiceModelsScript>
     </PropertyGroup>
 
-    <Error Condition="!Exists('$(_NovolisExtractVoiceModelsScript)')"
-           Text="Novolis.Audio.Voice.SherpaOnnx: missing extract script at $(_NovolisExtractVoiceModelsScript)." />
+    <Error Condition="'$(_NovolisExtractVoiceModelsScript)' == '' or !Exists('$(_NovolisExtractVoiceModelsScript)')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: missing extract script (expected under buildTransitive/scripts or repo scripts/)." />
 
     <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(_NovolisExtractVoiceModelsScript)&quot; -OutputDir &quot;$(OutDir.TrimEnd('\'))&quot;" />
 
-    <Error Condition="!Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy\tokens.txt')"
-           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled models (restore Novolis.Audio.Voice.SherpaOnnx from GitHub Packages or build novolis-audio with models present)." />
+    <Error Condition="!Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-amy\tokens.txt') or !Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-lessac-low\tokens.txt') or !Exists('$(_NovolisVoiceModelsOutRoot)\en-us-piper-kristin-medium\tokens.txt')"
+           Text="Novolis.Audio.Voice.SherpaOnnx: missing bundled models (restore Novolis.Audio.Voice.SherpaOnnx from GitHub Packages or build novolis-audio with all three model zips present)." />
   </Target>
 </Project>

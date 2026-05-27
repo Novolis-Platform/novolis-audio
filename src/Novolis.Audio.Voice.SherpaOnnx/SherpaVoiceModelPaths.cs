@@ -91,11 +91,6 @@ public sealed class SherpaVoiceModelPaths
             var nested = Path.Combine(candidate, "vits-piper-en_US-amy-low");
             if (File.Exists(Path.Combine(nested, "tokens.txt")))
                 return nested;
-
-            // NuGet contentFiles layout: models/tokens.txt at output root (no profile subfolder).
-            var flat = Path.Combine(baseDir, "models");
-            if (File.Exists(Path.Combine(flat, "tokens.txt")))
-                return flat;
         }
 
         return null;
