@@ -1,9 +1,9 @@
 using Novolis.Audio.Core;
 
-namespace Novolis.Audio.Effects;
+namespace Novolis.Audio.Filters;
 
 /// <summary>First-order high-pass and low-pass band limiting (radio-style bandwidth).</summary>
-public sealed class BandLimitEffect(int sampleRate, float highPassHz, float lowPassHz) : IAudioEffect
+public sealed class BandLimitEffect(int sampleRate, float highPassHz, float lowPassHz) : IAudioFilter
 {
     /// <inheritdoc />
     public PcmBuffer Apply(PcmBuffer input)

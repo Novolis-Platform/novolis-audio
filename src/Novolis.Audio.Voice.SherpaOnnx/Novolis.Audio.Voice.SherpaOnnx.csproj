@@ -10,7 +10,7 @@
     <AssemblyName>Novolis.Audio.Voice.SherpaOnnx</AssemblyName>
     <PackageId>Novolis.Audio.Voice.SherpaOnnx</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Sherpa-ONNX offline TTS with bundled Piper voice models (amy, lessac, kristin).</Description>
+    <Description>Sherpa-ONNX offline TTS/STT/VAD with bundled Piper and speech models.</Description>
     <_VoiceModelIds>en-us-piper-amy;en-us-piper-lessac-low;en-us-piper-kristin-medium</_VoiceModelIds>
   </PropertyGroup>
 
@@ -23,6 +23,11 @@
     <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-all-voice-model-archives.ps1&quot;" />
   </Target>
 
+  <Target Name="CreateSpeechModelZips" BeforeTargets="PrepareForBuild"
+          Condition="Exists('..\..\models\silero-vad\silero_vad.onnx') or Exists('..\..\models\en-whisper-tiny')">
+    <Exec Command="pwsh -NoProfile -File &quot;$(MSBuildThisFileDirectory)..\..\scripts\pack-all-speech-model-archives.ps1&quot;" />
+  </Target>
+
   <ItemGroup>
     <None Include="..\..\build\Novolis.Audio.Voice.SherpaOnnx.targets"
           Pack="true"
@@ -33,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
 

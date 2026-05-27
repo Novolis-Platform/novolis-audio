@@ -151,6 +151,39 @@ internal sealed class VerifyManifestStep : IPipelineStep
     }
 }
 
+internal sealed class VerifySpeechModelsStep : IPipelineStep
+{
+    public string Id => "step_03_speech_verify_models";
+
+    public string Description => "Verify bundled speech models under models/.";
+
+    public IReadOnlyList<string> DependsOn => [];
+
+    public IReadOnlyList<string> InputPaths(PipelineContext context) =>
+        SpeechManifestInputPaths.AllManifestSourceFiles(context.RepoRoot);
+
+    public IReadOnlyList<string> ExpectedOutputPaths(PipelineContext context) => [];
+
+    public ValueTask<StepExecutionResult> ExecuteAsync(PipelineContext context, CancellationToken cancellationToken)
+    {
+        var code = SpeechModelVerifier.Verify(context.RepoRoot, context.Log);
+        if (code != 0)
+        {
+            return ValueTask.FromResult(new StepExecutionResult
+            {
+                Status = StepStatus.Failed,
+                Error = new StepErrorRecord { Message = $"verify-speech-models failed with exit code {code}" },
+            });
+        }
+
+        return ValueTask.FromResult(new StepExecutionResult
+        {
+            Status = StepStatus.Succeeded,
+            Inputs = StepFileFingerprint.HashFiles(InputPaths(context), context.RepoRoot),
+        });
+    }
+}
+
 internal sealed class VerifyVoiceModelsStep : IPipelineStep
 {
     public string Id => "step_03_voice_verify_models";
@@ -190,11 +223,17 @@ internal sealed class CodegenStep : IPipelineStep
 
     public string Description => "Generate interop, façade, and voice catalog *.g.cs files.";
 
-    public IReadOnlyList<string> DependsOn => ["step_03_verify_manifest", "step_03_voice_verify_models"];
+    public IReadOnlyList<string> DependsOn =>
+    [
+        "step_03_verify_manifest",
+        "step_03_voice_verify_models",
+        "step_03_speech_verify_models",
+    ];
 
     public IReadOnlyList<string> InputPaths(PipelineContext context) =>
         AudioManifestInputPaths.AllManifestSourceFiles(context.RepoRoot)
             .Concat(VoiceManifestInputPaths.AllManifestSourceFiles(context.RepoRoot))
+            .Concat(SpeechManifestInputPaths.AllManifestSourceFiles(context.RepoRoot))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(p => p, StringComparer.Ordinal)
             .ToList();
@@ -217,6 +256,7 @@ internal sealed class CodegenStep : IPipelineStep
         var pipeline = new AudioCodegenPipeline(context.RepoRoot);
         pipeline.GenerateBindingsOnly(context.Log);
         pipeline.GenerateVoiceCatalogOnly(context.Log);
+        pipeline.GenerateSpeechCatalogOnly(context.Log);
         return ValueTask.FromResult(new StepExecutionResult
         {
             Status = StepStatus.Succeeded,
@@ -246,6 +286,7 @@ internal sealed class DriftStep : IPipelineStep
             "src/Novolis.Audio.Bindings/",
             "src/Novolis.Audio.Runtime/",
             "src/Novolis.Audio.Voice.Abstractions/VoiceModelCatalog.g.cs",
+            "src/Novolis.Audio.Voice.Abstractions/SpeechModelCatalog.g.cs",
         };
 
         var args = string.Join(' ', paths.Select(p => $"\"{p}\""));
@@ -330,6 +371,10 @@ internal static class CodegenOutputCatalog
         var voiceCatalog = RepoPaths.VoiceModelCatalogPath(repoRoot);
         if (File.Exists(voiceCatalog))
             list.Add(voiceCatalog);
+
+        var speechCatalog = RepoPaths.SpeechModelCatalogPath(repoRoot);
+        if (File.Exists(speechCatalog))
+            list.Add(speechCatalog);
 
         return list;
     }

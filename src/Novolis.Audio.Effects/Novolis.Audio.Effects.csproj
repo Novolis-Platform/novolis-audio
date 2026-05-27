@@ -10,11 +10,12 @@
     <AssemblyName>Novolis.Audio.Effects</AssemblyName>
     <PackageId>Novolis.Audio.Effects</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>PCM effect chains for voice and playback pipelines.</Description>
+    <Description>PCM effect chains (dynamics, gain, coloration) and pipelines for voice and playback.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Filters\Novolis.Audio.Filters.csproj" />
   </ItemGroup>
 
 </Project>

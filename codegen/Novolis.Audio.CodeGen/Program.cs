@@ -34,6 +34,9 @@ internal static class Program
         if (VoiceModelVerifier.Verify(repoRoot) != 0)
             return 1;
 
+        if (SpeechModelVerifier.Verify(repoRoot) != 0)
+            return 1;
+
         var pipeline = new AudioCodegenPipeline(repoRoot);
         pipeline.GenerateAllVoiceAndBindings();
         return 0;

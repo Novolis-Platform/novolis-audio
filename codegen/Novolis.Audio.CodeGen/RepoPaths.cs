@@ -16,4 +16,7 @@ public static class RepoPaths
 
     public static string VoiceModelCatalogPath(string repoRoot) =>
         Path.Combine(VoiceAbstractionsDir(repoRoot), "VoiceModelCatalog.g.cs");
+
+    public static string SpeechModelCatalogPath(string repoRoot) =>
+        Path.Combine(VoiceAbstractionsDir(repoRoot), "SpeechModelCatalog.g.cs");
 }

@@ -13,6 +13,7 @@
     <Project Path="src/Novolis.Audio/Novolis.Audio.csproj" />
     <Project Path="src/Novolis.Audio.Core/Novolis.Audio.Core.csproj" />
     <Project Path="src/Novolis.Audio.Codecs/Novolis.Audio.Codecs.csproj" />
+    <Project Path="src/Novolis.Audio.Filters/Novolis.Audio.Filters.csproj" />
     <Project Path="src/Novolis.Audio.Effects/Novolis.Audio.Effects.csproj" />
     <Project Path="src/Novolis.Audio.Playback/Novolis.Audio.Playback.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Abstractions/Novolis.Audio.Voice.Abstractions.csproj" />

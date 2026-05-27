@@ -10,6 +10,7 @@ internal static class PipelineStepRegistry
         new NativeStep(),
         new VerifyManifestStep(),
         new VerifyVoiceModelsStep(),
+        new VerifySpeechModelsStep(),
         new CodegenStep(),
         new DriftStep(),
         new BuildStep(),

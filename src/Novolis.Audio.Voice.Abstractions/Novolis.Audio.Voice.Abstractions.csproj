@@ -10,11 +10,12 @@
     <AssemblyName>Novolis.Audio.Voice.Abstractions</AssemblyName>
     <PackageId>Novolis.Audio.Voice.Abstractions</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Text-to-speech contracts and null synthesizer for CI.</Description>
+    <Description>TTS/STT contracts, speech model catalog, and null engines for CI.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Effects\Novolis.Audio.Effects.csproj" />
   </ItemGroup>
 
 </Project>

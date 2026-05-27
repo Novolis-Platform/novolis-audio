@@ -10,7 +10,7 @@
     <AssemblyName>Novolis.Audio.Voice</AssemblyName>
     <PackageId>Novolis.Audio.Voice</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Voice facade: SpeakAsync and WriteToFileAsync over synthesizer, effects, and playback.</Description>
+    <Description>Voice facade: TTS SpeakAsync and STT ListenAsync over Sherpa, effects, and PCM I/O.</Description>
   </PropertyGroup>
 
   <ItemGroup>

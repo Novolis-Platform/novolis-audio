@@ -2,6 +2,11 @@
 
 See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob/main/docs/release-policy.md).
 
+## 2026.1.6 — Filters / Effects split
+
+- `Novolis.Audio.Filters` — `IAudioFilter`, `BandLimitEffect`
+- `Novolis.Audio.Effects` — dynamics, gain, hiss, noise gate, pipelines (`IAudioEffect` extends `IAudioFilter`)
+
 ## 2026.1.3 — Voice archetypes + multi-speaker
 
 - `Novolis.Audio.Voice.Profiles` — neutral base-voice archetypes (`excitable_female`, `procedural_male`, …)
@@ -18,6 +23,7 @@ New packable packages:
 
 - `Novolis.Audio.Core`
 - `Novolis.Audio.Codecs`
+- `Novolis.Audio.Filters`
 - `Novolis.Audio.Effects`
 - `Novolis.Audio.Playback`
 - `Novolis.Audio.Voice.Abstractions`

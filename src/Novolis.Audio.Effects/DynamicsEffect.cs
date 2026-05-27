@@ -1,4 +1,5 @@
 using Novolis.Audio.Core;
+using Novolis.Audio.Filters;
 
 namespace Novolis.Audio.Effects;
 

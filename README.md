@@ -21,7 +21,8 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 |---------|------|
 | `Novolis.Audio.Core` | PCM buffers, WAV read/write |
 | `Novolis.Audio.Codecs` | Codec contracts (WAV in Core today) |
-| `Novolis.Audio.Effects` | PCM effect chains |
+| `Novolis.Audio.Filters` | PCM filters (band-limit, EQ) |
+| `Novolis.Audio.Effects` | PCM effect chains and pipelines |
 | `Novolis.Audio.Playback` | PCM playback (`NaudioPcmPlayback`) |
 | `Novolis.Audio.Voice` | **`SpeakAsync` / `WriteToFileAsync` facade** |
 | `Novolis.Audio.Voice.Abstractions` | TTS contracts |

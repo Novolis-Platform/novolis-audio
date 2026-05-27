@@ -1,10 +1,6 @@
-using Novolis.Audio.Core;
+using Novolis.Audio.Filters;
 
 namespace Novolis.Audio.Effects;
 
-/// <summary>Transforms a PCM buffer (e.g. radio band-limit, gain).</summary>
-public interface IAudioEffect
-{
-    /// <summary>Returns a processed copy or the same instance.</summary>
-    PcmBuffer Apply(PcmBuffer input);
-}
+/// <summary>Transforms a PCM buffer (dynamics, gain, coloration, or filters).</summary>
+public interface IAudioEffect : IAudioFilter;

@@ -54,7 +54,8 @@ PcmBuffer (Novolis.Audio.Core)
 | Package | Role |
 |---------|------|
 | `Novolis.Audio.Core` | PCM buffers, WAV read/write |
-| `Novolis.Audio.Effects` | Effect chains (identity stub in scaffold) |
+| `Novolis.Audio.Filters` | Band-limit and other PCM filters |
+| `Novolis.Audio.Effects` | Dynamics, gain, coloration, effect pipelines |
 | `Novolis.Audio.Playback` | PCM playback (null in CI) |
 | `Novolis.Audio.Voice.Abstractions` | TTS contracts |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa adapter (stub → null synth) |
@@ -66,3 +67,24 @@ PcmBuffer (Novolis.Audio.Core)
 **Consumer entry for voice:** `Novolis.Audio.Voice` (not bundled into the `Novolis.Audio` meta-package).
 
 Compose **archetype** (`Voice.Profiles`) then **delivery** (`Voice.Atc` for radio/ICAO). Domain-specific delivery packages (`Voice.Radio`, …) can follow the `Voice.Atc` pattern.
+
+## Speech input (STT)
+
+```
+ISpeechService (Novolis.Audio.Voice)
+    ↑
+IAudioCapture → IAudioEffectPipeline → IVoiceActivityDetector → ISpeechRecognizer
+    ↑
+PcmBuffer (Novolis.Audio.Core)
+```
+
+| Package | Role |
+|---------|------|
+| `Novolis.Audio.Playback` | `NaudioMicrophoneCapture`, `NullAudioCapture` |
+| `Novolis.Audio.Filters` | `BandLimitEffect` in mic/ATC chains |
+| `Novolis.Audio.Effects` | `InputSpeechEffects` preprocessor chain |
+| `Novolis.Audio.Voice.Abstractions` | `ListenAsync`, STT/VAD contracts, `SpeechModelCatalog` |
+| `Novolis.Audio.Voice.SherpaOnnx` | Sherpa Silero VAD + offline Whisper |
+| `Novolis.Audio.Voice` | `SpeechService`, `AddNovolisSpeech()` |
+
+See [speech-models.md](speech-models.md) for fetch/pack instructions.

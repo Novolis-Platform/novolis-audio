@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Filters</RootNamespace>
+    <AssemblyName>Novolis.Audio.Filters</AssemblyName>
+    <PackageId>Novolis.Audio.Filters</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>PCM frequency-domain filters (band-limit, future EQ).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Audio.Effects" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

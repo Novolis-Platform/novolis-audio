@@ -26,6 +26,7 @@ new WavEncoder().Encode(pcm, stream);
 
 | Package | When to use |
 |---------|-------------|
+| `Novolis.Audio.Filters` | PCM filters |
 | `Novolis.Audio.Effects` | PCM effect chains |
 | `Novolis.Audio.Playback` | Play PCM to a device |
 | `Novolis.Audio.Voice` | Text-to-speech facade |

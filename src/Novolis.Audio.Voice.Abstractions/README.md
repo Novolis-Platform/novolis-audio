@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.Abstractions
 
-Text-to-speech contracts: `IVoiceSynthesizer`, `IVoiceService`, and `NullVoiceSynthesizer`.
+TTS/STT contracts: `IVoiceService`, `ISpeechService`, `IVoiceSynthesizer`, `ISpeechRecognizer`, `IVoiceActivityDetector`, `IAudioCapture`, and null engines for CI.
 
 ## Install
 

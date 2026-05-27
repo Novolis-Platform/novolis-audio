@@ -29,10 +29,20 @@ public sealed class AudioCodegenPipeline
         log?.WriteLine($"Wrote {outputPath}");
     }
 
+    public void GenerateSpeechCatalogOnly(TextWriter? log = null)
+    {
+        var outputPath = RepoPaths.SpeechModelCatalogPath(_repoRoot);
+        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+        var hash = SpeechModelCatalogEmitter.ComputeManifestSha256(_repoRoot);
+        File.WriteAllText(outputPath, SpeechModelCatalogEmitter.Emit(hash));
+        log?.WriteLine($"Wrote {outputPath}");
+    }
+
     public void GenerateAllVoiceAndBindings(TextWriter? log = null)
     {
         GenerateBindingsOnly(log);
         GenerateVoiceCatalogOnly(log);
+        GenerateSpeechCatalogOnly(log);
     }
 
     private BindingCodegenOptions CreateOptions(bool verifyManifest) =>

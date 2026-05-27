@@ -67,6 +67,7 @@ public class VoiceStackTests
             "Novolis.Audio.Voice",
             "Novolis.Audio.Voice.SherpaOnnx",
             "Novolis.Audio.Effects",
+            "Novolis.Audio.Filters",
             "Novolis.Audio.Playback",
             "Novolis.Audio.Voice.Atc",
         };

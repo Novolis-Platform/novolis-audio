@@ -1,6 +1,6 @@
 using Novolis.Audio.Core;
 
-namespace Novolis.Audio.Effects;
+namespace Novolis.Audio.Filters;
 
 internal static class PcmInt16Math
 {

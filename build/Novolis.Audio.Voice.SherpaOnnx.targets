@@ -29,6 +29,24 @@
   </Target>
 
   <!-- ItemGroup Exists() is evaluated before CreateVoiceModelZips; add pack inputs after zips exist. -->
+  <Target Name="CopyNovolisSpeechModelZipsToOutput"
+          AfterTargets="Build"
+          BeforeTargets="ExtractNovolisBundledVoiceModels"
+          Condition="'$(DisableNovolisBundledVoiceModels)' != 'true'">
+    <PropertyGroup>
+      <_NovolisVoiceModelsOutRoot>$([System.IO.Path]::Combine('$(OutDir.TrimEnd(`\`))', 'models'))</_NovolisVoiceModelsOutRoot>
+    </PropertyGroup>
+    <MakeDir Directories="$(_NovolisVoiceModelsOutRoot)" />
+    <Copy SourceFiles="$(_NovolisVoiceArtifactsDir)\speech-model-silero-vad.zip"
+          DestinationFiles="$(_NovolisVoiceModelsOutRoot)\silero-vad.zip"
+          SkipUnchangedFiles="true"
+          Condition="Exists('$(_NovolisVoiceArtifactsDir)\speech-model-silero-vad.zip')" />
+    <Copy SourceFiles="$(_NovolisVoiceArtifactsDir)\speech-model-en-whisper-tiny.zip"
+          DestinationFiles="$(_NovolisVoiceModelsOutRoot)\en-whisper-tiny.zip"
+          SkipUnchangedFiles="true"
+          Condition="Exists('$(_NovolisVoiceArtifactsDir)\speech-model-en-whisper-tiny.zip')" />
+  </Target>
+
   <Target Name="AddNovolisVoiceModelZipsForPack"
           AfterTargets="CreateVoiceModelZips"
           BeforeTargets="Pack"
@@ -50,6 +68,26 @@
                Condition="Exists('$(_NovolisVoiceArtifactsDir)\voice-model-en-us-piper-kristin-medium.zip')">
         <Pack>true</Pack>
         <PackagePath>contentFiles/any/any/models/en-us-piper-kristin-medium.zip</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="AddNovolisSpeechModelZipsForPack"
+          AfterTargets="CreateSpeechModelZips"
+          BeforeTargets="Pack"
+          Condition="'$(IsPackable)' == 'true'">
+    <ItemGroup>
+      <Content Include="$(_NovolisVoiceArtifactsDir)\speech-model-silero-vad.zip"
+               Condition="Exists('$(_NovolisVoiceArtifactsDir)\speech-model-silero-vad.zip')">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles/any/any/models/silero-vad.zip</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+      <Content Include="$(_NovolisVoiceArtifactsDir)\speech-model-en-whisper-tiny.zip"
+               Condition="Exists('$(_NovolisVoiceArtifactsDir)\speech-model-en-whisper-tiny.zip')">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles/any/any/models/en-whisper-tiny.zip</PackagePath>
         <PackageCopyToOutput>true</PackageCopyToOutput>
       </Content>
     </ItemGroup>

@@ -1,17 +1,18 @@
 using Novolis.Audio.Core;
+using Novolis.Audio.Filters;
 
 namespace Novolis.Audio.Effects;
 
-/// <summary>Runs effects in order.</summary>
+/// <summary>Runs filters and effects in order.</summary>
 public sealed class ChainedEffectPipeline : IAudioEffectPipeline
 {
-    private readonly IReadOnlyList<IAudioEffect> _effects;
+    private readonly IReadOnlyList<IAudioFilter> _steps;
 
-    /// <summary>Creates a pipeline from the given effects.</summary>
-    public ChainedEffectPipeline(params IAudioEffect[] effects)
+    /// <summary>Creates a pipeline from the given filters and effects.</summary>
+    public ChainedEffectPipeline(params IAudioFilter[] effects)
     {
         ArgumentNullException.ThrowIfNull(effects);
-        _effects = effects;
+        _steps = effects;
     }
 
     /// <inheritdoc />
@@ -19,8 +20,8 @@ public sealed class ChainedEffectPipeline : IAudioEffectPipeline
     {
         ArgumentNullException.ThrowIfNull(input);
         var current = input;
-        foreach (var effect in _effects)
-            current = effect.Apply(current);
+        foreach (var step in _steps)
+            current = step.Apply(current);
         return current;
     }
 }

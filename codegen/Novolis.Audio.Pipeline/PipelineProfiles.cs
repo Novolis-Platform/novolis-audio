@@ -8,6 +8,7 @@ internal static class PipelineProfiles
         "step_02_native",
         "step_03_verify_manifest",
         "step_03_voice_verify_models",
+        "step_03_speech_verify_models",
         "step_04_codegen",
         "step_05_drift",
         "step_06_build",
@@ -22,6 +23,7 @@ internal static class PipelineProfiles
                 "step_02_native",
                 "step_03_verify_manifest",
                 "step_03_voice_verify_models",
+                "step_03_speech_verify_models",
                 "step_04_codegen",
                 "step_05_drift",
             ],
@@ -29,12 +31,14 @@ internal static class PipelineProfiles
             [
                 "step_03_verify_manifest",
                 "step_03_voice_verify_models",
+                "step_03_speech_verify_models",
                 "step_04_codegen",
             ],
             "agent-verify" =>
             [
                 "step_03_verify_manifest",
                 "step_03_voice_verify_models",
+                "step_03_speech_verify_models",
                 "step_04_codegen",
                 "step_05_drift",
                 "step_06_build",
@@ -51,6 +55,7 @@ internal static class PipelineProfiles
             "step_02_native" => "CMake build novolis_audio shim; copy to step_02_native/artifacts.",
             "step_03_verify_manifest" => "Verify manifest imports exist in novolis_audio.h.",
             "step_03_voice_verify_models" => "Verify bundled voice model layout under models/.",
+            "step_03_speech_verify_models" => "Verify bundled speech model layout under models/.",
             "step_04_codegen" => "Emit committed *.g.cs from manifests (bindings + voice catalog).",
             "step_05_drift" => "git diff on manifests and generated C#.",
             "step_06_build" => "Release build Bindings + Runtime + Abstractions.",

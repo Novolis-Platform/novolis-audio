@@ -10,7 +10,7 @@
     <AssemblyName>Novolis.Audio.Playback</AssemblyName>
     <PackageId>Novolis.Audio.Playback</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>PCM playback abstractions (decoupled from miniaudio runtime).</Description>
+    <Description>PCM playback and microphone capture (decoupled from miniaudio runtime).</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,8 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 
 **Consumer entry (voice/TTS):** `Novolis.Audio.Voice` + `Novolis.Audio.Voice.Profiles` (base archetypes) + optional `Novolis.Audio.Voice.Atc` (delivery).
 
+**Consumer entry (speech/STT):** `Novolis.Audio.Voice` + `AddNovolisSpeech()` (`ListenAsync` pipeline).
+
 ## Layout
 
 | Path | Role |

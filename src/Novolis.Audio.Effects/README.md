@@ -1,6 +1,6 @@
 # Novolis.Audio.Effects
 
-PCM effect chains (`IAudioEffect`, `IAudioEffectPipeline`).
+PCM effect chains (`IAudioEffect`, `IAudioEffectPipeline`). Frequency filters live in `Novolis.Audio.Filters`.
 
 ## Install
 
@@ -23,6 +23,7 @@ IAudioEffectPipeline pipeline = new IdentityEffectPipeline();
 | Package | When to use |
 |---------|-------------|
 | `Novolis.Audio.Core` | `PcmBuffer` input/output |
+| `Novolis.Audio.Filters` | Band-limit and other filters |
 | `Novolis.Audio.Voice` | Voice pipeline |
 
 ## Support
