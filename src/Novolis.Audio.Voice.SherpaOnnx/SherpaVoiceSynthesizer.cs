@@ -27,7 +27,7 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
         {
             Sid = 0,
             Speed = lengthScale,
-            SilenceScale = 0.2f,
+            SilenceScale = 0.12f,
         };
 
         var audio = tts.GenerateWithConfig(text, genConfig, callback: null);

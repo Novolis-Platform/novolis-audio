@@ -19,7 +19,8 @@ public static class VoicePresetPreviewFactory
         var archetype = draft.ToArchetype();
         var builder = VoiceArchetypeApplicator.Apply(new VoiceServiceBuilder(), archetype);
 
-        if (Math.Abs(draft.RateMultiplier - 1f) > 0.001f)
+        var rateScale = draft.RateMultiplier > 0 ? draft.RateMultiplier : 1f;
+        if (Math.Abs(rateScale - 1f) > 0.001f)
         {
             builder.Configure(options =>
             {
@@ -29,13 +30,12 @@ public static class VoicePresetPreviewFactory
                     Profile = synthesis.Profile,
                     ModelProfile = synthesis.ModelProfile,
                     ModelDirectory = synthesis.ModelDirectory,
-                    SpeakingRate = synthesis.SpeakingRate * draft.RateMultiplier,
+                    SpeakingRate = synthesis.SpeakingRate * rateScale,
                 };
             });
         }
 
-        if (draft.ApplyRadioEffects || draft.UsePhraseology)
-            AtcVoiceProfile.ApplyDelivery(builder, draft.ToAtcOptions());
+        builder = VoiceEffectChainBuilder.Apply(builder, draft);
 
         return builder.BuildService();
     }

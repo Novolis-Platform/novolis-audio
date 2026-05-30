@@ -36,6 +36,8 @@ public sealed class VoicePresetDraft
 
     public string EffectChainId { get; set; } = "atc-radio";
 
+    public List<VoiceDeliveryEffectStep> EffectSteps { get; } = [];
+
     public string? BridgeCharacterId { get; set; }
 
     public string BridgeDisplayName { get; set; } = "Character";
@@ -45,15 +47,22 @@ public sealed class VoicePresetDraft
     public static VoicePresetDraft FromArchetype(VoiceArchetype archetype)
     {
         ArgumentNullException.ThrowIfNull(archetype);
-        return new VoicePresetDraft
+        var draft = new VoicePresetDraft
         {
             ProfileId = archetype.Profile.Id,
             PropertyName = VoiceIdentifierHelper.ToPropertyName(archetype.Profile.Id),
             Model = archetype.Model,
             SpeakingRate = archetype.SpeakingRate,
             Description = archetype.Description,
-            RateMultiplier = 1f,
+            RateMultiplier = VoiceEffectChainBuilder.StudioPreviewRateBoost,
+            UsePhraseology = true,
+            ApplyRadioEffects = false,
         };
+        draft.EffectSteps.Clear();
+        foreach (var step in VoiceEffectChainBuilder.CreateDefaultStudioChain())
+            draft.EffectSteps.Add(step.Clone());
+        draft.SyncLegacyFlagsFromSteps();
+        return draft;
     }
 
     public VoiceArchetype ToArchetype() =>
@@ -61,24 +70,44 @@ public sealed class VoicePresetDraft
 
     public AtcVoiceOptions ToAtcOptions()
     {
+        SyncLegacyFlagsFromSteps();
         var defaults = new AtcVoiceOptions();
+        var band = FindStep(VoiceEffectStepKind.BandLimit);
+        var dynamics = FindStep(VoiceEffectStepKind.Dynamics);
+        var output = FindStep(VoiceEffectStepKind.OutputGain);
+        var hiss = FindStep(VoiceEffectStepKind.RadioHiss);
         return new AtcVoiceOptions
         {
             UsePhraseology = UsePhraseology,
             ApplyRadioEffects = ApplyRadioEffects,
             EffectChainId = ApplyRadioEffects ? EffectChainId : "none",
-            HighPassHz = HighPassHz,
-            LowPassHz = LowPassHz,
-            Drive = Drive,
-            MakeupGain = MakeupGain,
-            OutputGainDb = OutputGainDb,
-            HissLevel = HissLevel,
+            HighPassHz = band?.HighPassHz ?? HighPassHz,
+            LowPassHz = band?.LowPassHz ?? LowPassHz,
+            Drive = dynamics?.Drive ?? Drive,
+            MakeupGain = dynamics?.MakeupGain ?? MakeupGain,
+            OutputGainDb = output?.OutputGainDb ?? OutputGainDb,
+            HissLevel = hiss?.HissLevel ?? HissLevel,
             EffectSampleRateHz = defaults.EffectSampleRateHz,
         };
     }
 
-    public VoicePresetDraft Clone() =>
-        new()
+    public void SyncLegacyFlagsFromSteps()
+    {
+        if (EffectSteps.Count == 0)
+            return;
+
+        UsePhraseology = EffectSteps.Any(s => s.Enabled && s.Kind == VoiceEffectStepKind.Phraseology);
+        ApplyRadioEffects = EffectSteps.Any(s =>
+            s.Enabled && s.Kind is VoiceEffectStepKind.BandLimit or VoiceEffectStepKind.Dynamics
+                or VoiceEffectStepKind.OutputGain or VoiceEffectStepKind.RadioHiss);
+    }
+
+    private VoiceDeliveryEffectStep? FindStep(VoiceEffectStepKind kind) =>
+        EffectSteps.FirstOrDefault(s => s.Enabled && s.Kind == kind);
+
+    public VoicePresetDraft Clone()
+    {
+        var clone = new VoicePresetDraft
         {
             ProfileId = ProfileId,
             PropertyName = PropertyName,
@@ -99,4 +128,8 @@ public sealed class VoicePresetDraft
             BridgeDisplayName = BridgeDisplayName,
             BridgeSpectreColor = BridgeSpectreColor,
         };
+        foreach (var step in EffectSteps)
+            clone.EffectSteps.Add(step.Clone());
+        return clone;
+    }
 }
