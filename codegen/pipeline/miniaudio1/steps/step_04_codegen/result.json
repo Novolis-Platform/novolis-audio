@@ -1,8 +1,8 @@
 {
   "stepId": "step_04_codegen",
   "status": "Succeeded",
-  "startedUtc": "2026-05-27T22:58:55.1119375+00:00",
-  "durationMs": 511,
+  "startedUtc": "2026-05-30T22:34:28.519495+00:00",
+  "durationMs": 500,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Audio.Manifests/AudioBindingManifestSource.cs": "db55d4bfcd0ba8f931e1612cc02202e361fa91828f7f578e6495120d0f313e2b",
@@ -15,7 +15,7 @@
     "codegen/Novolis.Audio.Manifests/SpeechModelEngineKind.cs": "73bc5730387efa8251c2e4d37530901fe789410e2b2c37ab2405fbeb67e61085",
     "codegen/Novolis.Audio.Manifests/SpeechModelManifestEntry.cs": "41ac3bc8187ce093d0d19944745267dfaf62c5cd43da1c2ed061f487932ed68b",
     "codegen/Novolis.Audio.Manifests/VoiceManifestInputPaths.cs": "3b125acfe59dc1043caa878fdc277d72c3c1eee11193e20a5ec0f6292465a2d9",
-    "codegen/Novolis.Audio.Manifests/VoiceModelManifestEntry.cs": "7a0e1d6dd5fe5f487aa2e831eaa4cfdbe9c5aff92312fa52bccff7906ade0b16"
+    "codegen/Novolis.Audio.Manifests/VoiceModelManifestEntry.cs": "7cec07f850a2b1079e898da77f2d60f1ad627a84511bc3999c9763b3747aa90d"
   },
   "outputs": [
     {
@@ -35,8 +35,8 @@
     },
     {
       "path": "src/Novolis.Audio.Voice.Abstractions/VoiceModelCatalog.g.cs",
-      "sha256": "b9042780b3c18f46e8ec46d03b88c17c553bc15c08ad3d35a92d5c9805348219",
-      "bytes": 4005
+      "sha256": "231da663a78b991e9adefa2e8aa74fcfe915462be024c120079bcc16261f2735",
+      "bytes": 4066
     },
     {
       "path": "src/Novolis.Audio.Voice.Abstractions/SpeechModelCatalog.g.cs",

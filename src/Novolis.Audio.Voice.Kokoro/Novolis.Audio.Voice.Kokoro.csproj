@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Kokoro</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Kokoro</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Kokoro</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>KokoroSharp CPU offline TTS adapter for Novolis.Audio.Voice.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KokoroSharp.CPU" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
+  </ItemGroup>
+
+</Project>

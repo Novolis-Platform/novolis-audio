@@ -39,7 +39,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Effects\Novolis.Audio.Effects.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Playback\Novolis.Audio.Playback.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
   </ItemGroup>
 
   <Import Project="..\..\build\Novolis.Audio.Voice.SherpaOnnx.targets" />

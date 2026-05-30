@@ -1,5 +1,6 @@
 using Novolis.Audio.Voice.Atc;
 using Novolis.Audio.Voice.Profiles;
+using Novolis.Audio.Voice.Platform;
 
 namespace Novolis.Audio.Voice.Design;
 
@@ -10,7 +11,11 @@ public sealed class VoicePresetDraft
 
     public string PropertyName { get; set; } = "NewVoice";
 
+    public VoiceSynthesizerBackend Backend { get; set; } = VoiceSynthesizerBackend.SherpaOnnx;
+
     public VoiceModelProfile Model { get; set; } = VoiceModelCatalog.EnUsPiperAmy;
+
+    public PlatformSpeechOptions? Platform { get; set; }
 
     public float SpeakingRate { get; set; } = 1.24f;
 
@@ -111,7 +116,15 @@ public sealed class VoicePresetDraft
         {
             ProfileId = ProfileId,
             PropertyName = PropertyName,
+            Backend = Backend,
             Model = Model,
+            Platform = Platform is null ? null : new PlatformSpeechOptions
+            {
+                Pitch = Platform.Pitch,
+                Volume = Platform.Volume,
+                Rate = Platform.Rate,
+                Locale = Platform.Locale,
+            },
             SpeakingRate = SpeakingRate,
             Description = Description,
             RateMultiplier = RateMultiplier,

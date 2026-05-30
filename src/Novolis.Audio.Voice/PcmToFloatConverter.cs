@@ -1,16 +1,16 @@
 using Novolis.Audio.Core;
 
-namespace Novolis.Audio.Voice.SherpaOnnx;
+namespace Novolis.Audio.Voice;
 
-/// <summary>Converts <see cref="PcmBuffer"/> to mono float samples for Sherpa.</summary>
+/// <summary>Converts <see cref="PcmBuffer"/> to mono float samples for speech backends.</summary>
 public static class PcmToFloatConverter
 {
-    /// <summary>Converts mono PCM to normalized float samples for Sherpa.</summary>
+    /// <summary>Converts mono PCM to normalized float samples.</summary>
     public static float[] ToMonoFloat(PcmBuffer buffer)
     {
         ArgumentNullException.ThrowIfNull(buffer);
         if (buffer.Format.Channels != 1)
-            throw new NotSupportedException("Sherpa speech path requires mono PCM.");
+            throw new NotSupportedException("Speech path requires mono PCM.");
 
         if (buffer.Format.SampleFormat == PcmSampleFormat.Float32)
         {

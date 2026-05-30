@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Novolis.Audio.Voice.Atc;
+using Novolis.Audio.Voice.Platform;
 
 namespace Novolis.Audio.Voice.Design;
 
@@ -78,7 +79,15 @@ public static class VoicePresetCodeEmitter
         return sb.ToString().TrimEnd();
     }
 
-    public static string EmitUsage(VoicePresetDraft draft)
+    public static string EmitUsage(VoicePresetDraft draft) =>
+        draft.Backend switch
+        {
+            VoiceSynthesizerBackend.KokoroOnnx => EmitKokoroUsage(draft),
+            VoiceSynthesizerBackend.Platform => EmitPlatformUsage(draft),
+            _ => EmitSherpaUsage(draft),
+        };
+
+    private static string EmitSherpaUsage(VoicePresetDraft draft)
     {
         var deliveryName = draft.ApplyRadioEffects || draft.UsePhraseology
             ? draft.PropertyName + "Delivery"
@@ -106,13 +115,48 @@ public static class VoicePresetCodeEmitter
 
         return $$"""
             var builder = VoiceArchetypeApplicator.Apply(
-                new VoiceServiceBuilder(),
+                new VoiceServiceBuilder().UseSherpaOnnx(),
                 VoiceArchetypeCatalog.{{draft.PropertyName}});
             {{rateLine}}{{atcLine}}
             IVoiceService voice = builder.BuildService();
             await voice.SpeakAsync("Your phrase here.");
             """;
     }
+
+    private static string EmitKokoroUsage(VoicePresetDraft draft)
+    {
+        var modelId = EscapeString(draft.Model.Id);
+        var rate = VoiceIdentifierHelper.FormatFloat(draft.SpeakingRate * draft.RateMultiplier);
+        return $$"""
+            var builder = new VoiceServiceBuilder().UseKokoro();
+            builder.Configure(o => o.Synthesis = new VoiceSynthesisOptions
+            {
+                Profile = new VoiceProfile("{{draft.ProfileId}}"),
+                ModelProfile = new VoiceModelProfile("{{modelId}}"),
+                SpeakingRate = {{rate}},
+            });
+            IVoiceService voice = builder.BuildService();
+            await voice.SpeakAsync("Your phrase here.");
+            """;
+    }
+
+    private static string EmitPlatformUsage(VoicePresetDraft draft)
+    {
+        var platform = draft.Platform ?? new PlatformSpeechOptions();
+        return $$"""
+            IVoiceService voice = new WindowsPlatformVoiceService(new PlatformSpeechOptions
+            {
+                Pitch = {{VoiceIdentifierHelper.FormatFloat(platform.Pitch)}},
+                Volume = {{VoiceIdentifierHelper.FormatFloat(platform.Volume)}},
+                Rate = {{VoiceIdentifierHelper.FormatFloat(platform.Rate)}},
+                Locale = {{FormatNullableString(platform.Locale)}},
+            });
+            await voice.SpeakAsync("Your phrase here.");
+            """;
+    }
+
+    private static string FormatNullableString(string? value) =>
+        value is null ? "null" : $"\"{EscapeString(value)}\"";
 
     public static string EmitBridgeCharacter(VoicePresetDraft draft)
     {
@@ -147,6 +191,9 @@ public static class VoicePresetCodeEmitter
 
     private static string RequireModelMember(VoicePresetDraft draft)
     {
+        if (draft.Backend == VoiceSynthesizerBackend.KokoroOnnx)
+            throw new InvalidOperationException("Archetype catalog export requires SherpaOnnx backend.");
+
         if (!VoiceModelCatalogNames.TryGetMemberName(draft.Model, out var member))
             throw new InvalidOperationException($"Unknown model id '{draft.Model.Id}'.");
         return member;

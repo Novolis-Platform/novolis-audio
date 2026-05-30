@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Phraseology\Novolis.Audio.Voice.Phraseology.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Profiles\Novolis.Audio.Voice.Profiles.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
   </ItemGroup>
 
 </Project>

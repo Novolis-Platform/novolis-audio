@@ -66,7 +66,7 @@ public class SpeechStackTests
         bytes[0] = 0xFF;
         bytes[1] = 0x7F;
         var buffer = new PcmBuffer(format, bytes, 2);
-        var floats = Novolis.Audio.Voice.SherpaOnnx.PcmToFloatConverter.ToMonoFloat(buffer);
+        var floats = PcmToFloatConverter.ToMonoFloat(buffer);
         await Assert.That(floats.Length).IsEqualTo(2);
         await Assert.That(floats[0]).IsGreaterThan(0.9f);
     }

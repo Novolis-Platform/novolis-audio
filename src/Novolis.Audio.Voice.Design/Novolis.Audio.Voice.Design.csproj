@@ -19,6 +19,8 @@
     <ProjectReference Include="..\Novolis.Audio.Voice.Atc\Novolis.Audio.Voice.Atc.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Kokoro\Novolis.Audio.Voice.Kokoro.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Platform.Abstractions\Novolis.Audio.Voice.Platform.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@
     <AssemblyName>Novolis.Audio.Voice</AssemblyName>
     <PackageId>Novolis.Audio.Voice</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Voice facade: TTS SpeakAsync and STT ListenAsync over Sherpa, effects, and PCM I/O.</Description>
+    <Description>Voice facade: TTS SpeakAsync and STT ListenAsync over pluggable synthesizers, effects, and PCM I/O.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,6 @@
     <ProjectReference Include="..\Novolis.Audio.Playback\Novolis.Audio.Playback.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Voice.Profiles\Novolis.Audio.Voice.Profiles.csproj" />
-    <ProjectReference Include="..\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
   </ItemGroup>
 
 </Project>

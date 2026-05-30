@@ -1,14 +1,13 @@
 using Novolis.Audio.Core;
 using Novolis.Audio.Effects;
 using Novolis.Audio.Playback;
-using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Voice;
 
 /// <summary>Fluent builder for <see cref="VoiceService"/>.</summary>
 public sealed class VoiceServiceBuilder
 {
-    private IVoiceSynthesizer _synthesizer = new SherpaVoiceSynthesizer();
+    private IVoiceSynthesizer _synthesizer = new NullVoiceSynthesizer();
     private IAudioEffectPipeline _effects = new IdentityEffectPipeline();
     private IAudioPlayback _playback = new NaudioPcmPlayback();
     private IWavEncoder _wavEncoder = new WavEncoder();
@@ -18,13 +17,6 @@ public sealed class VoiceServiceBuilder
     public VoiceServiceBuilder UseSynthesizer(IVoiceSynthesizer synthesizer)
     {
         _synthesizer = synthesizer ?? throw new ArgumentNullException(nameof(synthesizer));
-        return this;
-    }
-
-    /// <summary>Uses Sherpa-ONNX TTS (falls back to silence when models are absent).</summary>
-    public VoiceServiceBuilder UseSherpaOnnx()
-    {
-        _synthesizer = new SherpaVoiceSynthesizer();
         return this;
     }
 

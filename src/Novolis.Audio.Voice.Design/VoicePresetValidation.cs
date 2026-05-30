@@ -1,3 +1,6 @@
+using Novolis.Audio.Voice.Kokoro;
+using Novolis.Audio.Voice.Platform;
+
 namespace Novolis.Audio.Voice.Design;
 
 /// <summary>Validation results for <see cref="VoicePresetDraft"/> before export or preview.</summary>
@@ -21,14 +24,13 @@ public sealed class VoicePresetValidation
         if (!VoiceIdentifierHelper.IsValidCSharpIdentifier(draft.PropertyName))
             errors.Add("Property name must be a valid C# identifier.");
 
-        if (!VoiceModelCatalog.TryGet(draft.Model, out _))
-            errors.Add($"Model '{draft.Model.Id}' is not in VoiceModelCatalog.");
-
-        if (!VoiceModelCatalogNames.TryGetMemberName(draft.Model, out _))
-            errors.Add($"Model '{draft.Model.Id}' has no VoiceModelCatalog member for export.");
+        ValidateModel(draft, errors);
 
         if (draft.SpeakingRate <= 0f || draft.SpeakingRate > 3f)
             errors.Add("Speaking rate must be between 0 and 3.");
+
+        if (draft.Backend == VoiceSynthesizerBackend.Platform && draft.ApplyRadioEffects)
+            warnings.Add("Platform TTS cannot run Novolis radio DSP; effects are phraseology-only.");
 
         if (string.IsNullOrWhiteSpace(draft.Description))
             warnings.Add("Description is empty.");
@@ -42,5 +44,24 @@ public sealed class VoicePresetValidation
             Errors = errors,
             Warnings = warnings,
         };
+    }
+
+    private static void ValidateModel(VoicePresetDraft draft, List<string> errors)
+    {
+        switch (draft.Backend)
+        {
+            case VoiceSynthesizerBackend.KokoroOnnx:
+                if (!KokoroVoiceCatalog.TryResolveVoiceId(draft.Model, out _))
+                    errors.Add($"Model '{draft.Model.Id}' is not in KokoroVoiceCatalog.");
+                break;
+            case VoiceSynthesizerBackend.Platform:
+                break;
+            default:
+                if (!VoiceModelCatalog.TryGet(draft.Model, out _))
+                    errors.Add($"Model '{draft.Model.Id}' is not in VoiceModelCatalog.");
+                if (!VoiceModelCatalogNames.TryGetMemberName(draft.Model, out _))
+                    errors.Add($"Model '{draft.Model.Id}' has no VoiceModelCatalog member for export.");
+                break;
+        }
     }
 }

@@ -24,4 +24,7 @@ public enum VoiceModelEngineKind
 {
     /// <summary>Piper VITS model consumed by Sherpa <c>OfflineTtsVitsModelConfig</c>.</summary>
     SherpaOnnxVitsPiper,
+
+    /// <summary>Kokoro ONNX voice (metadata-only; weights ship via KokoroSharp.CPU).</summary>
+    KokoroOnnx,
 }

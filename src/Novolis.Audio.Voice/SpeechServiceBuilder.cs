@@ -1,6 +1,5 @@
 using Novolis.Audio.Effects;
 using Novolis.Audio.Playback;
-using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Voice;
 
@@ -8,8 +7,8 @@ namespace Novolis.Audio.Voice;
 public sealed class SpeechServiceBuilder
 {
     private IAudioCapture _capture = new NullAudioCapture();
-    private IVoiceActivityDetector _vad = new SherpaVoiceActivityDetector();
-    private ISpeechRecognizer _recognizer = new SherpaOfflineSpeechRecognizer();
+    private IVoiceActivityDetector _vad = new NullVoiceActivityDetector();
+    private ISpeechRecognizer _recognizer = new NullSpeechRecognizer();
     private ITranscriptNormalizer _normalizer = new DefaultTranscriptNormalizer();
 
     /// <summary>Sets the audio capture implementation.</summary>
@@ -38,9 +37,6 @@ public sealed class SpeechServiceBuilder
         _recognizer = recognizer ?? throw new ArgumentNullException(nameof(recognizer));
         return this;
     }
-
-    /// <summary>Uses Sherpa offline Whisper STT.</summary>
-    public SpeechServiceBuilder UseSherpaOnnx() => UseRecognizer(new SherpaOfflineSpeechRecognizer());
 
     /// <summary>Uses no-op STT for CI.</summary>
     public SpeechServiceBuilder UseNullRecognizer() => UseRecognizer(new NullSpeechRecognizer());

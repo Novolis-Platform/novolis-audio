@@ -1,20 +1,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Novolis.Audio.Playback;
+using Novolis.Audio.Voice;
 
-namespace Novolis.Audio.Voice;
+namespace Novolis.Audio.Voice.SherpaOnnx;
 
-/// <summary>DI registration for speech input services.</summary>
-public static class SpeechServiceCollectionExtensions
+/// <summary>DI registration for Sherpa-backed <see cref="ISpeechService"/>.</summary>
+public static class SpeechServiceCollectionSherpaExtensions
 {
     /// <summary>
-    /// Registers <see cref="ISpeechService"/> with null VAD/STT, NAudio capture, and default preprocessing.
-    /// For Sherpa models, call <c>AddNovolisSpeechSherpa</c> from <c>Novolis.Audio.Voice.SherpaOnnx</c>.
+    /// Registers <see cref="ISpeechService"/> with Sherpa VAD/STT (no-op when models are absent),
+    /// NAudio capture, and default input preprocessing.
     /// </summary>
-    public static IServiceCollection AddNovolisSpeech(this IServiceCollection services)
+    public static IServiceCollection AddNovolisSpeechSherpa(this IServiceCollection services)
     {
         services.AddSingleton<IAudioCapture, NaudioMicrophoneCapture>();
-        services.AddSingleton<IVoiceActivityDetector, NullVoiceActivityDetector>();
-        services.AddSingleton<ISpeechRecognizer, NullSpeechRecognizer>();
+        services.AddSingleton<IVoiceActivityDetector, SherpaVoiceActivityDetector>();
+        services.AddSingleton<ISpeechRecognizer, SherpaOfflineSpeechRecognizer>();
         services.AddSingleton<ITranscriptNormalizer, DefaultTranscriptNormalizer>();
         services.AddSingleton<ISpeechService>(sp =>
             new SpeechService(

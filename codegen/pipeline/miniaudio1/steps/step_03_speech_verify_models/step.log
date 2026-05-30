@@ -1,6 +1,4 @@
-# step_03_speech_verify_models — 2026-05-27T22:58:55.0597941+00:00
+# step_03_speech_verify_models — 2026-05-30T22:34:28.5172610+00:00
 # force=False
 
-speech-model: SKIP silero-vad (missing D:\novolis\novolis-audio\models\silero-vad; run scripts/fetch-speech-model.ps1)
-speech-model: SKIP en-whisper-tiny (missing D:\novolis\novolis-audio\models\en-whisper-tiny; run scripts/fetch-speech-model.ps1)
-verify-speech-models: OK
+SKIPPED: outputs up to date

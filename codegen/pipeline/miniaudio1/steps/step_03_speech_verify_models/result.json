@@ -1,8 +1,8 @@
 {
   "stepId": "step_03_speech_verify_models",
-  "status": "Succeeded",
-  "startedUtc": "2026-05-27T22:58:55.0597941+00:00",
-  "durationMs": 51,
+  "status": "Skipped",
+  "startedUtc": "2026-05-30T22:34:28.517261+00:00",
+  "durationMs": 0,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Audio.Manifests/NovolisAudioSpeechModelsManifest.cs": "4e3e289e615868a661be7c6bc44f019478a6b71fb9e70704f401b5d0f79ca60b",
@@ -10,5 +10,6 @@
     "codegen/Novolis.Audio.Manifests/SpeechModelEngineKind.cs": "73bc5730387efa8251c2e4d37530901fe789410e2b2c37ab2405fbeb67e61085",
     "codegen/Novolis.Audio.Manifests/SpeechModelManifestEntry.cs": "41ac3bc8187ce093d0d19944745267dfaf62c5cd43da1c2ed061f487932ed68b"
   },
-  "outputs": []
+  "outputs": [],
+  "skipReason": "outputs up to date"
 }

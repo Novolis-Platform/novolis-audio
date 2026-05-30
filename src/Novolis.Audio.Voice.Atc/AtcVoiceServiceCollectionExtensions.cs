@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Novolis.Audio.Voice.Phraseology;
 using Novolis.Audio.Voice.Profiles;
+using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Voice.Atc;
 
@@ -20,7 +21,7 @@ public static class AtcVoiceServiceCollectionExtensions
         services.AddSingleton<IPhraseologyNormalizer, DefaultPhraseologyNormalizer>();
         services.AddNovolisVoice(sp =>
         {
-            var builder = new VoiceServiceBuilder();
+            var builder = new VoiceServiceBuilder().UseSherpaOnnx();
             VoiceArchetypeApplicator.Apply(builder, archetype);
             AtcVoiceProfile.ApplyDelivery(builder, deliveryOptions);
             return builder.BuildService();

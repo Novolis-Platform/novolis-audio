@@ -15,5 +15,9 @@
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
     <PackageVersion Include="NAudio" Version="2.3.0" />
     <PackageVersion Include="org.k2fsa.sherpa.onnx" Version="1.12.40" />
+    <PackageVersion Include="KokoroSharp.CPU" Version="0.6.7" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
+    <PackageVersion Include="Microsoft.Maui.Essentials" Version="10.0.20" />
+    <PackageVersion Include="System.Speech" Version="9.0.0" />
   </ItemGroup>
 </Project>

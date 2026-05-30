@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Platform</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Platform.Abstractions</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Platform.Abstractions</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Voice synthesizer backend selection and platform speech options for OS TTS adapters.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

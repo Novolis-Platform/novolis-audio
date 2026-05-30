@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using Novolis.Audio.Effects;
-using Novolis.Audio.Voice.SherpaOnnx;
 
 namespace Novolis.Audio.Voice;
 
@@ -34,8 +33,8 @@ public sealed class SpeechService : ISpeechService
         var inputEffects = options.InputEffects ?? InputSpeechEffects.Create(options.Capture.SampleRateHz);
         var normalize = options.NormalizeTranscript ?? (t => _normalizer.Normalize(t));
 
-        if (_vad is SherpaVoiceActivityDetector sherpaVad)
-            sherpaVad.Configure(options.VadModelProfile);
+        if (_vad is IVoiceActivityDetectorConfigurer configurer)
+            configurer.Configure(options.VadModelProfile);
 
         await foreach (var chunk in _capture.CaptureAsync(options.Capture, cancellationToken).ConfigureAwait(false))
         {

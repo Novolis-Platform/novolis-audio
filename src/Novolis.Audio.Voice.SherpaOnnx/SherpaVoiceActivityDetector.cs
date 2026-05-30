@@ -4,7 +4,7 @@ using SherpaOnnx;
 namespace Novolis.Audio.Voice.SherpaOnnx;
 
 /// <summary>Sherpa Silero VAD; no segments when the model is missing.</summary>
-public sealed class SherpaVoiceActivityDetector : IVoiceActivityDetector, IDisposable
+public sealed class SherpaVoiceActivityDetector : IVoiceActivityDetector, IVoiceActivityDetectorConfigurer, IDisposable
 {
     private readonly NullVoiceActivityDetector _fallback = new();
     private readonly object _gate = new();

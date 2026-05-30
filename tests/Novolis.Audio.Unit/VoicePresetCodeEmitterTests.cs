@@ -31,6 +31,11 @@ public class VoicePresetCodeEmitterTests
         draft.PropertyName = "DryNeutral";
         draft.ApplyRadioEffects = false;
         draft.UsePhraseology = false;
+        foreach (var step in draft.EffectSteps)
+        {
+            if (step.Kind == VoiceEffectStepKind.Phraseology)
+                step.Enabled = false;
+        }
 
         var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.AtcDeliveryStatic);
 
@@ -62,6 +67,7 @@ public class VoicePresetCodeEmitterTests
 
         var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.UsageSnippet);
 
+        await Assert.That(code).Contains("UseSherpaOnnx()");
         await Assert.That(code).Contains("VoiceArchetypeApplicator.Apply");
         await Assert.That(code).Contains("VoiceArchetypeCatalog.CalmFemale");
         await Assert.That(code).Contains("BuildService()");
