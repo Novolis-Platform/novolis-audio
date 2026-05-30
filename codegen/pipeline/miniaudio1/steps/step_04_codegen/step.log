@@ -1,7 +1,4 @@
-# step_04_codegen — 2026-05-30T22:34:28.5194950+00:00
+# step_04_codegen — 2026-05-30T23:24:08.1967002+00:00
 # force=False
 
-emit: novolis-audio interop
-emit: facades
-Wrote D:\novolis\novolis-audio\src\Novolis.Audio.Voice.Abstractions\VoiceModelCatalog.g.cs
-Wrote D:\novolis\novolis-audio\src\Novolis.Audio.Voice.Abstractions\SpeechModelCatalog.g.cs
+SKIPPED: outputs up to date

@@ -1,28 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
-
-  <PropertyGroup>
-    <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst;net10.0-windows10.0.19041.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Novolis.Audio.Voice.Platform.Maui</RootNamespace>
-    <AssemblyName>Novolis.Audio.Voice.Platform.Maui</AssemblyName>
-    <PackageId>Novolis.Audio.Voice.Platform.Maui</PackageId>
-    <IsPackable>true</IsPackable>
-    <UseMaui>true</UseMaui>
-    <SingleProject>true</SingleProject>
-    <Description>MAUI TextToSpeech IVoiceService adapter (Speak only; no PCM export or effect chain).</Description>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Maui.Controls" />
-    <PackageReference Include="Microsoft.Maui.Essentials" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
-    <ProjectReference Include="..\Novolis.Audio.Voice.Platform.Abstractions\Novolis.Audio.Voice.Platform.Abstractions.csproj" />
-  </ItemGroup>
-
-</Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst;net10.0-windows10.0.19041.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Platform.Maui</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Platform.Maui</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Platform.Maui</PackageId>
+    <IsPackable>true</IsPackable>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Description>MAUI TextToSpeech IVoiceService adapter (Speak only; no PCM export or effect chain).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" />
+    <PackageReference Include="Microsoft.Maui.Essentials" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Platform.Abstractions\Novolis.Audio.Voice.Platform.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
