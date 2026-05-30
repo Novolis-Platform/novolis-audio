@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Atc\Novolis.Audio.Voice.Atc.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Profiles\Novolis.Audio.Voice.Profiles.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Design\Novolis.Audio.Voice.Design.csproj" />
   </ItemGroup>
 
 </Project>
