@@ -1,6 +1,8 @@
 using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.Design;
+using Novolis.Audio.Voice.Kokoro;
 using Novolis.Audio.Voice.Profiles;
+using Novolis.Audio.Voice.Platform;
 
 namespace Novolis.Audio.Unit;
 
@@ -21,6 +23,22 @@ public class VoicePresetCodeEmitterTests
         await Assert.That(code).Contains("test_operator");
         await Assert.That(code).Contains("VoiceModelCatalog.EnUsPiperLessacLow");
         await Assert.That(code).Contains("1.18f");
+    }
+
+    [Test]
+    public async Task EmitArchetype_kokoro_uses_model_profile_literal()
+    {
+        var draft = VoicePresetDraft.FromArchetype(VoiceArchetypeCatalog.NeutralFemale);
+        draft.Backend = VoiceSynthesizerBackend.KokoroOnnx;
+        draft.Model = KokoroVoiceCatalog.ToModelProfile("af_heart");
+        draft.PropertyName = "HeartKokoro";
+        draft.ProfileId = "heart_kokoro";
+
+        var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.ArchetypeCatalogEntry);
+
+        await Assert.That(code).Contains("UseKokoro");
+        await Assert.That(code).Contains("new VoiceModelProfile(\"kokoro:af_heart\")");
+        await Assert.That(code).DoesNotContain("VoiceModelCatalog.");
     }
 
     [Test]

@@ -24,13 +24,25 @@ public static class VoicePresetCodeEmitter
     /// <summary>Emits a <see cref="Profiles.VoiceArchetypeCatalog"/> entry.</summary>
     public static string EmitArchetype(VoicePresetDraft draft)
     {
-        var modelMember = RequireModelMember(draft);
         var description = EscapeString(draft.Description);
+        var (modelExpression, leadingComment) = draft.Backend switch
+        {
+            VoiceSynthesizerBackend.KokoroOnnx => (
+                $"new VoiceModelProfile(\"{EscapeString(draft.Model.Id)}\")",
+                "// Kokoro: build with VoiceServiceBuilder.UseKokoro(); see UsageSnippet.\n"),
+            VoiceSynthesizerBackend.Platform => (
+                $"new VoiceModelProfile(\"{EscapeString(draft.Model.Id)}\")",
+                "// Platform TTS: use UsageSnippet; model metadata is reference-only.\n"),
+            _ => (
+                $"VoiceModelCatalog.{RequireSherpaModelMember(draft)}",
+                string.Empty),
+        };
+
         return $$"""
-            /// <summary>{{description}}</summary>
+            {{leadingComment}}/// <summary>{{description}}</summary>
             public static VoiceArchetype {{draft.PropertyName}} { get; } = new(
                 new VoiceProfile("{{draft.ProfileId}}"),
-                VoiceModelCatalog.{{modelMember}},
+                {{modelExpression}},
                 SpeakingRate: {{VoiceIdentifierHelper.FormatFloat(draft.SpeakingRate)}},
                 Description: "{{description}}");
             """;
@@ -110,13 +122,10 @@ public static class VoicePresetCodeEmitter
     private static string FormatNullableString(string? value) =>
         value is null ? "null" : $"\"{EscapeString(value)}\"";
 
-    private static string RequireModelMember(VoicePresetDraft draft)
+    private static string RequireSherpaModelMember(VoicePresetDraft draft)
     {
-        if (draft.Backend == VoiceSynthesizerBackend.KokoroOnnx)
-            throw new InvalidOperationException("Archetype catalog export requires SherpaOnnx backend.");
-
         if (!VoiceModelCatalogNames.TryGetMemberName(draft.Model, out var member))
-            throw new InvalidOperationException($"Unknown model id '{draft.Model.Id}'.");
+            throw new InvalidOperationException($"Unknown Sherpa model id '{draft.Model.Id}'.");
         return member;
     }
 
