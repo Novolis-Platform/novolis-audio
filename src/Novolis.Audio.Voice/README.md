@@ -45,7 +45,7 @@ var builder = VoiceArchetypeApplicator.Apply(
 | Package | When to use |
 |---------|-------------|
 | `Novolis.Audio.Voice.Profiles` | Archetype catalog (lightweight) |
-| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + radio) |
+| `Novolis.Audio.Voice.Design` | Studio presets and GPR code export |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio` | Game SFX (miniaudio) — separate stack |
 

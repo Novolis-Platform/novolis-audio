@@ -23,7 +23,7 @@ var text = new DefaultPhraseologyNormalizer().Normalize("SAS 123");
 
 | Package | When to use |
 |---------|-------------|
-| `Novolis.Audio.Voice.Atc` | ATC profile preset |
+| `Novolis.Audio.Voice` | Compose phraseology into `VoiceServiceBuilder` |
 
 ## Support
 

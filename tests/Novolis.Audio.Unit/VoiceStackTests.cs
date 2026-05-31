@@ -1,5 +1,4 @@
 using Novolis.Audio.Voice;
-using Novolis.Audio.Voice.Atc;
 using Novolis.Audio.Voice.Phraseology;
 using Novolis.Audio.Voice.Profiles;
 using Novolis.Audio.Voice.SherpaOnnx;
@@ -9,9 +8,8 @@ namespace Novolis.Audio.Unit;
 public class VoiceStackTests
 {
     [Test]
-    public async Task AtcVoiceProfile_exposes_delivery_tag()
+    public async Task DefaultPhraseologyNormalizer_expands_digits()
     {
-        await Assert.That(AtcVoiceProfile.DeliveryTag.Id).IsEqualTo("atc");
         var normalizer = new DefaultPhraseologyNormalizer();
         var normalized = normalizer.Normalize("SAS 123");
         await Assert.That(normalized).Contains("one");
@@ -44,7 +42,6 @@ public class VoiceStackTests
             typeof(IVoiceService).Assembly,
             typeof(SherpaVoiceSynthesizer).Assembly,
             typeof(IPhraseologyNormalizer).Assembly,
-            typeof(AtcVoiceProfile).Assembly,
             typeof(VoiceArchetypeCatalog).Assembly,
         };
 
@@ -69,7 +66,6 @@ public class VoiceStackTests
             "Novolis.Audio.Effects",
             "Novolis.Audio.Filters",
             "Novolis.Audio.Playback",
-            "Novolis.Audio.Voice.Atc",
         };
 
         foreach (var reference in typeof(VoiceArchetypeCatalog).Assembly.GetReferencedAssemblies())

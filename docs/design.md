@@ -62,11 +62,11 @@ PcmBuffer (Novolis.Audio.Core)
 | `Novolis.Audio.Voice.Phraseology` | ICAO digit words |
 | `Novolis.Audio.Voice` | `SpeakAsync` / `WriteToFileAsync` facade |
 | `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes (model + rate) |
-| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + `atc-radio` DSP) |
+| `Novolis.Audio.Voice.Design` | Preset drafts, validation, preview, GPR code export |
 
 **Consumer entry for voice:** `Novolis.Audio.Voice` (not bundled into the `Novolis.Audio` meta-package).
 
-Compose **archetype** (`Voice.Profiles`) then **delivery** (`Voice.Atc` for radio/ICAO). Domain-specific delivery packages (`Voice.Radio`, …) can follow the `Voice.Atc` pattern.
+Compose **archetype** (`Voice.Profiles`) then optional **delivery** (phraseology + effect chain in your app, or copy `Novolis.Dogfooding.Voice` from dogfooding).
 
 ## Speech input (STT)
 

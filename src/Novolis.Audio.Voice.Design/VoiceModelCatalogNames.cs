@@ -10,9 +10,11 @@ public static class VoiceModelCatalogNames
         ["en-us-piper-kristin-medium"] = nameof(VoiceModelCatalog.EnUsPiperKristinMedium),
     };
 
+    /// <summary>Maps a model profile to a <see cref="VoiceModelCatalog"/> static member name for code export.</summary>
     public static bool TryGetMemberName(VoiceModelProfile profile, out string memberName) =>
         TryGetMemberName(profile.Id, out memberName);
 
+    /// <summary>Maps a profile id string to a <see cref="VoiceModelCatalog"/> static member name.</summary>
     public static bool TryGetMemberName(string? profileId, out string memberName)
     {
         if (string.IsNullOrWhiteSpace(profileId))

@@ -10,6 +10,10 @@ dotnet add package Novolis.Audio.Codecs
 
 **Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
 
+## Quick start
+
+Use `Novolis.Audio.Core` for WAV today; this package holds codec contracts for future formats.
+
 ## Related packages
 
 | Package | When to use |

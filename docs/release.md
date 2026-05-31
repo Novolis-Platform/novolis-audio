@@ -2,6 +2,12 @@
 
 See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob/main/docs/release-policy.md).
 
+## 2026.1.10 — ATC removed from GPR
+
+- **Removed** `Novolis.Audio.Voice.Atc` — use `Novolis.Dogfooding.Voice` in dogfooding or copy `AtcVoiceProfile` into your app.
+- **`Novolis.Audio.Voice.Design`** — `VoicePresetCodeTemplate` is GPR-generic only (`ArchetypeCatalogEntry`, `UsageSnippet`).
+- **`Novolis.Avalonia.Voice`** — no `Platform.Windows` dependency; Windows hosts set `VoicePreviewController.PlatformPreviewFactory`.
+
 ## 2026.1.6 — Filters / Effects split
 
 - `Novolis.Audio.Filters` — `IAudioFilter`, `BandLimitEffect`
@@ -11,9 +17,7 @@ See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob
 
 - `Novolis.Audio.Voice.Profiles` — neutral base-voice archetypes (`excitable_female`, `procedural_male`, …)
 - `Novolis.Audio.Voice.SherpaOnnx` — bundles three Piper models (amy, lessac-low, kristin-medium)
-- `Novolis.Audio.Voice.Atc` — delivery-only (`ApplyDelivery`: phraseology + `atc-radio`; compose after an archetype)
-
-Consumer entry for TTS: **`Novolis.Audio.Voice`** + **`Novolis.Audio.Voice.Profiles`**; optional **`Novolis.Audio.Voice.Atc`** for radio/ICAO delivery.
+Consumer entry for TTS: **`Novolis.Audio.Voice`** + **`Novolis.Audio.Voice.Profiles`**. ATC/radio delivery removed from GPR (see `novolis-dogfooding` / `Novolis.Dogfooding.Voice`).
 
 Third-party dependency: `org.k2fsa.sherpa.onnx` (nuget.org) in `Novolis.Audio.Voice.SherpaOnnx` only.
 
@@ -30,4 +34,3 @@ New packable packages:
 - `Novolis.Audio.Voice.SherpaOnnx`
 - `Novolis.Audio.Voice.Phraseology`
 - `Novolis.Audio.Voice`
-- `Novolis.Audio.Voice.Atc`

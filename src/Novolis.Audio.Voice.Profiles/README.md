@@ -4,6 +4,12 @@ Neutral **base-voice archetype catalog** (Piper model + speaking rate metadata).
 
 Apply archetypes with **`Novolis.Audio.Voice.VoiceArchetypeApplicator`** (in the `Novolis.Audio.Voice` package).
 
+## Install
+
+```bash
+dotnet add package Novolis.Audio.Voice.Profiles
+```
+
 ## Archetypes
 
 | Id | Model | Rate | Character |
@@ -18,13 +24,11 @@ Apply archetypes with **`Novolis.Audio.Voice.VoiceArchetypeApplicator`** (in the
 
 ```csharp
 using Novolis.Audio.Voice;
-using Novolis.Audio.Voice.Atc;
 using Novolis.Audio.Voice.Profiles;
 
 var builder = VoiceArchetypeApplicator.Apply(
     new VoiceServiceBuilder(),
     VoiceArchetypeCatalog.ExcitableFemale);
-AtcVoiceProfile.ApplyDelivery(builder);
 IVoiceService comms = builder.BuildService();
 ```
 
@@ -33,5 +37,4 @@ IVoiceService comms = builder.BuildService();
 | Package | Role |
 |---------|------|
 | `Novolis.Audio.Voice` | `VoiceArchetypeApplicator` + `IVoiceService` |
-| `Novolis.Audio.Voice.Atc` | ATC phraseology + `atc-radio` delivery |
 | `Novolis.Audio.Voice.SherpaOnnx` | Bundled Piper models |

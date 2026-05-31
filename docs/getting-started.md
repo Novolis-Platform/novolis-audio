@@ -33,27 +33,25 @@ engine.Start();
 <PackageReference Include="Novolis.Audio.Voice" Version="2026.1.*" />
 ```
 
-Optional archetypes + ATC delivery:
+Optional archetypes:
 
 ```xml
 <PackageReference Include="Novolis.Audio.Voice.Profiles" Version="2026.1.*" />
-<PackageReference Include="Novolis.Audio.Voice.Atc" Version="2026.1.*" />
 ```
 
 ```csharp
 using Novolis.Audio.Voice;
-using Novolis.Audio.Voice.Atc;
 using Novolis.Audio.Voice.Profiles;
 
 var builder = VoiceArchetypeApplicator.Apply(
     new VoiceServiceBuilder(),
     VoiceArchetypeCatalog.ExcitableFemale);
-AtcVoiceProfile.ApplyDelivery(builder);
 IVoiceService voice = builder.BuildService();
 
 await voice.SpeakAsync("Tower, SAS one two three is ready for departure.");
-await voice.WriteToFileAsync("Cleared for takeoff runway two two.", new FileInfo("atc.wav"));
 ```
+
+For ATC phraseology + radio DSP, copy the delivery pattern from `novolis-dogfooding` (`Novolis.Dogfooding.Voice`) or compose your own effect chain with `Novolis.Audio.Effects`.
 
 ### Models
 

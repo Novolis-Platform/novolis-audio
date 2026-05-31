@@ -23,7 +23,6 @@
     <Project Path="src/Novolis.Audio.Voice.Platform.Windows/Novolis.Audio.Voice.Platform.Windows.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Phraseology/Novolis.Audio.Voice.Phraseology.csproj" />
     <Project Path="src/Novolis.Audio.Voice/Novolis.Audio.Voice.csproj" />
-    <Project Path="src/Novolis.Audio.Voice.Atc/Novolis.Audio.Voice.Atc.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Profiles/Novolis.Audio.Voice.Profiles.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Design/Novolis.Audio.Voice.Design.csproj" />
     <Project Path="src/Novolis.Audio.Host.Abstractions/Novolis.Audio.Host.Abstractions.csproj" />

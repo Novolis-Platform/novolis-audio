@@ -29,7 +29,7 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
 | `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes |
-| `Novolis.Audio.Voice.Atc` | ATC delivery (phraseology + radio DSP) |
+| `Novolis.Audio.Voice.Design` | Preset drafts, validation, preview, GPR code export |
 
 Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack).
 

@@ -26,5 +26,5 @@ await voice.SpeakAsync("Tower, ready for departure.");
 
 ## Boundaries
 
-- Depends on `Novolis.Audio.Voice`, `.Profiles`, `.Atc`, `.SherpaOnnx` — not Avalonia.
+- Depends on `Novolis.Audio.Voice`, `.Profiles`, `.Phraseology`, `.SherpaOnnx` — not Avalonia.
 - Does not persist presets (export-only v1); paste emitted C# into `VoiceArchetypeCatalog` or app delivery types.

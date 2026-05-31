@@ -13,6 +13,9 @@ public sealed class WindowsPlatformVoiceService : IVoiceService
     private readonly PlatformSpeechOptions _speech;
     private readonly Func<string, string>? _normalize;
 
+    /// <summary>Creates a Windows platform TTS service.</summary>
+    /// <param name="speech">Optional voice/rate/pitch options.</param>
+    /// <param name="normalizeText">Optional phraseology normalizer applied before speak.</param>
     public WindowsPlatformVoiceService(
         PlatformSpeechOptions? speech = null,
         Func<string, string>? normalizeText = null)

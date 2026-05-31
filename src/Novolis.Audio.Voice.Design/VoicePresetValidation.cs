@@ -6,12 +6,16 @@ namespace Novolis.Audio.Voice.Design;
 /// <summary>Validation results for <see cref="VoicePresetDraft"/> before export or preview.</summary>
 public sealed class VoicePresetValidation
 {
+    /// <summary>True when <see cref="Errors"/> is empty.</summary>
     public bool IsValid { get; init; }
 
+    /// <summary>Blocking validation messages.</summary>
     public IReadOnlyList<string> Errors { get; init; } = [];
 
+    /// <summary>Non-blocking hints (export/preview still allowed).</summary>
     public IReadOnlyList<string> Warnings { get; init; } = [];
 
+    /// <summary>Validates a draft before preview or code export.</summary>
     public static VoicePresetValidation Validate(VoicePresetDraft draft)
     {
         ArgumentNullException.ThrowIfNull(draft);

@@ -8,7 +8,7 @@ Manifest-driven **.NET 10** bindings to `novolis_audio` (miniaudio shim). Univer
 
 **Consumer entry (game SFX):** `Novolis.Audio` or `MiniaudioAudioEngine` + abstractions.
 
-**Consumer entry (voice/TTS):** `Novolis.Audio.Voice` + `Novolis.Audio.Voice.Profiles` (base archetypes) + optional `Novolis.Audio.Voice.Atc` (delivery).
+**Consumer entry (voice/TTS):** `Novolis.Audio.Voice` + `Novolis.Audio.Voice.Profiles` (base archetypes). Domain delivery (e.g. ATC radio) lives in app code or `novolis-dogfooding` (`Novolis.Dogfooding.Voice`), not GPR.
 
 **Consumer entry (speech/STT):** `Novolis.Audio.Voice` + `AddNovolisSpeech()` (`ListenAsync` pipeline).
 

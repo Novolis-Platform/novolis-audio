@@ -9,6 +9,9 @@ namespace Novolis.Audio.Voice.Design;
 /// <summary>Builds <see cref="IVoiceService"/> instances from studio drafts (same pipeline as BridgeCommander).</summary>
 public static class VoicePresetPreviewFactory
 {
+    /// <summary>Builds a preview <see cref="IVoiceService"/> for the draft backend and effect chain.</summary>
+    /// <param name="draft">Studio preset.</param>
+    /// <param name="contentRoot">Optional app base directory for bundled Sherpa model extraction.</param>
     public static IVoiceService Create(VoicePresetDraft draft, string? contentRoot = null)
     {
         ArgumentNullException.ThrowIfNull(draft);

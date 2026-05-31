@@ -19,7 +19,6 @@
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice\Novolis.Audio.Voice.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Phraseology\Novolis.Audio.Voice.Phraseology.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.SherpaOnnx\Novolis.Audio.Voice.SherpaOnnx.csproj" />
-    <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Atc\Novolis.Audio.Voice.Atc.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Profiles\Novolis.Audio.Voice.Profiles.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Design\Novolis.Audio.Voice.Design.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Kokoro\Novolis.Audio.Voice.Kokoro.csproj" />
