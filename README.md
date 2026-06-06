@@ -41,6 +41,7 @@ Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice us
 | `Novolis.Audio.Patterns` | Immutable pattern graph and composition operators |
 | `Novolis.Audio.Analysis` | Waveform and spectrum snapshots for visuals and telemetry |
 | `Novolis.Audio.Live` | Live program model, compiler, scheduler, and swap state |
+| `Novolis.Audio.Live.Dsl` | Completion-friendly DSL helpers for instruments, effects, and patterns |
 | `Novolis.Audio.Live.Protocol` | MessagePack DTOs and mapping helpers for live IPC |
 | `Novolis.Audio.Live.Repl` | Performer client for compile/snapshot/swap requests |
 | `Novolis.Audio.Live.Visuals` | Graph and visual projections from the live model |

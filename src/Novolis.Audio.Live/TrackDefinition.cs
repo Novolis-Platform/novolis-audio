@@ -7,4 +7,5 @@ public sealed record TrackDefinition(
     string Name,
     InstrumentKind Instrument,
     PatternNode Pattern,
-    int Channel = 0);
+    int Channel = 0,
+    IReadOnlyList<EffectKind>? Effects = null);
