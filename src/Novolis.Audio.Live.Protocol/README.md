@@ -2,6 +2,23 @@
 
 MessagePack DTOs and helper methods for the Novolis Audio Live control plane.
 
+## Install
+
+```bash
+dotnet add package Novolis.Audio.Live.Protocol
+```
+
+## Quick start
+
+```csharp
+using Novolis.Audio.Live.Protocol;
+using Novolis.Transports.LocalIpc;
+
+var endpoint = LiveTransportEndpoints.CreateDefault();
+using var client = LocalIpcTransport.CreateClient();
+await using var connection = await client.ConnectAsync(endpoint);
+```
+
 ## What this package owns
 
 This package defines the **audio-domain wire contract** for live coding. It does not implement transport itself.
