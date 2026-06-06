@@ -4,16 +4,16 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Novolis.Audio.Live.Repl</RootNamespace>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>Novolis.Audio.Live.Dsl</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <PackageId>Novolis.Audio.Live.Repl</PackageId>
+    <PackageId>Novolis.Audio.Live.Dsl</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Transport client and command surface for Novolis Audio Live performer workflows.</Description>
+    <Description>Discoverable DSL helpers for Novolis Audio Live programs, instruments, and effects.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Novolis.Audio.Live.Protocol\Novolis.Audio.Live.Protocol.csproj" />
-    <ProjectReference Include="..\Novolis.Audio.Live.Dsl\Novolis.Audio.Live.Dsl.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Patterns\Novolis.Audio.Patterns.csproj" />
   </ItemGroup>
 </Project>

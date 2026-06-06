@@ -39,7 +39,7 @@ public sealed class LiveProgramSchedulerTests
 
     private static LiveProgram CreateProgram(int version)
     {
-        var note = new Note(
+        var note = new Novolis.Audio.MusicTheory.Note(
             new Pitch(PitchClass.C, Octave.MiddleC),
             Duration.Quarter,
             Velocity.Default,

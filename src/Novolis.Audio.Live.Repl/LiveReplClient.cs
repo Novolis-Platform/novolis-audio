@@ -8,10 +8,15 @@ namespace Novolis.Audio.Live.Repl;
 public sealed class LiveReplClient : IAsyncDisposable
 {
     private readonly ILocalIpcClient _client;
+    private readonly LiveReplSyntaxCompiler _syntaxCompiler;
     private ILocalIpcConnection? _connection;
     private long _sequence;
 
-    public LiveReplClient(ILocalIpcClient? client = null) => _client = client ?? LocalIpcTransport.CreateClient();
+    public LiveReplClient(ILocalIpcClient? client = null, LiveReplSyntaxCompiler? syntaxCompiler = null)
+    {
+        _client = client ?? LocalIpcTransport.CreateClient();
+        _syntaxCompiler = syntaxCompiler ?? new LiveReplSyntaxCompiler();
+    }
 
     public bool IsConnected => _connection is not null;
 
@@ -27,6 +32,9 @@ public sealed class LiveReplClient : IAsyncDisposable
         var response = await ReadResponseAsync<LiveCompileResponseDto>(connection, _sequence, cancellationToken).ConfigureAwait(false);
         return response;
     }
+
+    public ValueTask<LiveCompileResponseDto> CompileTextAsync(string source, SwapPolicy swapPolicy, CancellationToken cancellationToken = default) =>
+        CompileAsync(_syntaxCompiler.Compile(source), swapPolicy, cancellationToken);
 
     public async ValueTask<LiveTransportSnapshotDto> SnapshotAsync(CancellationToken cancellationToken = default)
     {

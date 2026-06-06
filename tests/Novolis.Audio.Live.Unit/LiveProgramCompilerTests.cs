@@ -31,9 +31,30 @@ public sealed class LiveProgramCompilerTests
         await Assert.That(result.Diagnostics.Any(d => d.Code == "LIVE001")).IsTrue();
     }
 
+    [Test]
+    public async Task Compile_rejects_unknown_instrument_or_effect_kinds()
+    {
+        var note = new Novolis.Audio.MusicTheory.Note(
+            new Pitch(PitchClass.C, Octave.MiddleC),
+            Duration.Quarter,
+            Velocity.Default,
+            (InstrumentKind)999);
+
+        var pattern = new SequencePattern([new NotePattern(note)]);
+        var track = new TrackDefinition("lead", (InstrumentKind)999, pattern, Effects: [(EffectKind)999]);
+        var definition = new LiveProgramDefinition(120m, [track], pattern);
+
+        var result = new LiveProgramCompiler().Compile(definition);
+
+        await Assert.That(result.Success).IsFalse();
+        await Assert.That(result.Diagnostics.Any(d => d.Code == "LIVE006")).IsTrue();
+        await Assert.That(result.Diagnostics.Any(d => d.Code == "LIVE007")).IsTrue();
+        await Assert.That(result.Diagnostics.Any(d => d.Code == "LIVE009")).IsTrue();
+    }
+
     private static LiveProgramDefinition CreateDefinition()
     {
-        var note = new Note(
+        var note = new Novolis.Audio.MusicTheory.Note(
             new Pitch(PitchClass.C, Octave.MiddleC),
             Duration.Quarter,
             Velocity.Default,

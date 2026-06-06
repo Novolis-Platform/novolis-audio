@@ -17,5 +17,5 @@ var note = new Note(
     new Pitch(PitchClass.C, Octave.MiddleC),
     Duration.Quarter,
     Velocity.Default,
-    InstrumentKind.Sine);
+    InstrumentKind.Lead);
 ```

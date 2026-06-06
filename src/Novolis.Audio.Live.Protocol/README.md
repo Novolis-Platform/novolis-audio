@@ -26,7 +26,7 @@ This package defines the **audio-domain wire contract** for live coding. It does
 It contains:
 
 - request/response DTOs for compile, snapshot, and queue-swap
-- immutable program and diagnostic payloads
+- immutable program, track-effect, and diagnostic payloads
 - mapping helpers between domain objects and wire DTOs
 - endpoint helpers for the default local IPC address
 - MessagePack serialization helpers
@@ -67,6 +67,7 @@ The current control surface is intentionally small:
 ```text
 REPL / visual client
   → build typed program definition
+  → choose named instruments and optional effect chains
   → MessagePack request
   → host compiles to immutable LiveProgram
   → host either accepts or rejects without disturbing the current performance

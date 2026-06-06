@@ -51,10 +51,10 @@ public static class LiveProtocolMappings
     };
 
     public static TrackDefinitionDto ToDto(this TrackDefinition track) =>
-        new(track.Name, track.Instrument, track.Pattern.ToDto(), track.Channel);
+        new(track.Name, track.Instrument, track.Pattern.ToDto(), track.Channel, track.Effects?.ToArray());
 
     public static TrackDefinition ToDomain(this TrackDefinitionDto dto) =>
-        new(dto.Name, dto.Instrument, dto.Pattern.ToDomain(), dto.Channel);
+        new(dto.Name, dto.Instrument, dto.Pattern.ToDomain(), dto.Channel, dto.Effects?.ToArray());
 
     public static LiveProgramDefinitionDto ToDto(this LiveProgramDefinition definition) =>
         new(definition.Bpm, definition.Tracks.Select(ToDto).ToArray(), definition.Root.ToDto());
