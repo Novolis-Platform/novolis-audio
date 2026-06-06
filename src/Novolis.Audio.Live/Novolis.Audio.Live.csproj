@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Live</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <PackageId>Novolis.Audio.Live</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Live music runtime, compiler, scheduler, and program swap state.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Analysis\Novolis.Audio.Analysis.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Patterns\Novolis.Audio.Patterns.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+  </ItemGroup>
+</Project>

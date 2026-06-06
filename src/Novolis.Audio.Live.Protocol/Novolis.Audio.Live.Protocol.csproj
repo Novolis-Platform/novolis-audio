@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Live.Protocol</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <PackageId>Novolis.Audio.Live.Protocol</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>MessagePack DTOs and transport helpers for Novolis Audio Live IPC.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MessagePack" />
+    <ProjectReference Include="..\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />
+    <ProjectReference Include="..\..\..\novolis-transports\src\Novolis.Transports.LocalIpc\Novolis.Transports.LocalIpc.csproj" />
+  </ItemGroup>
+</Project>
