@@ -33,6 +33,31 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 
 Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack).
 
+### Live music
+
+| Package | Role |
+|---------|------|
+| `Novolis.Audio.MusicTheory` | Typed notes, chords, durations, tempo, pitch, instrument kinds |
+| `Novolis.Audio.Patterns` | Immutable pattern graph and composition operators |
+| `Novolis.Audio.Analysis` | Waveform and spectrum snapshots for visuals and telemetry |
+| `Novolis.Audio.Live` | Live program model, compiler, scheduler, and swap state |
+| `Novolis.Audio.Live.Protocol` | MessagePack DTOs and mapping helpers for live IPC |
+| `Novolis.Audio.Live.Repl` | Performer client for compile/snapshot/swap requests |
+| `Novolis.Audio.Live.Visuals` | Graph and visual projections from the live model |
+| `Novolis.Audio.Live.Host` | Headless host that owns the clock and runtime state |
+
+The live stack is intentionally split across libraries:
+
+```text
+typed music model
+  → immutable pattern graph
+  → live compiler / swap queue
+  → host process
+  → REPL + visual clients
+```
+
+The general-purpose transport used by the live host lives in `novolis-transports` as `Novolis.Transports.LocalIpc`.
+
 ## Quick start (game SFX)
 
 ```csharp
@@ -73,3 +98,4 @@ dotnet build Novolis.Audio.slnx -c Release
 - [docs/design.md](docs/design.md)
 - [docs/voice-models.md](docs/voice-models.md)
 - [docs/release.md](docs/release.md)
+- [src/Novolis.Audio.Live.Protocol/README.md](src/Novolis.Audio.Live.Protocol/README.md)

@@ -79,6 +79,9 @@ public class VoiceStackTests
     [Test]
     public async Task Sherpa_synthesizer_produces_audio_for_each_bundled_model_when_present()
     {
+        if (!SherpaVoiceSynthesizer.IsNativeRuntimeAvailable())
+            return;
+
         foreach (var bundled in VoiceModelCatalog.All)
         {
             var paths = SherpaVoiceModelPaths.TryResolve(modelDirectory: null, bundled.Profile);

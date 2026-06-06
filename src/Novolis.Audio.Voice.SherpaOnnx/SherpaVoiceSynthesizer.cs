@@ -1,4 +1,5 @@
 using Novolis.Audio.Core;
+using System.Runtime.InteropServices;
 using SherpaOnnx;
 
 namespace Novolis.Audio.Voice.SherpaOnnx;
@@ -9,6 +10,15 @@ public sealed class SherpaVoiceSynthesizer : IVoiceSynthesizer, IDisposable
     private readonly NullVoiceSynthesizer _fallback = new();
     private readonly object _gate = new();
     private readonly Dictionary<string, OfflineTts> _engines = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Returns whether the native Sherpa runtime can be loaded in the current process.</summary>
+    public static bool IsNativeRuntimeAvailable()
+    {
+        return NativeLibrary.TryLoad("sherpa-onnx-c-api", out _)
+            || NativeLibrary.TryLoad("libsherpa-onnx-c-api.so", out _)
+            || NativeLibrary.TryLoad("sherpa-onnx-c-api.dll", out _)
+            || NativeLibrary.TryLoad("libsherpa-onnx-c-api.dylib", out _);
+    }
 
     /// <inheritdoc />
     public Task<PcmBuffer> SynthesizeAsync(

@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsTestingPlatformApplication>true</IsTestingPlatformApplication>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
 </Project>
