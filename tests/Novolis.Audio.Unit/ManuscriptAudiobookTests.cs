@@ -174,7 +174,8 @@ public sealed class ManuscriptAudiobookTests
             await File.WriteAllTextAsync(chapterPath, "# One\n\nHello world.\n");
 
             var snapshots = new List<AudiobookProgress>();
-            var progress = new Progress<AudiobookProgress>(snapshots.Add);
+            // Avoid System.Progress<T> — it posts via SynchronizationContext and can miss reports in CI.
+            var progress = new CollectingProgress(snapshots);
             var pipeline = new ManuscriptAudiobookPipeline(new FakeSynthesizer());
             var result = await pipeline.GenerateAsync(
                 "book",
@@ -199,6 +200,11 @@ public sealed class ManuscriptAudiobookTests
         {
             Directory.Delete(temp, recursive: true);
         }
+    }
+
+    sealed class CollectingProgress(List<AudiobookProgress> sink) : IProgress<AudiobookProgress>
+    {
+        public void Report(AudiobookProgress value) => sink.Add(value);
     }
 
     sealed class FakeSynthesizer : IManuscriptSynthesizer
