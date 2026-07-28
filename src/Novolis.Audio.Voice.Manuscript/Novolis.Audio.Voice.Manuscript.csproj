@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Manuscript</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Manuscript</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Manuscript</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Speech planning for manuscript TTS: chunking, scene breaks, pronunciation rewrites.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>
