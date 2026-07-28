@@ -2,6 +2,14 @@
 
 View-model projections for Live programs (graph nodes, transport frame, waveform/spectrum snapshots).
 
+## Install
+
+```bash
+dotnet add package Novolis.Audio.Live.Visuals
+```
+
+## Quick start
+
 ```csharp
 using Novolis.Audio.Live.Visuals;
 

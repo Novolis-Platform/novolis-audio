@@ -2,6 +2,21 @@
 
 Live music runtime: compiler, scheduler, and immutable program swap state.
 
+## Install
+
+```bash
+dotnet add package Novolis.Audio.Live
+```
+
+## Quick start
+
+```csharp
+using Novolis.Audio.Live;
+
+var session = new LiveSession();
+session.QueueSwap(compiledProgram);
+```
+
 Pair with:
 
 - `Novolis.Audio.Live.Protocol` — IPC + REPL client
