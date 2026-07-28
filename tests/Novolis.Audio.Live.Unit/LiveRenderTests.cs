@@ -29,6 +29,8 @@ public sealed class LiveRenderTests
     [Test]
     public async Task Oscillator_engine_starts_and_stops()
     {
+        Skip.Unless(OperatingSystem.IsWindows(), "WaveOutEvent requires winmm.dll");
+
         var session = new LiveSession();
         await using var engine = new OscillatorLiveAudioEngine();
         engine.Bind(session);
