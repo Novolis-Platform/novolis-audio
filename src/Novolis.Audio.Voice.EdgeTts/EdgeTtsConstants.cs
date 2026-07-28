@@ -6,7 +6,7 @@ internal static class EdgeTtsConstants
     public const string TrustedClientToken = "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
     public const string BasePath = "speech.platform.bing.com/consumer/speech/synthesize/readaloud";
 
-    public const string DefaultVoice = "en-US-EmmaMultilingualNeural";
+    public const string DefaultVoice = "en-US-AvaNeural";
     public const string ChromiumFullVersion = "143.0.3650.75";
 
     public static string ChromiumMajorVersion { get; } = ChromiumFullVersion.Split('.')[0];

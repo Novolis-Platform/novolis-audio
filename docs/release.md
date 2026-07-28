@@ -2,6 +2,18 @@
 
 See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob/main/docs/release-policy.md).
 
+## 2026.1.x — Live family Option C
+
+- **Removed** `Novolis.Audio.Analysis` (types moved into `Live.Visuals`), `Novolis.Audio.Live.Repl` (client moved into `Live.Protocol`), packable `Novolis.Audio.Live.Host` (host lives only in LiveStudio apps).
+- **Renamed** `Novolis.Audio.Host.*` → `Novolis.Audio.Output.*` (game output probe; not Live).
+- **Added** `Novolis.Audio.Live.Render` — v0 NAudio oscillators driven by `LiveSession`.
+- **NuGet-only** `Live.Protocol` → `Novolis.Transports.LocalIpc` (GPR).
+
+## 2026.1.x — Edge TTS typesafe voices
+
+- **`Novolis.Audio.Voice.EdgeTts`** — `EdgeVoice` catalog, `ProsodyPercent` / `ProsodyHertz`, `EdgeVoiceProfiles.Narrator` (Ava / −4%). `EdgeTtsSynthesisOptions` is typed (no string Voice/Rate/Pitch/Volume).
+- **`Novolis.Audio.Voice.Manuscript`** — `ManuscriptVoiceSettings` uses curated voices; `VoiceMapStore` reads/writes books nested `narrator:` / `pauses:` / `generation:` YAML.
+
 ## 2026.1.10 — Edge TTS + ATC removed from GPR
 
 - **Added** `Novolis.Audio.Voice.EdgeTts` — online Microsoft Edge Read Aloud TTS client (MP3; requires network; cross-platform).

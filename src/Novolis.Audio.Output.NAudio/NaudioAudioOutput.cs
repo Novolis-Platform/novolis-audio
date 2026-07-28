@@ -1,7 +1,7 @@
 using NAudio.CoreAudioApi;
-using Novolis.Audio.Host;
+using Novolis.Audio.Output;
 
-namespace Novolis.Audio.Host.NAudio;
+namespace Novolis.Audio.Output.NAudio;
 
 /// <summary>NAudio-based probe of the Windows default render endpoint.</summary>
 public sealed class NaudioAudioOutput : IAudioOutput

@@ -7,9 +7,9 @@ public class EdgeTtsClientTests
     [Test]
     public async Task NormalizeVoice_expands_short_neural_ids()
     {
-        var name = EdgeTtsClient.NormalizeVoice("en-US-EmmaMultilingualNeural");
+        var name = EdgeTtsClient.NormalizeVoice(EdgeVoiceCatalog.ToShortName(EdgeVoice.EnUsAva));
         await Assert.That(name).IsEqualTo(
-            "Microsoft Server Speech Text to Speech Voice (en-US, EmmaMultilingualNeural)");
+            "Microsoft Server Speech Text to Speech Voice (en-US, AvaNeural)");
     }
 
     [Test]
@@ -20,14 +20,30 @@ public class EdgeTtsClientTests
     }
 
     [Test]
-    public async Task SynthesizeToMp3_rejects_bad_rate()
+    public async Task EdgeVoiceCatalog_parses_curated_short_names()
     {
-        using var client = new EdgeTtsClient();
-        await Assert.That(async () =>
-                await client.SynthesizeToMp3Async(
-                    "hi",
-                    new EdgeTtsSynthesisOptions { Rate = "fast" }))
-            .ThrowsExactly<EdgeTtsException>();
+        await Assert.That(EdgeVoiceCatalog.TryParse("en-US-AvaNeural", out var voice)).IsTrue();
+        await Assert.That(voice).IsEqualTo(EdgeVoice.EnUsAva);
+        await Assert.That(EdgeVoiceCatalog.TryParse("en-US-NotARealVoice", out _)).IsFalse();
+    }
+
+    [Test]
+    public async Task Prosody_formats_signed_ssml()
+    {
+        await Assert.That(new ProsodyPercent(-4).ToSsml()).IsEqualTo("-4%");
+        await Assert.That(ProsodyPercent.Zero.ToSsml()).IsEqualTo("+0%");
+        await Assert.That(new ProsodyHertz(10).ToSsml()).IsEqualTo("+10Hz");
+        await Assert.That(ProsodyPercent.TryParse("-4%", out var rate)).IsTrue();
+        await Assert.That(rate.Value).IsEqualTo(-4);
+    }
+
+    [Test]
+    public async Task Narrator_profile_matches_book_defaults()
+    {
+        var narrator = EdgeVoiceProfiles.Narrator;
+        await Assert.That(narrator.Voice).IsEqualTo(EdgeVoice.EnUsAva);
+        await Assert.That(narrator.Rate.Value).IsEqualTo(-4);
+        await Assert.That(narrator.SceneBreakMs).IsEqualTo(1200);
     }
 
     [Test]

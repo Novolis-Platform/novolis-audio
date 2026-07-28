@@ -63,7 +63,7 @@ public sealed class AudiobookManifestChapter
     public long DurationMs { get; init; }
 }
 
-/// <summary>Result of <see cref="ManuscriptAudiobookPipeline.GenerateAsync"/>.</summary>
+/// <summary>Result of <see cref="ManuscriptAudiobookPipeline"/> generation.</summary>
 public sealed class AudiobookResult
 {
     /// <summary>Absolute path to <c>manifest.json</c>.</summary>

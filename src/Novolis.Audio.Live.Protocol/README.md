@@ -21,7 +21,7 @@ await using var connection = await client.ConnectAsync(endpoint);
 
 ## What this package owns
 
-This package defines the **audio-domain wire contract** for live coding. It does not implement transport itself.
+This package defines the **audio-domain wire contract** for live coding, plus the performer **REPL client** (`Novolis.Audio.Live.Repl` namespace inside this assembly). It does not implement transport itself.
 
 It contains:
 

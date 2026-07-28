@@ -12,8 +12,11 @@ namespace Novolis.Audio.Voice.EdgeTts;
 /// </summary>
 public sealed class EdgeTtsClient : IDisposable
 {
+    /// <summary>Default curated voice (book narrator Ava).</summary>
+    public static EdgeVoice DefaultVoice { get; } = EdgeVoice.EnUsAva;
+
     /// <summary>Default neural voice short name.</summary>
-    public const string DefaultVoice = EdgeTtsConstants.DefaultVoice;
+    public static string DefaultVoiceShortName { get; } = EdgeTtsConstants.DefaultVoice;
 
     private static readonly Regex ShortVoicePattern = new(
         @"^([a-z]{2,})-([A-Z]{2,})-(.+Neural)$",
@@ -54,8 +57,10 @@ public sealed class EdgeTtsClient : IDisposable
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
         options ??= new EdgeTtsSynthesisOptions();
 
-        var voice = NormalizeVoice(options.Voice);
-        ValidateProsody(options.Rate, options.Volume, options.Pitch);
+        var voice = NormalizeVoice(EdgeVoiceCatalog.ToShortName(options.Voice));
+        var rate = options.Rate.ToSsml();
+        var volume = options.Volume.ToSsml();
+        var pitch = options.Pitch.ToSsml();
 
         var chunks = SplitText(Sanitize(text), maxUtf8Bytes: 4096);
         using var output = new MemoryStream();
@@ -66,9 +71,9 @@ public sealed class EdgeTtsClient : IDisposable
             var mp3 = await SynthesizeChunkAsync(
                     chunk,
                     voice,
-                    options.Rate,
-                    options.Volume,
-                    options.Pitch,
+                    rate,
+                    volume,
+                    pitch,
                     retryOnForbidden: true,
                     cancellationToken)
                 .ConfigureAwait(false);
@@ -322,16 +327,6 @@ public sealed class EdgeTtsClient : IDisposable
         }
 
         return $"Microsoft Server Speech Text to Speech Voice ({lang}-{region}, {name})";
-    }
-
-    private static void ValidateProsody(string rate, string volume, string pitch)
-    {
-        if (!Regex.IsMatch(rate, @"^[+-]\d+%$"))
-            throw new EdgeTtsException($"Invalid rate '{rate}'.");
-        if (!Regex.IsMatch(volume, @"^[+-]\d+%$"))
-            throw new EdgeTtsException($"Invalid volume '{volume}'.");
-        if (!Regex.IsMatch(pitch, @"^[+-]\d+Hz$"))
-            throw new EdgeTtsException($"Invalid pitch '{pitch}'.");
     }
 
     private static string Sanitize(string text)

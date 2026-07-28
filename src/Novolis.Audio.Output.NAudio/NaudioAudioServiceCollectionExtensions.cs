@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using Novolis.Audio.Host;
+using Novolis.Audio.Output;
 
-namespace Novolis.Audio.Host.NAudio;
+namespace Novolis.Audio.Output.NAudio;
 
 /// <summary>Registers NAudio-backed <see cref="IAudioOutput"/> for game hosts.</summary>
 public static class NaudioAudioServiceCollectionExtensions

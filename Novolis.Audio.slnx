@@ -6,7 +6,6 @@
     <Project Path="codegen/Novolis.Audio.Manifests/Novolis.Audio.Manifests.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Novolis.Audio.Analysis/Novolis.Audio.Analysis.csproj" />
     <Project Path="src/Novolis.Audio.MusicTheory/Novolis.Audio.MusicTheory.csproj" />
     <Project Path="src/Novolis.Audio.Patterns/Novolis.Audio.Patterns.csproj" />
     <Project Path="src/Novolis.Audio.Native/Novolis.Audio.Native.csproj" />
@@ -30,14 +29,13 @@
     <Project Path="src/Novolis.Audio.Voice/Novolis.Audio.Voice.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Profiles/Novolis.Audio.Voice.Profiles.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Design/Novolis.Audio.Voice.Design.csproj" />
-    <Project Path="src/Novolis.Audio.Host.Abstractions/Novolis.Audio.Host.Abstractions.csproj" />
-    <Project Path="src/Novolis.Audio.Host.NAudio/Novolis.Audio.Host.NAudio.csproj" />
+    <Project Path="src/Novolis.Audio.Output.Abstractions/Novolis.Audio.Output.Abstractions.csproj" />
+    <Project Path="src/Novolis.Audio.Output.NAudio/Novolis.Audio.Output.NAudio.csproj" />
     <Project Path="src/Novolis.Audio.Live/Novolis.Audio.Live.csproj" />
     <Project Path="src/Novolis.Audio.Live.Dsl/Novolis.Audio.Live.Dsl.csproj" />
     <Project Path="src/Novolis.Audio.Live.Protocol/Novolis.Audio.Live.Protocol.csproj" />
-    <Project Path="src/Novolis.Audio.Live.Repl/Novolis.Audio.Live.Repl.csproj" />
     <Project Path="src/Novolis.Audio.Live.Visuals/Novolis.Audio.Live.Visuals.csproj" />
-    <Project Path="src/Novolis.Audio.Live.Host/Novolis.Audio.Live.Host.csproj" />
+    <Project Path="src/Novolis.Audio.Live.Render/Novolis.Audio.Live.Render.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Audio.Unit/Novolis.Audio.Unit.csproj" />

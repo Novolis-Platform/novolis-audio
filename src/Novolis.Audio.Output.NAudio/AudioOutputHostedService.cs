@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
-using Novolis.Audio.Host;
+using Novolis.Audio.Output;
 
-namespace Novolis.Audio.Host.NAudio;
+namespace Novolis.Audio.Output.NAudio;
 
 internal sealed class AudioOutputHostedService(IAudioOutput output) : IHostedService
 {

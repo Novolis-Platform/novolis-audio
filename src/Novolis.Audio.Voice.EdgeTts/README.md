@@ -19,19 +19,25 @@ using Novolis.Audio.Voice.EdgeTts;
 
 using var tts = new EdgeTtsClient();
 
-var voices = await tts.ListVoicesAsync();
+var voices = await tts.ListVoicesAsync(); // remote catalog (EdgeVoiceInfo)
 var mp3 = await tts.SynthesizeToMp3Async(
     "Tower, ready for departure.",
     new EdgeTtsSynthesisOptions
     {
-        Voice = "en-US-EmmaMultilingualNeural",
-        Rate = "+0%",
-        Volume = "+0%",
-        Pitch = "+0Hz",
+        Voice = EdgeVoice.EnUsAva,
+        Rate = new ProsodyPercent(-4),
+        Volume = ProsodyPercent.Zero,
+        Pitch = ProsodyHertz.Zero,
     });
 
 await File.WriteAllBytesAsync("hello.mp3", mp3);
 ```
+
+## Curated voices and profiles
+
+- `EdgeVoice` / `EdgeVoiceCatalog` — closed set for dropdowns (Ava, Jenny, Andrew, …)
+- `EdgeVoiceProfiles.Narrator` — book defaults (Ava, −4% rate)
+- `ProsodyPercent` / `ProsodyHertz` — typed prosody (no `"+0%"` strings on the public API)
 
 ## Notes
 

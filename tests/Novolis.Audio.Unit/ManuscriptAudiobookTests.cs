@@ -1,3 +1,4 @@
+using Novolis.Audio.Voice.EdgeTts;
 using Novolis.Audio.Voice.Manuscript;
 
 namespace Novolis.Audio.Unit;
@@ -89,21 +90,115 @@ public sealed class ManuscriptAudiobookTests
     {
         var settings = new ManuscriptVoiceSettings
         {
-            Voice = "en-US-EmmaMultilingualNeural",
-            Rate = "-10%",
-            Pitch = "+2Hz",
-            Volume = "+5%",
+            Voice = EdgeVoice.EnUsJenny,
+            Rate = new ProsodyPercent(-10),
+            Pitch = new ProsodyHertz(2),
+            Volume = new ProsodyPercent(5),
             SceneBreakMs = 900,
             PauseMs = 400,
+            MaxChunkChars = 2400,
             Pronunciation = new Dictionary<string, string> { ["Novolis"] = "No-voh-lis" },
         };
 
         var yaml = VoiceMapStore.SaveToYaml(settings);
+        await Assert.That(yaml).Contains("narrator:");
+        await Assert.That(yaml).Contains("en-US-JennyNeural");
+        await Assert.That(yaml).Contains("max_chunk_chars: 2400");
+
         var loaded = VoiceMapStore.LoadFromYaml(yaml);
-        await Assert.That(loaded.Voice).IsEqualTo(settings.Voice);
-        await Assert.That(loaded.Rate).IsEqualTo(settings.Rate);
+        await Assert.That(loaded.Voice).IsEqualTo(EdgeVoice.EnUsJenny);
+        await Assert.That(loaded.Rate.Value).IsEqualTo(-10);
+        await Assert.That(loaded.Pitch.Value).IsEqualTo(2);
+        await Assert.That(loaded.Volume.Value).IsEqualTo(5);
         await Assert.That(loaded.SceneBreakMs).IsEqualTo(900);
+        await Assert.That(loaded.MaxChunkChars).IsEqualTo(2400);
         await Assert.That(loaded.Pronunciation["Novolis"]).IsEqualTo("No-voh-lis");
+    }
+
+    [Test]
+    public async Task VoiceMapStore_loads_books_nested_voice_map()
+    {
+        const string booksYaml =
+            """
+            # Canonical single-narrator configuration.
+            narrator:
+              voice: en-US-AvaNeural
+              rate: "-4%"
+              pitch: "+0Hz"
+              volume: "+0%"
+
+            pauses:
+              scene_break_ms: 1200
+
+            generation:
+              max_chunk_chars: 2800
+
+            pronunciation:
+              Ixa: "Ick-sah"
+            """;
+
+        var loaded = VoiceMapStore.LoadFromYaml(booksYaml);
+        await Assert.That(loaded.Voice).IsEqualTo(EdgeVoice.EnUsAva);
+        await Assert.That(loaded.Rate.Value).IsEqualTo(-4);
+        await Assert.That(loaded.Pitch.Value).IsEqualTo(0);
+        await Assert.That(loaded.Volume.Value).IsEqualTo(0);
+        await Assert.That(loaded.SceneBreakMs).IsEqualTo(1200);
+        await Assert.That(loaded.MaxChunkChars).IsEqualTo(2800);
+        await Assert.That(loaded.Pronunciation["Ixa"]).IsEqualTo("Ick-sah");
+    }
+
+    [Test]
+    public async Task VoiceMapStore_rejects_unknown_voice()
+    {
+        const string yaml =
+            """
+            narrator:
+              voice: en-US-NotInCatalogNeural
+              rate: "+0%"
+              pitch: "+0Hz"
+              volume: "+0%"
+            """;
+
+        await Assert.That(() => VoiceMapStore.LoadFromYaml(yaml))
+            .ThrowsExactly<EdgeTtsException>();
+    }
+
+    [Test]
+    public async Task Pipeline_reports_chapter_and_overall_progress()
+    {
+        var temp = Path.Combine(Path.GetTempPath(), $"novolis-audio-progress-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(temp);
+        try
+        {
+            var chapterPath = Path.Combine(temp, "ch01.md");
+            await File.WriteAllTextAsync(chapterPath, "# One\n\nHello world.\n");
+
+            var snapshots = new List<AudiobookProgress>();
+            var progress = new Progress<AudiobookProgress>(snapshots.Add);
+            var pipeline = new ManuscriptAudiobookPipeline(new FakeSynthesizer());
+            var result = await pipeline.GenerateAsync(
+                "book",
+                [new AudiobookChapterInput("ch01", "One", chapterPath)],
+                new ManuscriptVoiceSettings(),
+                new ManuscriptAudiobookOptions
+                {
+                    OutputDirectory = Path.Combine(temp, "out"),
+                    AssembleMode = AudiobookAssembleMode.None,
+                    ParallelJobs = 1,
+                },
+                progress);
+
+            await Assert.That(result.ChapterPaths.Count).IsEqualTo(1);
+            await Assert.That(snapshots.Count).IsGreaterThan(0);
+            await Assert.That(snapshots.Last().Phase).IsEqualTo(AudiobookProgressPhase.Completed);
+            await Assert.That(snapshots.Last().OverallFraction).IsEqualTo(1.0);
+            await Assert.That(snapshots.Any(s => s.Chapters.Count == 1)).IsTrue();
+            await Assert.That(snapshots.Any(s => s.CompletedChapters == 1)).IsTrue();
+        }
+        finally
+        {
+            Directory.Delete(temp, recursive: true);
+        }
     }
 
     sealed class FakeSynthesizer : IManuscriptSynthesizer

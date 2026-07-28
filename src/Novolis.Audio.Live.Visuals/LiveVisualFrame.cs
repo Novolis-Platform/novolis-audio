@@ -1,4 +1,3 @@
-using Novolis.Audio.Analysis;
 using Novolis.Audio.Live;
 
 namespace Novolis.Audio.Live.Visuals;

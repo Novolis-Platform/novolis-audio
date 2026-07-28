@@ -9,11 +9,12 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <PackageId>Novolis.Audio.Live.Protocol</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>MessagePack DTOs and transport helpers for Novolis Audio Live IPC.</Description>
+    <Description>MessagePack DTOs, IPC helpers, and REPL client for Novolis Audio Live.</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MessagePack" />
+    <PackageReference Include="Novolis.Transports.LocalIpc" />
     <ProjectReference Include="..\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />
-    <ProjectReference Include="..\..\..\novolis-transports\src\Novolis.Transports.LocalIpc\Novolis.Transports.LocalIpc.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Live.Dsl\Novolis.Audio.Live.Dsl.csproj" />
   </ItemGroup>
 </Project>

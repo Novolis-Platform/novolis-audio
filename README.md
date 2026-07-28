@@ -14,6 +14,8 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Bindings` | Generated `[LibraryImport]` to `novolis_audio` |
 | `Novolis.Audio.Native` | RID native binaries (transitive) |
 | `Novolis.Audio.Manifests` | C# binding manifests (maintainers) |
+| `Novolis.Audio.Output.Abstractions` | Game master-volume / device probe contract |
+| `Novolis.Audio.Output.NAudio` | NAudio probe of Windows default render endpoint |
 
 ### Voice / PCM (TTS)
 
@@ -29,37 +31,36 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio.Voice.Kokoro` | Kokoro ONNX offline TTS |
 | `Novolis.Audio.Voice.EdgeTts` | Online Edge Read Aloud TTS (MP3; requires network) |
+| `Novolis.Audio.Voice.Manuscript` | Books / audiobook pipeline on EdgeTts |
 | `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
 | `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes |
 | `Novolis.Audio.Voice.Design` | Preset drafts, validation, preview, GPR code export |
 
-Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack).
+Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack). Edge/Manuscript is a parallel **MP3** path (not `IVoiceSynthesizer`).
 
 ### Live music
 
 | Package | Role |
 |---------|------|
-| `Novolis.Audio.MusicTheory` | Typed notes, chords, durations, tempo, pitch, instrument kinds |
-| `Novolis.Audio.Patterns` | Immutable pattern graph and composition operators |
-| `Novolis.Audio.Analysis` | Waveform and spectrum snapshots for visuals and telemetry |
-| `Novolis.Audio.Live` | Live program model, compiler, scheduler, and swap state |
-| `Novolis.Audio.Live.Dsl` | Completion-friendly DSL helpers for instruments, effects, and patterns |
-| `Novolis.Audio.Live.Protocol` | MessagePack DTOs and mapping helpers for live IPC |
-| `Novolis.Audio.Live.Repl` | Performer client for compile/snapshot/swap requests |
-| `Novolis.Audio.Live.Visuals` | Graph and visual projections from the live model |
-| `Novolis.Audio.Live.Host` | Headless host that owns the clock and runtime state |
+| `Novolis.Audio.MusicTheory` | Typed notes, chords, durations, tempo, instruments |
+| `Novolis.Audio.Patterns` | Immutable pattern graph |
+| `Novolis.Audio.Live` | Compiler, scheduler, program swap state |
+| `Novolis.Audio.Live.Dsl` | Authoring helpers |
+| `Novolis.Audio.Live.Protocol` | MessagePack IPC DTOs + REPL client |
+| `Novolis.Audio.Live.Visuals` | Graph / analysis projections |
+| `Novolis.Audio.Live.Render` | v0 NAudio oscillator synthesis |
 
-The live stack is intentionally split across libraries:
+See [docs/live.md](docs/live.md). Host process lives in **LiveStudio** (`novolis-apps`), not as a packable audio project.
 
 ```text
 typed music model
   → immutable pattern graph
   → live compiler / swap queue
-  → host process
+  → host process (+ Render)
   → REPL + visual clients
 ```
 
-The general-purpose transport used by the live host lives in `novolis-transports` as `Novolis.Transports.LocalIpc`.
+Transport: `Novolis.Transports.LocalIpc` (GitHub Packages).
 
 ## Quick start (game SFX)
 
@@ -86,8 +87,6 @@ await voice.SpeakAsync("Tower, ready for departure.");
 await voice.WriteToFileAsync("Cleared for takeoff.", new FileInfo("atc.wav"));
 ```
 
-Three English Piper models ship under `models/` (Git LFS for `*.onnx`). Archetypes in `Novolis.Audio.Voice.Profiles` map speakers to temperament — see [docs/voice-models.md](docs/voice-models.md).
-
 ## Maintainer pipeline
 
 ```bash
@@ -99,6 +98,7 @@ dotnet build Novolis.Audio.slnx -c Release
 
 - [docs/getting-started.md](docs/getting-started.md)
 - [docs/design.md](docs/design.md)
+- [docs/live.md](docs/live.md)
 - [docs/voice-models.md](docs/voice-models.md)
 - [docs/release.md](docs/release.md)
 - [src/Novolis.Audio.Live.Protocol/README.md](src/Novolis.Audio.Live.Protocol/README.md)

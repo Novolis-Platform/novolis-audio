@@ -9,7 +9,7 @@ public sealed class EdgeVoiceInfo
     [JsonPropertyName("Name")]
     public string Name { get; init; } = "";
 
-    /// <summary>Short id such as <c>en-US-EmmaMultilingualNeural</c>.</summary>
+    /// <summary>Short id such as <c>en-US-AvaNeural</c>.</summary>
     [JsonPropertyName("ShortName")]
     public string ShortName { get; init; } = "";
 

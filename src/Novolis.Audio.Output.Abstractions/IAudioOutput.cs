@@ -1,4 +1,4 @@
-namespace Novolis.Audio.Host;
+namespace Novolis.Audio.Output;
 
 /// <summary>Abstracts the game's connection to the OS audio output (master path, future buses).</summary>
 public interface IAudioOutput : IAsyncDisposable

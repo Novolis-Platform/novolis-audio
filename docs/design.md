@@ -68,6 +68,10 @@ PcmBuffer (Novolis.Audio.Core)
 
 Compose **archetype** (`Voice.Profiles`) then optional **delivery** (phraseology + effect chain in your app, or copy `Novolis.Dogfooding.Voice` from dogfooding).
 
+**Parallel MP3 path:** `Voice.EdgeTts` + `Voice.Manuscript` (books) — not `IVoiceSynthesizer`. See package READMEs.
+
+**Live music:** separate family — see [live.md](live.md).
+
 ## Speech input (STT)
 
 ```

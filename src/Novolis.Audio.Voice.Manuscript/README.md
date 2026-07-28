@@ -16,13 +16,18 @@ Requires `Novolis.Audio.Voice.EdgeTts` for online synthesis (network access).
 
 ## Voice map
 
-Load and save writer voice settings compatible with `tools/audio/voice-map.yaml`:
+Load and save writer voice settings compatible with books `tools/audio/voice-map.yaml`
+(nested `narrator` / `pauses` / `generation` / `pronunciation`):
 
 ```csharp
 var settings = VoiceMapStore.Load("voice-map.yaml");
+// Defaults match book narrator: EdgeVoice.EnUsAva, rate -4%
 VoiceMapStore.Save("voice-map.yaml", settings);
+
+var fromProfile = ManuscriptVoiceSettings.FromProfile(EdgeVoiceProfiles.Narrator);
 ```
 
+YAML stores Edge short names (e.g. `en-US-AvaNeural`); unknown voices fail closed.
 ## Selection preview
 
 ```csharp
@@ -38,7 +43,9 @@ Preview text is capped at 4000 characters. A second preview cancels the previous
 ## Audiobook pipeline
 
 ```csharp
-var pipeline = new ManuscriptAudiobookPipeline(synthesizer);
+var progress = new Progress<AudiobookProgress>(p =>
+    Console.WriteLine($"{p.OverallFraction:P0} {p.Message}"));
+
 var result = await pipeline.GenerateAsync(
     bookId: "my-book",
     chapters:
@@ -52,11 +59,11 @@ var result = await pipeline.GenerateAsync(
         AssembleMode = AudiobookAssembleMode.Both,
         ChapterGapMs = 1000,
     },
+    progress,
     ct);
-
-AudiobookVerifier.VerifyOrThrow(options.OutputDirectory, result.Manifest);
 ```
 
+- Reports `AudiobookProgress` (overall fraction, phase, per-chapter segment bars)
 - Writes `chapters/{id}.mp3` cached by `PlanHash`
 - Writes `manifest.json`
 - `AudiobookAssembleMode.ConcatMp3` produces `{bookId}.mp3`

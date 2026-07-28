@@ -4,11 +4,10 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Novolis.Audio.Analysis</RootNamespace>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <PackageId>Novolis.Audio.Analysis</PackageId>
+    <PackageId>Novolis.Audio.Output.Abstractions</PackageId>
+    <Description>Game audio output contract (master volume, device probe).</Description>
+    <RootNamespace>Novolis.Audio.Output</RootNamespace>
+    <AssemblyName>Novolis.Audio.Output.Abstractions</AssemblyName>
     <IsPackable>true</IsPackable>
-    <Description>Waveform, spectrum, and event tap data for live audio visualizers.</Description>
   </PropertyGroup>
 </Project>

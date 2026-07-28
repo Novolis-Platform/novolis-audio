@@ -13,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Novolis.Audio.Analysis\Novolis.Audio.Analysis.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Live.Dsl\Novolis.Audio.Live.Dsl.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Live.Protocol\Novolis.Audio.Live.Protocol.csproj" />
-    <ProjectReference Include="..\..\src\Novolis.Audio.Live.Repl\Novolis.Audio.Live.Repl.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Live.Render\Novolis.Audio.Live.Render.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Live.Visuals\Novolis.Audio.Live.Visuals.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Patterns\Novolis.Audio.Patterns.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />

@@ -18,11 +18,31 @@ public sealed class LiveReplSyntaxCompiler
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(source);
 
-        var notePlayMatch = NotePlayPattern.Match(source);
+        var normalized = StripCommentsAndJoin(source);
+        var notePlayMatch = NotePlayPattern.Match(normalized);
         if (notePlayMatch.Success)
             return CompileNotePlay(notePlayMatch.Groups["args"].Value);
 
-        throw new InvalidOperationException($"Unsupported live REPL input '{source}'. Start with Note.Play().");
+        throw new InvalidOperationException(
+            "Unsupported live REPL input. Use a single statement like Note.Play(), Note.Play(4), or Note.Play(C4).");
+    }
+
+    private static string StripCommentsAndJoin(string source)
+    {
+        var parts = new List<string>();
+        foreach (var rawLine in source.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'))
+        {
+            var line = rawLine;
+            var comment = line.IndexOf("//", StringComparison.Ordinal);
+            if (comment >= 0)
+                line = line[..comment];
+
+            line = line.Trim();
+            if (line.Length > 0)
+                parts.Add(line);
+        }
+
+        return string.Join(' ', parts);
     }
 
     private static LiveProgramDefinition CompileNotePlay(string args)
