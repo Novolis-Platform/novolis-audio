@@ -10,7 +10,7 @@ dotnet add package Novolis.Audio.Voice.Manuscript
 
 Requires `Novolis.Audio.Voice.EdgeTts` for online synthesis (network access).
 
-## Speech planning
+## Quick start
 
 `SpeechPlanner.Create` turns chapter markdown into spoken chunks and scene-break pauses with optional pronunciation rewrites.
 
