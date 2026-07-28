@@ -2,8 +2,9 @@
 
 See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob/main/docs/release-policy.md).
 
-## 2026.1.10 — ATC removed from GPR
+## 2026.1.10 — Edge TTS + ATC removed from GPR
 
+- **Added** `Novolis.Audio.Voice.EdgeTts` — online Microsoft Edge Read Aloud TTS client (MP3; requires network; cross-platform).
 - **Removed** `Novolis.Audio.Voice.Atc` — use `Novolis.Dogfooding.Voice` in dogfooding or copy `AtcVoiceProfile` into your app.
 - **`Novolis.Audio.Voice.Design`** — `VoicePresetCodeTemplate` is GPR-generic only (`ArchetypeCatalogEntry`, `UsageSnippet`).
 - **`Novolis.Avalonia.Voice`** — no `Platform.Windows` dependency; Windows hosts set `VoicePreviewController.PlatformPreviewFactory`.

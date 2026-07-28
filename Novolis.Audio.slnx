@@ -22,6 +22,7 @@
     <Project Path="src/Novolis.Audio.Voice.Abstractions/Novolis.Audio.Voice.Abstractions.csproj" />
     <Project Path="src/Novolis.Audio.Voice.SherpaOnnx/Novolis.Audio.Voice.SherpaOnnx.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Kokoro/Novolis.Audio.Voice.Kokoro.csproj" />
+    <Project Path="src/Novolis.Audio.Voice.EdgeTts/Novolis.Audio.Voice.EdgeTts.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Platform.Abstractions/Novolis.Audio.Voice.Platform.Abstractions.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Platform.Windows/Novolis.Audio.Voice.Platform.Windows.csproj" />
     <Project Path="src/Novolis.Audio.Voice.Phraseology/Novolis.Audio.Voice.Phraseology.csproj" />

@@ -1,1 +1,14 @@
-{"packages":{}}
+{
+  "packages": {
+    "Novolis.Audio.Voice.EdgeTts": {
+      "paths": [
+        "src/Novolis.Audio.Voice.EdgeTts/**",
+        "tests/Novolis.Audio.Unit/EdgeTtsClientTests.cs",
+        "Directory.Build.props",
+        "Directory.Packages.props",
+        "global.json"
+      ],
+      "project": "src/Novolis.Audio.Voice.EdgeTts/Novolis.Audio.Voice.EdgeTts.csproj"
+    }
+  }
+}

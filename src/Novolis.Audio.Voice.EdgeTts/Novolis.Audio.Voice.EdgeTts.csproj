@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.EdgeTts</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.EdgeTts</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.EdgeTts</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>
+      Online TTS client for Microsoft Edge Read Aloud (same service as edge-tts).
+      Requires network access; no Edge browser or Windows install required. Returns MP3 audio.
+    </Description>
+    <PackageTags>audio;tts;edge-tts;speech;read-aloud;requires-network;cross-platform</PackageTags>
+  </PropertyGroup>
+
+</Project>
