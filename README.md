@@ -27,6 +27,8 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Voice` | **`SpeakAsync` / `WriteToFileAsync` facade** |
 | `Novolis.Audio.Voice.Abstractions` | TTS contracts |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
+| `Novolis.Audio.Voice.Kokoro` | Kokoro ONNX offline TTS |
+| `Novolis.Audio.Voice.EdgeTts` | Online Edge Read Aloud TTS (MP3; requires network) |
 | `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
 | `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes |
 | `Novolis.Audio.Voice.Design` | Preset drafts, validation, preview, GPR code export |
