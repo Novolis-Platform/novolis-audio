@@ -10,8 +10,17 @@
     <AssemblyName>Novolis.Audio.Voice.Manuscript</AssemblyName>
     <PackageId>Novolis.Audio.Voice.Manuscript</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Speech planning for manuscript TTS: chunking, scene breaks, pronunciation rewrites.</Description>
+    <Description>
+      Manuscript TTS: speech planning, voice-map YAML, Edge TTS synthesis, chapter audiobook pipeline,
+      MP3 concat/M4B assemble, and selection speech preview.
+    </Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.EdgeTts\Novolis.Audio.Voice.EdgeTts.csproj" />
+    <PackageReference Include="NAudio" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
 
 </Project>
