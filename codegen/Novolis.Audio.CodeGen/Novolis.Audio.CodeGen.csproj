@@ -13,7 +13,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <!-- Explicit: ProjectRef mode is non-transitive for NuGet deps of Roslyn. -->
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
     <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <!-- IFileSystem surface from CodegenEnvironment (System.IO.Abstractions → Testably). -->
+    <PackageReference Include="System.IO.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>
