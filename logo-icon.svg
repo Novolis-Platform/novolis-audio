@@ -1,0 +1,46 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="277 122 709 710" width="512" height="512" role="img" aria-label="Novolis icon">
+  <title>Novolis icon mark</title>
+  <defs>
+    <linearGradient id="mark-cyan" x1="412" y1="206" x2="850" y2="332" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2fdfff"/>
+      <stop offset="1" stop-color="#0997ff"/>
+    </linearGradient>
+    <linearGradient id="mark-left" x1="314" y1="326" x2="430" y2="639" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12c7ff"/>
+      <stop offset="1" stop-color="#237cff"/>
+    </linearGradient>
+    <linearGradient id="mark-right" x1="871" y1="368" x2="824" y2="674" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2f8cff"/>
+      <stop offset="1" stop-color="#8f37ff"/>
+    </linearGradient>
+    <linearGradient id="mark-lower" x1="526" y1="714" x2="812" y2="687" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7a42ff"/>
+      <stop offset="1" stop-color="#b246ff"/>
+    </linearGradient>
+    <linearGradient id="mark-diagonal" x1="405" y1="327" x2="854" y2="671" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#16cfff"/>
+      <stop offset="0.52" stop-color="#4d86ff"/>
+      <stop offset="1" stop-color="#9c42ff"/>
+    </linearGradient>
+    <linearGradient id="mark-left-stem" x1="472" y1="433" x2="540" y2="656" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0ba8ff"/>
+      <stop offset="1" stop-color="#0677d9"/>
+    </linearGradient>
+    <linearGradient id="mark-right-stem" x1="734" y1="325" x2="804" y2="581" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2aa5ff"/>
+      <stop offset="1" stop-color="#6138d9"/>
+    </linearGradient>
+    <linearGradient id="star-gradient" x1="831" y1="241" x2="918" y2="329" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#35d8ff"/>
+      <stop offset="1" stop-color="#9b60ff"/>
+    </linearGradient>
+  </defs>
+  <g id="vector-mark">
+    <path id="upper" data-kind="arc-sector" data-label="upper" fill="url(#mark-cyan)" d="M413 313 H456 A255 255 0 0 1 850 332 A265 265 0 0 0 413 313 Z"/>
+    <path id="lower" data-kind="arc-sector" data-label="lower" fill="url(#mark-lower)" d="M520 711 A255 255 0 0 0 810 688 L768 688 A265 265 0 0 1 520 711 Z"/>
+    <path id="n" data-kind="line-arc" data-label="n" fill="url(#mark-diagonal)" d="M398 326 H531 L824 619 A265 265 0 0 0 871 368 A255 255 0 0 1 827 671 H731 L428 357 A265 265 0 0 0 526 732 A255 255 0 0 1 398 326 Z"/>
+    <path id="n_left" data-kind="straight" data-label="n_left" fill="url(#mark-left-stem)" d="M472 433 L540 496 V616 L504 655 H472 Z"/>
+    <path id="n_right" data-kind="straight" data-label="n_right" fill="url(#mark-right-stem)" d="M734 367 L771 328 H804 V581 L734 513 Z"/>
+    <path id="star" data-kind="four-arc" data-label="star" fill="url(#star-gradient)" d="M874 241 A44 44 0 0 0 918 285 A44 44 0 0 0 874 329 A44 44 0 0 0 831 285 A44 44 0 0 0 874 241 Z"/>
+  </g>
+</svg>
