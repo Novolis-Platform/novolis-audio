@@ -7,6 +7,8 @@ on:
       - 'build/version.props'
       - 'docs/**'
       - '**.md'
+      - 'LICENSE'
+      - '.editorconfig'
   workflow_dispatch:
     inputs:
       skip_publish:
