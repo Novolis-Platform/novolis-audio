@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.Phraseology
 
-ICAO-style phraseology normalization (digit words, spacing).
+ICAO-style phraseology normalization for voice presets — digit words, aviation callouts, and similar spoken-form transforms.
 
 ## Install
 
@@ -15,16 +15,22 @@ dotnet add package Novolis.Audio.Voice.Phraseology
 ```csharp
 using Novolis.Audio.Voice.Phraseology;
 
-var text = new DefaultPhraseologyNormalizer().Normalize("SAS 123");
-// contains "one", "two", "three"
+IPhraseologyNormalizer normalizer = new DefaultPhraseologyNormalizer();
+var spoken = normalizer.Normalize("Runway 27L, cleared for takeoff");
 ```
 
-## Related packages
+Enable per preset via `VoicePresetDraft.UsePhraseology` in [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md).
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice` | Compose phraseology into `VoiceServiceBuilder` |
+## API
 
-## Support
+| API | Purpose |
+|-----|---------|
+| `IPhraseologyNormalizer` | `Normalize(string)` — transform text for TTS |
+| `DefaultPhraseologyNormalizer` | Default ICAO digit-word and phraseology rules |
 
-Pre-release (`2026.1.*` on GitHub Packages).
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | `VoicePresetDraft.UsePhraseology` flag |
+| [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | Voice preset studio |

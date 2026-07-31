@@ -1,6 +1,6 @@
 # Novolis.Audio.Core
 
-PCM buffers, format descriptors, and RIFF WAV read/write.
+PCM buffer types and WAV encode/decode for the Novolis audio stack.
 
 ## Install
 
@@ -15,22 +15,30 @@ dotnet add package Novolis.Audio.Core
 ```csharp
 using Novolis.Audio.Core;
 
-var format = new PcmFormat(24_000, 1, PcmSampleFormat.Int16);
-var pcm = PcmBuffer.CreateSilence(format, TimeSpan.FromSeconds(1));
+using Novolis.Audio.Core;
 
+var format = new PcmFormat(PcmSampleFormat.Int16, channels: 1, sampleRate: 44100);
+var buffer = new PcmBuffer(format, sampleBytes, frameCount);
 using var stream = new MemoryStream();
-new WavEncoder().Encode(pcm, stream);
+new WavEncoder().Encode(buffer, stream);
+stream.Position = 0;
+var decoded = new WavDecoder().Decode(stream);
 ```
 
-## Related packages
+## API
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Filters` | PCM filters |
-| `Novolis.Audio.Effects` | PCM effect chains |
-| `Novolis.Audio.Playback` | Play PCM to a device |
-| `Novolis.Audio.Voice` | Text-to-speech facade |
+| API | Purpose |
+|-----|---------|
+| `PcmBuffer` | PCM sample container |
+| `PcmFormat`, `PcmSampleFormat` | Format descriptors |
+| `IWavEncoder` / `WavEncoder` | WAV encode |
+| `IWavDecoder` / `WavDecoder` | WAV decode |
+| `IPcmMixer` | Mix PCM buffers |
 
-## Support
+## Related / dogfood
 
-Pre-release (`2026.1.*` on GitHub Packages).
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Codecs`](../Novolis.Audio.Codecs/README.md) | Future codec abstractions |
+| [`Novolis.Audio.Effects`](../Novolis.Audio.Effects/README.md) | Voice DSP pipeline |
+| [`Novolis.Audio.Playback`](../Novolis.Audio.Playback/README.md) | PCM playback |

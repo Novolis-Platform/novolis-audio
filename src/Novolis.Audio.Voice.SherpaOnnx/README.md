@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.SherpaOnnx
 
-Sherpa-ONNX offline TTS (Piper/VITS). Falls back to silence when `NOVOLIS_VOICE_MODEL_DIR` is unset.
+Sherpa-ONNX offline TTS, STT, and VAD backends for the Novolis voice stack.
 
 ## Install
 
@@ -8,28 +8,37 @@ Sherpa-ONNX offline TTS (Piper/VITS). Falls back to silence when `NOVOLIS_VOICE_
 dotnet add package Novolis.Audio.Voice.SherpaOnnx
 ```
 
-**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`), Sherpa-ONNX model files.
 
 ## Quick start
 
 ```csharp
-using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.SherpaOnnx;
 
+services.AddNovolisVoiceSherpa();
+services.AddNovolisSpeechSherpa();
+
+// Or builder pattern:
 IVoiceService voice = new VoiceServiceBuilder().UseSherpaOnnx().BuildService();
-await voice.SpeakAsync("Tower, ready for departure.");
 ```
 
-## Models
+## API
 
-Download Piper, VITS, or ZipVoice models from [sherpa-onnx TTS releases](https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models) and set `VoiceSynthesisOptions.ModelDirectory` or `NOVOLIS_VOICE_MODEL_DIR` (follow-up PR).
+| API | Purpose |
+|-----|---------|
+| `VoiceServiceCollectionSherpaExtensions.AddNovolisVoiceSherpa` | TTS DI registration |
+| `VoiceServiceBuilderSherpaExtensions` | Builder pattern registration |
+| `SherpaVoiceSynthesizer` | `IVoiceSynthesizer` |
+| `SpeechServiceCollectionSherpaExtensions.AddNovolisSpeechSherpa` | STT DI registration |
+| `SherpaOfflineSpeechRecognizer` | `ISpeechRecognizer` |
+| `SherpaVoiceActivityDetector` | VAD + configurer |
+| `SherpaVoiceModelPaths`, `SherpaSpeechModelPaths` | Model path records |
+| `BundledVoiceModelExtractor` | Extract bundled models |
+| `SherpaAudioConverter` | Format conversion |
 
-## Related packages
+## Related / dogfood
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice` | Consumer facade |
-
-## Support
-
-Pre-release (`2026.1.*` on GitHub Packages).
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Audio.Voice.Abstractions`](../Novolis.Audio.Voice.Abstractions/README.md) | Contracts |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Primary offline backend |

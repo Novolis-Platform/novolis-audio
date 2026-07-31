@@ -1,15 +1,6 @@
 # Novolis.Audio.Voice.Platform.Abstractions
 
-Backend selection (`VoiceSynthesizerBackend`) and `PlatformSpeechOptions` for OS text-to-speech adapters.
-
-## Quick start
-
-```csharp
-using Novolis.Audio.Voice.Platform;
-
-var backend = VoiceSynthesizerBackend.Platform;
-var speech = new PlatformSpeechOptions { Rate = 1.1f, Locale = "en-US" };
-```
+Shared platform speech options for MAUI and Windows TTS adapters.
 
 ## Install
 
@@ -17,13 +8,34 @@ var speech = new PlatformSpeechOptions { Rate = 1.1f, Locale = "en-US" };
 dotnet add package Novolis.Audio.Voice.Platform.Abstractions
 ```
 
-## Related packages
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice.Platform.Windows` | Windows desktop OS TTS |
-| `Novolis.Audio.Voice.Platform.Maui` | MAUI mobile/desktop OS TTS |
+## Quick start
 
-## Support
+```csharp
+using Novolis.Audio.Voice.Platform.Abstractions;
 
-Pre-release (`2026.1.*` on GitHub Packages).
+var options = new PlatformSpeechOptions
+{
+    Rate = 1.0f,
+    Pitch = 1.0f,
+    Volume = 1.0f,
+    Locale = "en-US",
+};
+```
+
+Pass to `AddNovolisVoiceMaui(options)` or `AddNovolisVoiceWindows(options)`.
+
+## API
+
+| API | Purpose |
+|-----|---------|
+| `PlatformSpeechOptions` | `Pitch`, `Volume`, `Rate`, `Locale` |
+
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Voice.Platform.Maui`](../Novolis.Audio.Voice.Platform.Maui/README.md) | MAUI TTS adapter |
+| [`Novolis.Audio.Voice.Platform.Windows`](../Novolis.Audio.Voice.Platform.Windows/README.md) | Windows TTS adapter |
+| [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | `VoicePlatformInspector` |

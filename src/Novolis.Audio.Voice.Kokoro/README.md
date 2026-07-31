@@ -1,24 +1,6 @@
 # Novolis.Audio.Voice.Kokoro
 
-Kokoro ONNX offline TTS via [KokoroSharp.CPU](https://www.nuget.org/packages/KokoroSharp.CPU). Falls back to silence when the model cannot load.
-
-## Quick start
-
-```csharp
-using Novolis.Audio.Voice;
-using Novolis.Audio.Voice.Kokoro;
-
-var voice = new VoiceServiceBuilder()
-    .UseKokoro()
-    .Configure(o => o.Synthesis = new VoiceSynthesisOptions
-    {
-        ModelProfile = KokoroVoiceCatalog.ToModelProfile("af_heart"),
-        SpeakingRate = 1.1f,
-    })
-    .BuildService();
-
-await voice.SpeakAsync("Tower, ready for departure.");
-```
+Kokoro ONNX voice synthesizer backend implementing `IVoiceSynthesizer`.
 
 ## Install
 
@@ -26,15 +8,34 @@ await voice.SpeakAsync("Tower, ready for departure.");
 dotnet add package Novolis.Audio.Voice.Kokoro
 ```
 
-**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`), Kokoro ONNX model files.
 
-## Related packages
+## Quick start
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice` | Consumer facade |
-| `Novolis.Audio.Voice.SherpaOnnx` | Piper/Sherpa models |
+```csharp
+using Novolis.Audio.Voice.Kokoro;
 
-## Support
+services.AddNovolisVoiceKokoro();
 
-Pre-release (`2026.1.*` on GitHub Packages).
+// Or builder pattern:
+IVoiceService voice = new VoiceServiceBuilder().UseKokoro().BuildService();
+
+var entry = KokoroVoiceCatalog.All.First();
+```
+
+## API
+
+| API | Purpose |
+|-----|---------|
+| `KokoroVoiceSynthesizer` | `IVoiceSynthesizer` (ONNX) |
+| `KokoroVoiceCatalog` | Voice entries |
+| `KokoroVoiceEntry` | Voice metadata record |
+| `VoiceServiceCollectionKokoroExtensions.AddNovolisVoiceKokoro` | DI registration |
+| `VoiceServiceBuilderKokoroExtensions` | Builder pattern registration |
+
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Voice.Abstractions`](../Novolis.Audio.Voice.Abstractions/README.md) | `IVoiceSynthesizer` contract |
+| [`Novolis.Audio.Voice.SherpaOnnx`](../Novolis.Audio.Voice.SherpaOnnx/README.md) | Alternative offline backend |

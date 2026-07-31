@@ -1,6 +1,6 @@
 # Novolis.Audio.Effects
 
-PCM effect chains (`IAudioEffect`, `IAudioEffectPipeline`). Frequency filters live in `Novolis.Audio.Filters`.
+PCM effect chain for voice synthesis DSP — gain, dynamics, noise gate, radio hiss, and preset radio chains.
 
 ## Install
 
@@ -8,24 +8,39 @@ PCM effect chains (`IAudioEffect`, `IAudioEffectPipeline`). Frequency filters li
 dotnet add package Novolis.Audio.Effects
 ```
 
-**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`). References `Novolis.Audio.Filters`.
 
 ## Quick start
 
 ```csharp
 using Novolis.Audio.Effects;
 
-IAudioEffectPipeline pipeline = new IdentityEffectPipeline();
+IAudioEffectPipeline pipeline = new ChainedEffectPipeline([
+    new GainEffect(1.2),
+    new DynamicsEffect(drive: 1.5, makeupGain: 0.8),
+    new NoiseGateEffect(threshold: 0.02),
+]);
+
+var speech = InputSpeechEffects.Create(sampleRateHz: 16_000);
 ```
 
-## Related packages
+## API
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Core` | `PcmBuffer` input/output |
-| `Novolis.Audio.Filters` | Band-limit and other filters |
-| `Novolis.Audio.Voice` | Voice pipeline |
+| API | Purpose |
+|-----|---------|
+| `IAudioEffect` | Extends `IAudioFilter` |
+| `IAudioEffectPipeline` | Chain processing |
+| `ChainedEffectPipeline` | Ordered effect chain |
+| `IdentityEffectPipeline` | Pass-through |
+| `GainEffect` | Linear gain |
+| `DynamicsEffect` | Drive + makeup |
+| `NoiseGateEffect` | Threshold gate |
+| `RadioHissEffect` | Hiss layer |
+| `InputSpeechEffects.Create(sampleRateHz)` | Default mic preprocessor chain |
 
-## Support
+## Related / dogfood
 
-Pre-release (`2026.1.*` on GitHub Packages).
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | `VoiceEffectChainBuilder` |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice synthesis DSP |

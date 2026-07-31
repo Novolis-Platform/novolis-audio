@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.Abstractions
 
-TTS/STT contracts: `IVoiceService`, `ISpeechService`, `IVoiceSynthesizer`, `ISpeechRecognizer`, `IVoiceActivityDetector`, `IAudioCapture`, and null engines for CI.
+Speech and TTS contracts — synthesis, recognition, VAD, capture, model catalogs, and null implementations for testing.
 
 ## Install
 
@@ -13,19 +13,34 @@ dotnet add package Novolis.Audio.Voice.Abstractions
 ## Quick start
 
 ```csharp
-using Novolis.Audio.Voice;
+using Novolis.Audio.Voice.Abstractions;
 
-IVoiceService voice = NullVoiceService.Instance;
-await voice.SpeakAsync("Hello"); // no-op in CI
+await voice.SpeakAsync("Hello", new VoiceSynthesisOptions { Rate = 1.1 });
+var result = await recognizer.RecognizeAsync(audioSegment, new SpeechRecognitionOptions());
 ```
 
-## Related packages
+Register concrete backends via SherpaOnnx, Kokoro, or platform packages.
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice` | Full facade with DI |
-| `Novolis.Audio.Voice.SherpaOnnx` | ONNX synthesizer (stub today) |
+## API
 
-## Support
+| API | Purpose |
+|-----|---------|
+| `IVoiceService` | `SpeakAsync`, `WriteToFileAsync` |
+| `IVoiceSynthesizer` | Low-level PCM synthesis |
+| `ISpeechService` / `ISpeechRecognizer` | Speech-to-text |
+| `IVoiceActivityDetector` | Voice activity detection |
+| `IAudioCapture` | Audio input |
+| `VoiceModelCatalog` / `SpeechModelCatalog` | Bundled model ids |
+| `VoiceSynthesisOptions`, `SpeechRecognitionOptions`, `ListenOptions` | Options types |
+| `SpeechUtterance`, `SpeechRecognitionResult`, `SpeechAudioSegment` | DTOs |
+| `ITranscriptNormalizer` / `DefaultTranscriptNormalizer` | Transcript cleanup |
+| `NullVoiceSynthesizer`, `NullSpeechRecognizer`, `NullVoiceActivityDetector` | Null impls |
+| `VoiceModelMaterialization` | Model path resolution |
 
-Pre-release (`2026.1.*` on GitHub Packages).
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Voice.SherpaOnnx`](../Novolis.Audio.Voice.SherpaOnnx/README.md) | Primary offline TTS/STT |
+| [`Novolis.Audio.Voice.Kokoro`](../Novolis.Audio.Voice.Kokoro/README.md) | ONNX TTS |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice desk |

@@ -1,23 +1,6 @@
 # Novolis.Audio.Voice.Platform.Windows
 
-Windows `SpeechSynthesizer` adapter implementing `IVoiceService` (Speak only).
-
-## Quick start
-
-```csharp
-using Novolis.Audio.Voice.Platform;
-using Novolis.Audio.Voice.Platform.Windows;
-
-IVoiceService voice = new WindowsPlatformVoiceService(new PlatformSpeechOptions
-{
-    Rate = 1.05f,
-    Locale = "en-US",
-});
-
-await voice.SpeakAsync("Your phrase here.");
-```
-
-`WriteToFileAsync` throws `NotSupportedException` because the OS API does not expose PCM for Novolis effect chains.
+Windows `System.Speech` TTS adapter implementing `IVoiceService` — Speak and WAV export via platform synthesis.
 
 ## Install
 
@@ -25,8 +8,31 @@ await voice.SpeakAsync("Your phrase here.");
 dotnet add package Novolis.Audio.Voice.Platform.Windows
 ```
 
-**Target:** `net10.0-windows10.0.19041.0`
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`), Windows.
 
-## Support
+## Quick start
 
-Pre-release (`2026.1.*` on GitHub Packages).
+```csharp
+using Novolis.Audio.Voice.Platform.Windows;
+
+services.AddNovolisVoiceWindows(new PlatformSpeechOptions { Rate = 1.0f });
+
+await voice.SpeakAsync("Hello");
+await voice.WriteToFileAsync("Hello", outputPath);
+```
+
+## API
+
+| API | Purpose |
+|-----|---------|
+| `VoiceServiceCollectionWindowsExtensions.AddNovolisVoiceWindows` | DI registration |
+| `WindowsPlatformVoiceService` | `IVoiceService` via Windows TTS |
+| `WindowsPlatformVoiceService.SpeakAsync` | Platform speech with `PlatformSpeechOptions` |
+| `WindowsPlatformVoiceService.WriteToFileAsync` | Export WAV via platform synthesis |
+
+## Related / dogfood
+
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Audio.Voice.Platform.Abstractions`](../Novolis.Audio.Voice.Platform.Abstractions/README.md) | `PlatformSpeechOptions` |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | `VoicePreviewPlatformFactory` |

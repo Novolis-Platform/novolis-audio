@@ -1,6 +1,6 @@
 # Novolis.Audio.Voice.Design
 
-Voice preset drafts, validation, C# code export, and preview factory for **NovolisVoiceStudio** and other tooling.
+Editable voice preset model, validation, effect-chain builder, preview factory, and C# code emitter for voice catalog composition.
 
 ## Install
 
@@ -8,23 +8,35 @@ Voice preset drafts, validation, C# code export, and preview factory for **Novol
 dotnet add package Novolis.Audio.Voice.Design
 ```
 
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`). References voice abstractions, effects, profiles.
+
 ## Quick start
 
 ```csharp
 using Novolis.Audio.Voice.Design;
-using Novolis.Audio.Voice.Profiles;
 
-var draft = VoicePresetDraft.FromArchetype(VoiceArchetypeCatalog.ExcitableFemale);
-draft.ProfileId = "wing_lead_female";
-draft.PropertyName = "WingLeadFemale";
-draft.Drive = 3.1f;
-
-var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.ArchetypeCatalogEntry);
-var voice = VoicePresetPreviewFactory.Create(draft);
-await voice.SpeakAsync("Tower, ready for departure.");
+var draft = new VoicePresetDraft { Name = "Tower", Backend = VoiceSynthesizerBackend.SherpaOnnx };
+VoicePresetValidation.Validate(draft);
+var chain = VoiceEffectChainBuilder.Build(draft);
+var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.CatalogEntry);
 ```
 
-## Boundaries
+## API
 
-- Depends on `Novolis.Audio.Voice`, `.Profiles`, `.Phraseology`, `.SherpaOnnx` — not Avalonia.
-- Does not persist presets (export-only v1); paste emitted C# into `VoiceArchetypeCatalog` or app delivery types.
+| API | Purpose |
+|-----|---------|
+| `VoicePresetDraft` | Editable preset (backend, model, platform, DSP, phraseology flags) |
+| `VoiceEffectChainBuilder` | Build effect chain from draft |
+| `VoicePresetValidation` | Validate draft |
+| `VoicePresetCodeEmitter` | Emit C# catalog code |
+| `VoicePresetCodeTemplate` | Template strings |
+| `VoicePresetPreviewFactory` | Preview voice instance |
+| `VoiceDeliveryEffectStep` / `VoiceEffectStepKind` | Effect step model |
+| `VoiceIdentifierHelper`, `VoiceModelCatalogNames` | Naming helpers |
+
+## Related / dogfood
+
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | Voice preset studio UI |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Full voice desk |

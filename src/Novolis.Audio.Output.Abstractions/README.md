@@ -1,6 +1,6 @@
 # Novolis.Audio.Output.Abstractions
 
-Game audio output contract (`IAudioOutput`) for master volume / device probe.
+Game audio output contract — master volume hook and default device probe. Separate from the Live coding stack.
 
 ## Install
 
@@ -8,17 +8,36 @@ Game audio output contract (`IAudioOutput`) for master volume / device probe.
 dotnet add package Novolis.Audio.Output.Abstractions
 ```
 
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
+
 ## Quick start
 
-```csharp
-using Novolis.Audio.Output;
+Implement `IAudioOutput` or use [`Novolis.Audio.Output.NAudio`](../Novolis.Audio.Output.NAudio/README.md):
 
-public sealed class NullAudioOutput : IAudioOutput
+```csharp
+using Novolis.Audio.Output.Abstractions;
+
+public sealed class MyAudioOutput : IAudioOutput
 {
-    public ValueTask StartAsync(CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
-    public void SetMasterVolume(float linear0To1) { }
+    public Task StartAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    public void SetMasterVolume(double volume) { }
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
 ```
 
-Not related to Live coding (`Novolis.Audio.Live.*`).
+## API
+
+| API | Purpose |
+|-----|---------|
+| `IAudioOutput` | Game output contract: `StartAsync`, `SetMasterVolume`, `IAsyncDisposable` |
+| `IAudioOutput.StartAsync` | Start or probe default output device |
+| `IAudioOutput.SetMasterVolume` | Linear 0–1 master volume |
+| `IAudioOutput.DisposeAsync` | Release output resources |
+
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Output.NAudio`](../Novolis.Audio.Output.NAudio/README.md) | Windows NAudio implementation |
+
+Not used by `Novolis.Audio.Live.*`.

@@ -1,6 +1,6 @@
 # Novolis.Audio.Playback
 
-PCM playback abstractions, decoupled from miniaudio game runtime.
+NAudio-backed PCM playback and microphone capture for the voice/speech pipeline.
 
 ## Install
 
@@ -8,23 +8,35 @@ PCM playback abstractions, decoupled from miniaudio game runtime.
 dotnet add package Novolis.Audio.Playback
 ```
 
-**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`), NAudio.
 
 ## Quick start
 
 ```csharp
 using Novolis.Audio.Playback;
 
-IAudioPlayback playback = new NullAudioPlayback();
+IAudioPlayback playback = new NaudioPcmPlayback();
+await playback.PlayAsync(pcmBuffer);
+
+IAudioCapture capture = new NaudioMicrophoneCapture();
 ```
 
-## Related packages
+Use `NullAudioPlayback` / `NullAudioCapture` for headless tests.
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Voice` | `SpeakAsync` playback path |
-| `Novolis.Audio` | Game SFX via miniaudio (separate stack) |
+## API
 
-## Support
+| API | Purpose |
+|-----|---------|
+| `IAudioPlayback` | PCM playback contract |
+| `NaudioPcmPlayback` | NAudio playback implementation |
+| `NullAudioPlayback` | No-op playback |
+| `IAudioCapture` | Audio input contract |
+| `NaudioMicrophoneCapture` | NAudio mic capture |
+| `NullAudioCapture` | No-op capture |
 
-Pre-release (`2026.1.*` on GitHub Packages).
+## Related / dogfood
+
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Voice.Abstractions`](../Novolis.Audio.Voice.Abstractions/README.md) | Speech pipeline contracts |
+| [`Novolis.Audio.Core`](../Novolis.Audio.Core/README.md) | `PcmBuffer` format |

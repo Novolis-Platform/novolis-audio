@@ -1,6 +1,6 @@
 # Novolis.Audio.Live.Dsl
 
-Discoverable helpers for authoring typed live-coding programs with a small Sonic Pi-style surface.
+Completion-friendly helpers building `LiveProgramDefinition` and pattern nodes for the Live REPL and studio compiler.
 
 ## Install
 
@@ -8,21 +8,41 @@ Discoverable helpers for authoring typed live-coding programs with a small Sonic
 dotnet add package Novolis.Audio.Live.Dsl
 ```
 
-## Example
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`). References `Novolis.Audio.Live`, `Novolis.Audio.Patterns`.
+
+## Quick start
 
 ```csharp
 using Novolis.Audio.Live.Dsl;
 
-var definition = Note.Play();
+var definition = LiveDsl.Program(
+    bpm: 120,
+    root: LiveDsl.Sequence(
+        LiveDsl.Note(PitchClass.C, Octave.MiddleC, Duration.Quarter, instrument: InstrumentKind.Lead),
+        LiveDsl.Rest(Duration.Eighth)),
+    LiveDsl.Track("lead", InstrumentKind.Lead, LiveDsl.Note(PitchClass.C, Octave.MiddleC, Duration.Quarter)));
 ```
 
-`Note.Play()` defaults to middle C, which is `C4` in the piano-player sense. If you want a different anchor, call `Note.Play(3)` or `Note.Play(5)`.
+## API
 
-In the REPL, that same phrase can be entered as text and lowered into this typed DSL surface before compile/swap.
+| API | Purpose |
+|-----|---------|
+| `LiveDsl.Program` | `(bpm, root, tracks…)` → `LiveProgramDefinition` |
+| `LiveDsl.Track` | Named track + optional `EffectKind[]` |
+| `LiveDsl.Note` | Note pattern (Pitch or PitchClass+Octave overloads) |
+| `LiveDsl.Chord` | Chord pattern |
+| `LiveDsl.Rest` | Rest pattern |
+| `LiveDsl.Sequence` | Sequence pattern |
+| `LiveDsl.Layer` | Layer pattern |
+| `LiveDsl.Repeat` | Repeat pattern |
+| `LiveDsl.Transpose` | Transpose pattern |
+| `Instruments` | Static instrument shortcuts |
+| `Fx` | Static effect shortcuts |
 
-## Design goals
+## Related / dogfood
 
-- keep the live authoring surface small and autocomplete-friendly
-- hide raw collection plumbing from users
-- keep the runtime model immutable and typed
-- make the common instrument and effect choices obvious in IntelliSense
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Audio.Live`](../Novolis.Audio.Live/README.md) | Session + compiler |
+| [`Novolis.Avalonia.Live`](../../../novolis-avalonia/src/Novolis.Avalonia.Live/README.md) | DSL completion in live editor |
+| Live demo catalog + REPL tests | Showcase program sets |

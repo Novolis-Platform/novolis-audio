@@ -1,6 +1,6 @@
 # Novolis.Audio.Abstractions
 
-Contracts for Novolis audio: `IAudioEngine`, `ISoundHandle`, and `NullAudioEngine` for headless tests.
+Game audio engine contract — load sounds and play one-shots over the miniaudio runtime.
 
 ## Install
 
@@ -13,26 +13,25 @@ dotnet add package Novolis.Audio.Abstractions
 ## Quick start
 
 ```csharp
-using Novolis.Audio;
+using Novolis.Audio.Abstractions;
 
-using IAudioEngine engine = new NullAudioEngine();
+IAudioEngine engine = NullAudioEngine.Instance; // or MiniaudioAudioEngine from Runtime
 engine.Start();
-// No native audio — suitable for CI and unit tests
+var handle = engine.LoadSound(path);
+engine.Play(handle);
 ```
 
-For real playback, install `Novolis.Audio` or `Novolis.Audio.Runtime` instead.
+## API
 
-## Related packages
+| API | Purpose |
+|-----|---------|
+| `IAudioEngine` | `Start`, `Stop`, `LoadSound`, `Play` |
+| `ISoundHandle` | Opaque sound handle |
+| `NullAudioEngine`, `NullSoundHandle` | Null implementations for tests |
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio` | App install (abstractions + runtime + native) |
-| `Novolis.Audio.Runtime` | `MiniaudioAudioEngine` implementation |
+## Related / dogfood
 
-## More documentation
-
-- [Getting started](https://github.com/Novolis-Platform/novolis-audio/blob/main/docs/getting-started.md)
-
-## Support
-
-Pre-release (`2026.1.*` on GitHub Packages).
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Runtime`](../Novolis.Audio.Runtime/README.md) | `MiniaudioAudioEngine` implementation |
+| [`Novolis.Audio`](../Novolis.Audio/README.md) | Meta-package bundling runtime + abstractions |

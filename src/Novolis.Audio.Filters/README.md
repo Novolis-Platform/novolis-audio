@@ -1,6 +1,6 @@
 # Novolis.Audio.Filters
 
-PCM frequency-domain filters (`IAudioFilter`).
+PCM int16 filter primitives for the voice effects pipeline.
 
 ## Install
 
@@ -15,18 +15,21 @@ dotnet add package Novolis.Audio.Filters
 ```csharp
 using Novolis.Audio.Filters;
 
-IAudioFilter bandLimit = new BandLimitEffect(sampleRate: 16_000, highPassHz: 300f, lowPassHz: 3_000f);
+IAudioFilter filter = new BandLimitEffect(sampleRate: 16_000, highPassHz: 80f, lowPassHz: 7_500f);
+filter.Process(inputSpan, outputSpan);
 ```
 
-Chain filters with `Novolis.Audio.Effects` (`ChainedEffectPipeline` accepts any `IAudioEffect`, including filters).
+## API
 
-## Related packages
+| API | Purpose |
+|-----|---------|
+| `IAudioFilter` | `Process(ReadOnlySpan<short>, Span<short>)` |
+| `BandLimitEffect` | High/low-pass band limit |
+| `PcmInt16Math` | PCM math helpers |
 
-| Package | When to use |
-|---------|-------------|
-| `Novolis.Audio.Core` | `PcmBuffer` input/output |
-| `Novolis.Audio.Effects` | Dynamics, gain, hiss, pipelines |
+## Related / dogfood
 
-## Support
-
-Pre-release (`2026.1.*` on GitHub Packages).
+| Package | Notes |
+|---------|-------|
+| [`Novolis.Audio.Effects`](../Novolis.Audio.Effects/README.md) | Effect chain pipeline |
+| [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | Voice preset effect builder |

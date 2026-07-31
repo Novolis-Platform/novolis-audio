@@ -1,8 +1,6 @@
 # Novolis.Audio.Voice.Profiles
 
-Neutral **base-voice archetype catalog** (Piper model + speaking rate metadata). This package references only `Novolis.Audio.Voice.Abstractions` — no Sherpa, playback, or effects.
-
-Apply archetypes with **`Novolis.Audio.Voice.VoiceArchetypeApplicator`** (in the `Novolis.Audio.Voice` package).
+Static voice archetype catalog — profile, model, speaking rate, and description presets for voice design.
 
 ## Install
 
@@ -10,31 +8,32 @@ Apply archetypes with **`Novolis.Audio.Voice.VoiceArchetypeApplicator`** (in the
 dotnet add package Novolis.Audio.Voice.Profiles
 ```
 
-## Archetypes
-
-| Id | Model | Rate | Character |
-|----|-------|------|-----------|
-| `excitable_female` | amy | 1.13 | Stressed, professional; brisk |
-| `procedural_male` | lessac | 0.98 | Seasoned, measured operator |
-| `calm_female` | kristin | 1.00 | Even, reassuring |
-| `steady_male` | lessac | 1.04 | Confident default male |
-| `neutral_female` | amy | 1.00 | Plain reference female |
+**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
 
 ## Quick start
 
 ```csharp
-using Novolis.Audio.Voice;
 using Novolis.Audio.Voice.Profiles;
 
-var builder = VoiceArchetypeApplicator.Apply(
-    new VoiceServiceBuilder(),
-    VoiceArchetypeCatalog.ExcitableFemale);
-IVoiceService comms = builder.BuildService();
+foreach (var archetype in VoiceArchetypeCatalog.All)
+{
+    Console.WriteLine($"{archetype.Profile}: {archetype.Description}");
+}
+
+services.AddNovolisVoiceArchetypes();
 ```
 
-## Related packages
+## API
 
-| Package | Role |
-|---------|------|
-| `Novolis.Audio.Voice` | `VoiceArchetypeApplicator` + `IVoiceService` |
-| `Novolis.Audio.Voice.SherpaOnnx` | Bundled Piper models |
+| API | Purpose |
+|-----|---------|
+| `VoiceArchetype` | `(Profile, Model, SpeakingRate, Description)` |
+| `VoiceArchetypeCatalog` | Static archetypes: ExcitableFemale, ProceduralMale, CalmFemale, SteadyMale, NeutralFemale, … + `All` |
+| `VoiceArchetypeServiceCollectionExtensions.AddNovolisVoiceArchetypes` | DI registration |
+
+## Related / dogfood
+
+| Package / app | Notes |
+|---------------|-------|
+| [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | `VoicePresetDraft` composition |
+| [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | `VoicePresetListBox.LoadCatalogSeeds()` |
