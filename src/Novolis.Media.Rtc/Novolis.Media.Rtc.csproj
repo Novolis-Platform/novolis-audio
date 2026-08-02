@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Media.Rtc</RootNamespace>
+    <AssemblyName>Novolis.Media.Rtc</AssemblyName>
+    <PackageId>Novolis.Media.Rtc</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>SIPSorcery-backed mesh RTC session implementing IRtcMeshSession.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Media.Rtc.Abstractions\Novolis.Media.Rtc.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Media.Capture.Windows\Novolis.Media.Capture.Windows.csproj" />
+    <PackageReference Include="SIPSorcery" />
+    <PackageReference Include="SIPSorceryMedia.Abstractions" />
+    <PackageReference Include="SIPSorceryMedia.Windows" />
+    <PackageReference Include="SIPSorceryMedia.Encoders" />
+  </ItemGroup>
+</Project>

@@ -36,6 +36,9 @@
     <Project Path="src/Novolis.Audio.Live.Protocol/Novolis.Audio.Live.Protocol.csproj" />
     <Project Path="src/Novolis.Audio.Live.Visuals/Novolis.Audio.Live.Visuals.csproj" />
     <Project Path="src/Novolis.Audio.Live.Render/Novolis.Audio.Live.Render.csproj" />
+    <Project Path="src/Novolis.Media.Rtc.Abstractions/Novolis.Media.Rtc.Abstractions.csproj" />
+    <Project Path="src/Novolis.Media.Capture.Windows/Novolis.Media.Capture.Windows.csproj" />
+    <Project Path="src/Novolis.Media.Rtc/Novolis.Media.Rtc.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Audio.Unit/Novolis.Audio.Unit.csproj" />

@@ -23,5 +23,9 @@
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageVersion Include="Microsoft.Maui.Essentials" Version="10.0.20" />
     <PackageVersion Include="System.Speech" Version="9.0.0" />
+    <PackageVersion Include="SIPSorcery" Version="10.0.3" />
+    <PackageVersion Include="SIPSorceryMedia.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="SIPSorceryMedia.Windows" Version="10.0.13" />
+    <PackageVersion Include="SIPSorceryMedia.Encoders" Version="10.0.4" />
   </ItemGroup>
 </Project>
