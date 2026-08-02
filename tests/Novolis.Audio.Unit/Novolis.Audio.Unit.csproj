@@ -14,6 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Novolis.Audio\Novolis.Audio.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Codecs\Novolis.Audio.Codecs.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Effects\Novolis.Audio.Effects.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Filters\Novolis.Audio.Filters.csproj" />
+    <ProjectReference Include="..\..\codegen\Novolis.Audio.Manifests\Novolis.Audio.Manifests.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Output.Abstractions\Novolis.Audio.Output.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Playback\Novolis.Audio.Playback.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Runtime\Novolis.Audio.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Abstractions\Novolis.Audio.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />

@@ -6,6 +6,20 @@ namespace Novolis.Audio.Unit;
 public class AudioEffectsTests
 {
     [Test]
+    public async Task ChainedEffectPipeline_runs_steps_in_order()
+    {
+        var format = new PcmFormat(16_000, 1, PcmSampleFormat.Int16);
+        var bytes = new byte[4];
+        Buffer.BlockCopy(new short[] { 1000, -1000 }, 0, bytes, 0, 4);
+        var input = new PcmBuffer(format, bytes, 2);
+
+        var pipeline = new ChainedEffectPipeline(new GainEffect(2f), new GainEffect(0.5f));
+        var output = pipeline.Process(input);
+
+        await Assert.That(Peak(output)).IsEqualTo(Peak(input));
+    }
+
+    [Test]
     public async Task GainEffect_increases_peak()
     {
         var format = new PcmFormat(16_000, 1, PcmSampleFormat.Int16);
