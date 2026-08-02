@@ -39,4 +39,4 @@ var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.CatalogEnt
 | Package / app | Notes |
 |---------------|-------|
 | [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | Voice preset studio UI |
-| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Full voice desk |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Full voice studio |

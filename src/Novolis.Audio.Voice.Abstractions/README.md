@@ -43,4 +43,4 @@ Register concrete backends via SherpaOnnx, Kokoro, or platform packages.
 |---------|-------|
 | [`Novolis.Audio.Voice.SherpaOnnx`](../Novolis.Audio.Voice.SherpaOnnx/README.md) | Primary offline TTS/STT |
 | [`Novolis.Audio.Voice.Kokoro`](../Novolis.Audio.Voice.Kokoro/README.md) | ONNX TTS |
-| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice desk |
+| [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice studio |
