@@ -6,6 +6,20 @@ Generated `[LibraryImport]` bindings to the Novolis native audio shim. Maintaine
 
 Not intended for direct app consumption. Reference `Novolis.Audio.Runtime` or the [`Novolis.Audio`](../Novolis.Audio/README.md) meta-package.
 
+```bash
+dotnet add package Novolis.Audio.Runtime
+```
+
+## Quick start
+
+Prefer `MiniaudioAudioEngine` from `Novolis.Audio.Runtime`. Bindings are an implementation detail:
+
+```csharp
+using Novolis.Audio.Runtime;
+
+IAudioEngine engine = new MiniaudioAudioEngine();
+```
+
 ## Purpose
 
 Low-level P/Invoke to `novolis_audio` native library, consumed by `MiniaudioAudioEngine`.
