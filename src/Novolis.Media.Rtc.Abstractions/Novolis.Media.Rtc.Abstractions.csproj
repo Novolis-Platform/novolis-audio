@@ -9,5 +9,6 @@
     <PackageId>Novolis.Media.Rtc.Abstractions</PackageId>
     <IsPackable>true</IsPackable>
     <Description>RTC mesh contracts: video frames, signal messages, and IRtcMeshSession.</Description>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 </Project>

@@ -2,6 +2,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
   <PropertyGroup>
     <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Novolis.Media.Capture.Windows</RootNamespace>
@@ -9,6 +10,7 @@
     <PackageId>Novolis.Media.Capture.Windows</PackageId>
     <IsPackable>true</IsPackable>
     <Description>Windows webcam capture for Novolis.Media.Rtc (SIPSorceryMedia.Windows).</Description>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Media.Rtc.Abstractions\Novolis.Media.Rtc.Abstractions.csproj" />
