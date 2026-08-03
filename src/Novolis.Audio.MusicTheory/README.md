@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.MusicTheory
 
 Typed musical primitives — pitch, notes, chords, tempo, duration, velocity, and instruments. Foundation for patterns, Live programs, and the Live DSL.
@@ -53,3 +61,4 @@ var tempo = new Tempo(120);
 | [`Novolis.Audio.Live`](../Novolis.Audio.Live/README.md) | Live program compilation |
 | [`Novolis.Audio.Live.Dsl`](../Novolis.Audio.Live.Dsl/README.md) | DSL helpers |
 | `Novolis.Audio.Unit/MusicTheoryTests.cs` | Unit tests |
+

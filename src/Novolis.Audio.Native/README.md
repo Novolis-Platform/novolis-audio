@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Native
 
 Per-RID native binaries (`novolis_audio.dll`, etc.) for the miniaudio shim. **Do not reference directly** — pulled transitively by [`Novolis.Audio.Runtime`](../Novolis.Audio.Runtime/README.md).
@@ -32,3 +40,4 @@ Ships platform-specific native assets consumed by the generated P/Invoke layer i
 | [`Novolis.Audio.Runtime`](../Novolis.Audio.Runtime/README.md) | `MiniaudioAudioEngine` consumer |
 
 Maintainer/regen only — apps use `MiniaudioAudioEngine`, not this package directly.
+

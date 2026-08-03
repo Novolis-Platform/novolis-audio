@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.EdgeTts
 
 Online TTS client for Microsoft Edge Read Aloud — the same service used by [edge-tts](https://github.com/rany2/edge-tts). Returns MP3. No Edge browser or Windows install required.
@@ -55,3 +63,4 @@ await File.WriteAllBytesAsync("hello.mp3", mp3);
 ## Support
 
 Pre-release (`2026.1.*` on GitHub Packages).
+

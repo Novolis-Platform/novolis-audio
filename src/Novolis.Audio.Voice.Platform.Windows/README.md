@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Platform.Windows
 
 Windows `System.Speech` TTS adapter implementing `IVoiceService` — Speak and WAV export via platform synthesis.
@@ -36,3 +44,4 @@ await voice.WriteToFileAsync("Hello", outputPath);
 |---------------|-------|
 | [`Novolis.Audio.Voice.Platform.Abstractions`](../Novolis.Audio.Voice.Platform.Abstractions/README.md) | `PlatformSpeechOptions` |
 | [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | `VoicePreviewPlatformFactory` |
+

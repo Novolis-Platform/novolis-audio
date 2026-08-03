@@ -5,6 +5,6 @@
     <RepositoryUrl>https://github.com/Novolis-Platform/novolis-audio</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageTags>audio;miniaudio;interop;gamedev;cross-platform</PackageTags>
+    <PackageTags>audio;miniaudio;interop;gamedev;cross-platform;edit;daw</PackageTags>
   </PropertyGroup>
 </Project>

@@ -14,6 +14,8 @@
     <Project Path="src/Novolis.Audio.Runtime/Novolis.Audio.Runtime.csproj" />
     <Project Path="src/Novolis.Audio/Novolis.Audio.csproj" />
     <Project Path="src/Novolis.Audio.Core/Novolis.Audio.Core.csproj" />
+    <Project Path="src/Novolis.Audio.Edit/Novolis.Audio.Edit.csproj" />
+    <Project Path="src/Novolis.Audio.Midi/Novolis.Audio.Midi.csproj" />
     <Project Path="src/Novolis.Audio.Codecs/Novolis.Audio.Codecs.csproj" />
     <Project Path="src/Novolis.Audio.Filters/Novolis.Audio.Filters.csproj" />
     <Project Path="src/Novolis.Audio.Effects/Novolis.Audio.Effects.csproj" />
@@ -40,5 +42,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Audio.Unit/Novolis.Audio.Unit.csproj" />
     <Project Path="tests/Novolis.Audio.Live.Unit/Novolis.Audio.Live.Unit.csproj" />
+    <Project Path="tests/Novolis.Audio.Edit.Unit/Novolis.Audio.Edit.Unit.csproj" />
+    <Project Path="tests/Novolis.Audio.Midi.Unit/Novolis.Audio.Midi.Unit.csproj" />
   </Folder>
 </Solution>

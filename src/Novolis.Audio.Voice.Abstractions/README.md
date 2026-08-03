@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Abstractions
 
 Speech and TTS contracts — synthesis, recognition, VAD, capture, model catalogs, and null implementations for testing.
@@ -44,3 +52,4 @@ Register concrete backends via SherpaOnnx, Kokoro, or platform packages.
 | [`Novolis.Audio.Voice.SherpaOnnx`](../Novolis.Audio.Voice.SherpaOnnx/README.md) | Primary offline TTS/STT |
 | [`Novolis.Audio.Voice.Kokoro`](../Novolis.Audio.Voice.Kokoro/README.md) | ONNX TTS |
 | [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice studio |
+

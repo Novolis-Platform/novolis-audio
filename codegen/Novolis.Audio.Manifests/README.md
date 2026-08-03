@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Manifests
 
 C#-authoritative binding manifest fragments for `Novolis.Audio` codegen (interop exports and facades).
@@ -42,3 +50,4 @@ Maintainers run `Novolis.Audio.Pipeline` (`maintainer` profile) which consumes t
 ## Support
 
 Pre-release (`2026.1.*` on GitHub Packages). Manifest IDs and fingerprints are verified in the audio codegen pipeline.
+

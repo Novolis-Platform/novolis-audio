@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Design
 
 Editable voice preset model, validation, effect-chain builder, preview factory, and C# code emitter for voice catalog composition.
@@ -40,3 +48,4 @@ var code = VoicePresetCodeEmitter.Emit(draft, VoicePresetCodeTemplate.CatalogEnt
 |---------------|-------|
 | [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | Voice preset studio UI |
 | [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Full voice studio |
+

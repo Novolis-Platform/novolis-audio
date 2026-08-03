@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Midi</RootNamespace>
+    <AssemblyName>Novolis.Audio.Midi</AssemblyName>
+    <PackageId>Novolis.Audio.Midi</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>MIDI piano instruments, sequences, Standard MIDI File I/O, and patch save/load.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>audio;midi;piano;synth;instruments;smf</PackageTags>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
+  </ItemGroup>
+</Project>

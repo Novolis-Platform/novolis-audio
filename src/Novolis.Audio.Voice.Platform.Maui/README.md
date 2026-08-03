@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Platform.Maui
 
 MAUI `TextToSpeech` adapter implementing `IVoiceService` — **Speak only**; no PCM/WAV export.
@@ -41,3 +49,4 @@ await voice.SpeakAsync("Hello");
 | [`Novolis.Audio.Voice.Platform.Windows`](../Novolis.Audio.Voice.Platform.Windows/README.md) | Windows TTS counterpart |
 
 For PCM/export use SherpaOnnx or Kokoro backends.
+

@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Live.Dsl
 
 Completion-friendly helpers building `LiveProgramDefinition` and pattern nodes for the Live REPL and studio compiler.
@@ -46,3 +54,4 @@ var definition = LiveDsl.Program(
 | [`Novolis.Audio.Live`](../Novolis.Audio.Live/README.md) | Session + compiler |
 | [`Novolis.Avalonia.Live`](../../../novolis-avalonia/src/Novolis.Avalonia.Live/README.md) | DSL completion in live editor |
 | Live demo catalog + REPL tests | Showcase program sets |
+

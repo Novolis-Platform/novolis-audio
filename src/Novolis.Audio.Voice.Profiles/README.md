@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Profiles
 
 Static voice archetype catalog — profile, model, speaking rate, and description presets for voice design.
@@ -37,3 +45,4 @@ services.AddNovolisVoiceArchetypes();
 |---------------|-------|
 | [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | `VoicePresetDraft` composition |
 | [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | `VoicePresetListBox.LoadCatalogSeeds()` |
+

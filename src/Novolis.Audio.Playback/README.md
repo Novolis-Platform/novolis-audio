@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Playback
 
 NAudio-backed PCM playback and microphone capture for the voice/speech pipeline.
@@ -40,3 +48,4 @@ Use `NullAudioPlayback` / `NullAudioCapture` for headless tests.
 |---------|-------|
 | [`Novolis.Audio.Voice.Abstractions`](../Novolis.Audio.Voice.Abstractions/README.md) | Speech pipeline contracts |
 | [`Novolis.Audio.Core`](../Novolis.Audio.Core/README.md) | `PcmBuffer` format |
+

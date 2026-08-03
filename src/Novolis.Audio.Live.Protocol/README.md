@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Live.Protocol
 
 MessagePack DTOs and helper methods for the Novolis Audio Live control plane.
@@ -117,3 +125,4 @@ Wire contracts are additive-first:
 - include `RequestId` on all request/response pairs
 
 That keeps the live host and clients loosely coupled while still staying strongly typed.
+

@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Platform.Abstractions
 
 Shared platform speech options for MAUI and Windows TTS adapters.
@@ -39,3 +47,4 @@ Pass to `AddNovolisVoiceMaui(options)` or `AddNovolisVoiceWindows(options)`.
 | [`Novolis.Audio.Voice.Platform.Maui`](../Novolis.Audio.Voice.Platform.Maui/README.md) | MAUI TTS adapter |
 | [`Novolis.Audio.Voice.Platform.Windows`](../Novolis.Audio.Voice.Platform.Windows/README.md) | Windows TTS adapter |
 | [`Novolis.Avalonia.Voice`](../../../novolis-avalonia/src/Novolis.Avalonia.Voice/README.md) | `VoicePlatformInspector` |
+

@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Filters
 
 PCM int16 filter primitives for the voice effects pipeline.
@@ -33,3 +41,4 @@ filter.Process(inputSpan, outputSpan);
 |---------|-------|
 | [`Novolis.Audio.Effects`](../Novolis.Audio.Effects/README.md) | Effect chain pipeline |
 | [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | Voice preset effect builder |
+

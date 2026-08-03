@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Runtime
 
 Miniaudio-backed `IAudioEngine` implementation for game and app sound playback.
@@ -38,3 +46,4 @@ engine.Play(handle);
 | [`Novolis.Audio`](../Novolis.Audio/README.md) | Meta-package for game hosts |
 
 Separate from `Novolis.Audio.Live.*` (live-coding oscillator stack).
+

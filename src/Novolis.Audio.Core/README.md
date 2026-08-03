@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Core
 
 PCM buffer types and WAV encode/decode for the Novolis audio stack.
@@ -42,3 +50,4 @@ var decoded = new WavDecoder().Decode(stream);
 | [`Novolis.Audio.Codecs`](../Novolis.Audio.Codecs/README.md) | Future codec abstractions |
 | [`Novolis.Audio.Effects`](../Novolis.Audio.Effects/README.md) | Voice DSP pipeline |
 | [`Novolis.Audio.Playback`](../Novolis.Audio.Playback/README.md) | PCM playback |
+

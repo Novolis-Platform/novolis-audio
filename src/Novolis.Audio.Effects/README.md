@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Effects
 
 PCM effect chain for voice synthesis DSP — gain, dynamics, noise gate, radio hiss, and preset radio chains.
@@ -44,3 +52,4 @@ var speech = InputSpeechEffects.Create(sampleRateHz: 16_000);
 |---------------|-------|
 | [`Novolis.Audio.Voice.Design`](../Novolis.Audio.Voice.Design/README.md) | `VoiceEffectChainBuilder` |
 | [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Voice synthesis DSP |
+

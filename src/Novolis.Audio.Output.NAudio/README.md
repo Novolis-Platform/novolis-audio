@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Output.NAudio
 
 NAudio-backed probe of the Windows default render endpoint for game hosts (master volume hook + device check at startup).
@@ -39,3 +47,4 @@ services.AddNaudioAudio(); // registers IAudioOutput + AudioOutputHostedService
 | [`Novolis.Audio.Output.Abstractions`](../Novolis.Audio.Output.Abstractions/README.md) | `IAudioOutput` contract |
 | [NovolisVoiceStudio](../../../novolis-dogfooding/apps/audio/NovolisVoiceStudio) | Game audio output registration |
 | [MeshBench](../../../novolis-dogfooding/apps/rendering/MeshBench) | Render studio host |
+

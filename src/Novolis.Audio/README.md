@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio
 
 Meta package for cross-platform Novolis audio: abstractions plus miniaudio-backed runtime (native binaries pulled transitively).
@@ -44,3 +52,4 @@ Headless tests: use `NullAudioEngine` from `Novolis.Audio.Abstractions` (include
 ## Support
 
 Pre-release (`2026.1.*` on GitHub Packages). Native playback uses a miniaudio-backed C shim with manifest-driven codegen (same pattern as `novolis-raylib`).
+

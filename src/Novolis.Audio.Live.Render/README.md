@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Live.Render
 
 v0 NAudio oscillator synthesis for Live — realtime `WaveOut` engine and offline renderer. Ignores `EffectKind` chains in v0.
@@ -45,3 +53,4 @@ var samples = LiveOfflineRenderer.Render(program, seconds: 4.0);
 | [`Novolis.Audio.Live.Visuals`](../Novolis.Audio.Live.Visuals/README.md) | Analysis snapshot consumers |
 | [LiveStudio host](../../../novolis-apps/src/LiveStudio/host) | IPC host + oscillator engine |
 | `Novolis.Audio.Live.Unit/LiveRenderTests.cs` | Unit tests |
+

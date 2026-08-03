@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Live.Visuals
 
 View-model projections and analysis snapshots for Live program UIs — graph tree, transport frame, waveform, and spectrum.
@@ -40,3 +48,4 @@ var frame = new LiveVisualFrame(transport, analysis, graph);
 | [`Novolis.Audio.Live.Render`](../Novolis.Audio.Live.Render/README.md) | `OscillatorLiveAudioEngine.LatestAnalysis` source |
 | [`Novolis.Avalonia.Live`](../../../novolis-avalonia/src/Novolis.Avalonia.Live/README.md) | Live visualizer panels |
 | [LiveStudio](../../../novolis-apps/src/LiveStudio) | Studio dashboard |
+

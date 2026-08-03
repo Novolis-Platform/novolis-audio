@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Kokoro
 
 Kokoro ONNX voice synthesizer backend implementing `IVoiceSynthesizer`.
@@ -39,3 +47,4 @@ var entry = KokoroVoiceCatalog.All.First();
 |---------|-------|
 | [`Novolis.Audio.Voice.Abstractions`](../Novolis.Audio.Voice.Abstractions/README.md) | `IVoiceSynthesizer` contract |
 | [`Novolis.Audio.Voice.SherpaOnnx`](../Novolis.Audio.Voice.SherpaOnnx/README.md) | Alternative offline backend |
+

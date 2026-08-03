@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.Manuscript
 
 Manuscript TTS for books: speech planning, voice-map YAML, Edge TTS synthesis, chapter audiobook pipeline, MP3 concat / M4B assemble, and selection speech preview.
@@ -74,3 +82,4 @@ var result = await pipeline.GenerateAsync(
 - `Novolis.Audio.Voice.EdgeTts` — TTS synthesis
 - `NAudio` — MP3 playback and Windows M4B AAC encode
 - `YamlDotNet` — voice-map YAML
+

@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Live
 
 Live session control plane — compile programs, queue swaps, and transport snapshots for the Live coding stack.
@@ -49,3 +57,4 @@ var snapshot = session.CreateSnapshot();
 | [`Novolis.Audio.Live.Visuals`](../Novolis.Audio.Live.Visuals/README.md) | UI projections |
 | [LiveStudio](../../../novolis-apps/src/LiveStudio) | Host + studio dashboard |
 | [Live Studio](../../../novolis-apps/src/LiveStudio) | Product host |
+

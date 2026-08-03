@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Bindings
 
 Generated `[LibraryImport]` bindings to the Novolis native audio shim. Maintainer/regen surface — apps use [`Novolis.Audio.Runtime`](../Novolis.Audio.Runtime/README.md) instead.
@@ -39,3 +47,4 @@ Low-level P/Invoke to `novolis_audio` native library, consumed by `MiniaudioAudi
 | [`Novolis.Audio.Runtime`](../Novolis.Audio.Runtime/README.md) | `MiniaudioAudioEngine` |
 
 Regenerate bindings when the native ABI changes — do not hand-edit generated files.
+

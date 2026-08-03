@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Patterns
 
 Immutable pattern graph for live composition — note, chord, rest, sequence, layer, repeat, and transpose nodes.
@@ -45,3 +53,4 @@ var pattern = new SequencePattern([
 | [`Novolis.Audio.Live`](../Novolis.Audio.Live/README.md) | `LiveProgram` root pattern |
 | [`Novolis.Audio.Live.Dsl`](../Novolis.Audio.Live.Dsl/README.md) | DSL builders |
 | [`Novolis.Avalonia.Live`](../../../novolis-avalonia/src/Novolis.Avalonia.Live/README.md) | Live editor UI |
+

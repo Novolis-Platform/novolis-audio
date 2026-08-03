@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice
 
 Voice facade: `SpeakAsync` and `WriteToFileAsync` over synthesizer, effects, and playback.
@@ -52,3 +60,4 @@ var builder = VoiceArchetypeApplicator.Apply(
 ## Support
 
 Pre-release (`2026.1.*` on GitHub Packages).
+
