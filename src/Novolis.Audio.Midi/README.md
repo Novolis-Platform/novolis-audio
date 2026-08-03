@@ -1,33 +1,22 @@
-<!-- novolis-pkg-brand:start -->
-<p align="center">
-  <a href="https://github.com/Novolis-Platform/novolis-audio">
-    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
-  </a>
-</p>
-<!-- novolis-pkg-brand:end -->
-
 # Novolis.Audio.Midi
 
-Lightweight MIDI piano stack: parametric instrument bank, note sequences, Standard MIDI File read/write, and JSON patch libraries.
+MIDI piano instruments, beat-grid **music score / piano-roll**, Standard MIDI File I/O, patch libraries, and **QuestPDF** full-score export.
 
 ## Surfaces
 
 | Type | Role |
 | --- | --- |
+| `MusicScore` / `ScoreNote` | Full score on a beat grid (bars, snap, place/remove) |
 | `InstrumentBank` | Built-in catalog of many synth / keys / pad / perc patches |
-| `InstrumentPatch` | ADSR + waveform parameters; JSON via `InstrumentPatchStore` |
-| `MidiSequence` | Timed notes for record / arrange |
-| `StandardMidiFile` | Type-0 SMF `.mid` load/save |
-| `MidiSynth` | Render a note or sequence to mono Int16 PCM |
+| `MidiSequence` / `StandardMidiFile` | Timed notes + Type-0 SMF `.mid` |
+| `MidiSynth` | Render notes/sequences to mono Int16 PCM |
+| `ScorePdfExporter` | Landscape PDF: grand staff systems, piano-roll page, note list |
+| `MidiPianoSession` | Interactive session binding score + bank + record |
 
-Pair with `Novolis.Avalonia.Audio` (`MidiPianoWorkspace`) for an on-screen keyboard.
-
-## Install
-
-```bash
-dotnet add package Novolis.Audio.Midi
+```csharp
+ScorePdfExporter.EnsureCommunityLicense();
+var score = MusicScore.CreateDemo();
+ScorePdfExporter.ExportToFile(score, @"d:\temp\score.pdf");
 ```
 
-**Prerequisites:** [.NET 10 SDK](https://dotnet.microsoft.com/download) (`net10.0`).
-
-
+Pair with `Novolis.Avalonia.Audio` (`MidiPianoWorkspace`, `PianoRollControl`, `ScoreStaffControl`).

@@ -73,12 +73,27 @@ public sealed class MidiCoreTests
     public async Task Session_records_notes()
     {
         var session = new MidiPianoSession();
-        session.StartRecording();
+        session.StartRecording(clearExisting: true);
         _ = session.NoteOn(60);
         await Task.Delay(40);
         session.NoteOff(60);
         session.StopRecording();
-        await Assert.That(session.Sequence.Notes.Count).IsEqualTo(1);
-        await Assert.That(session.Sequence.Notes[0].MidiNumber).IsEqualTo(60);
+        await Assert.That(session.Score.Notes.Count).IsEqualTo(1);
+        await Assert.That(session.Score.Notes[0].MidiNumber).IsEqualTo(60);
+    }
+
+    [Test]
+    public async Task Score_roundtrips_through_midi_and_pdf()
+    {
+        var score = MusicScore.CreateDemo();
+        await Assert.That(score.Notes.Count).IsGreaterThan(5);
+        var seq = score.ToSequence();
+        var reloaded = new MusicScore();
+        reloaded.ReplaceFromSequence(seq);
+        await Assert.That(reloaded.Notes.Count).IsEqualTo(score.Notes.Count);
+
+        var pdf = ScorePdfExporter.ExportToBytes(score);
+        await Assert.That(pdf.Length).IsGreaterThan(500);
+        await Assert.That(pdf[0]).IsEqualTo((byte)'%'); // %PDF
     }
 }
