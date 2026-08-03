@@ -99,6 +99,55 @@ public sealed class MusicScore
         Raise();
     }
 
+    /// <summary>Replaces tracks + notes with a deep copy of <paramref name="source"/> (keeps this instance for UI bindings).</summary>
+    public void ReplaceContent(MusicScore source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        _notes.Clear();
+        _tracks.Clear();
+        ActiveTrackId = Guid.Empty;
+
+        Title = source.Title;
+        Composer = source.Composer;
+        InstrumentName = source.InstrumentName;
+        TempoBpm = source.TempoBpm;
+        BeatsPerBar = source.BeatsPerBar;
+        BeatUnit = source.BeatUnit;
+        BarCount = source.BarCount;
+        SnapBeats = source.SnapBeats;
+        DefaultDurationBeats = source.DefaultDurationBeats;
+        InstrumentPatchId = source.InstrumentPatchId;
+
+        var idMap = new Dictionary<Guid, Guid>();
+        foreach (var t in source.Tracks)
+        {
+            var copy = new ScoreTrack(t.Name, t.PatchId, t.ColorIndex, clef: t.Clef)
+            {
+                Mute = t.Mute,
+                Solo = t.Solo,
+            };
+            idMap[t.Id] = copy.Id;
+            _tracks.Add(copy);
+        }
+
+        if (_tracks.Count > 0)
+        {
+            ActiveTrackId = source.ActiveTrackId != Guid.Empty && idMap.TryGetValue(source.ActiveTrackId, out var mapped)
+                ? mapped
+                : _tracks[0].Id;
+        }
+
+        foreach (var n in source.Notes)
+        {
+            var trackId = n.TrackId != Guid.Empty && idMap.TryGetValue(n.TrackId, out var tid)
+                ? tid
+                : ActiveTrackId;
+            _notes.Add(new ScoreNote(n.MidiNumber, n.StartBeat, n.DurationBeats, n.Velocity, trackId: trackId));
+        }
+
+        Raise();
+    }
+
     public ScoreNote Add(ScoreNote note)
     {
         ArgumentNullException.ThrowIfNull(note);
@@ -493,6 +542,210 @@ public sealed class MusicScore
 
         score.SelectTrack(kick.Id);
         score.InstrumentPatchId = kick.PatchId;
+        return score;
+    }
+
+    /// <summary>
+    /// Original hybrid trailer overture (~16s @ 100 BPM). Cinematic energy for A/B with audio demos —
+    /// not a transcription of any licensed commercial track.
+    /// </summary>
+    public static MusicScore CreateEmberSteelOverture()
+    {
+        var score = new MusicScore("Ember Steel Overture", tempoBpm: 100, beatsPerBar: 4, beatUnit: 4, barCount: 8)
+        {
+            Composer = "Novolis",
+            SnapBeats = 0.25,
+            DefaultDurationBeats = 0.5,
+            InstrumentName = "Orchestra · Hybrid Trailer",
+        };
+
+        var kick = score.AddTrack(new ScoreTrack("Kick", "perc.kick", 0, clef: ScoreClef.Bass));
+        var snare = score.AddTrack(new ScoreTrack("Snare", "perc.snare", 1, clef: ScoreClef.Bass));
+        var toms = score.AddTrack(new ScoreTrack("Toms", "perc.tom", 2, clef: ScoreClef.Bass));
+        var brass = score.AddTrack(new ScoreTrack("Brass", "brass.trumpet", 3, clef: ScoreClef.Treble));
+        var horns = score.AddTrack(new ScoreTrack("Horns", "brass.horn", 4, clef: ScoreClef.Treble));
+        var strings = score.AddTrack(new ScoreTrack("Strings", "pad.strings", 5, clef: ScoreClef.Grand));
+        var bass = score.AddTrack(new ScoreTrack("Bass", "bass.finger", 6, clef: ScoreClef.Bass));
+        var timp = score.AddTrack(new ScoreTrack("Timpani", "orch.timpani", 7, clef: ScoreClef.Bass));
+
+        void N(Guid t, int m, double s, double d, int v = 100) =>
+            score.Add(new ScoreNote(m, s, d, v, trackId: t));
+
+        void Chord(Guid t, ReadOnlySpan<int> midis, double s, double d, int v)
+        {
+            foreach (var m in midis)
+                N(t, m, s, d, v);
+        }
+
+        for (var bar = 0; bar < 8; bar++)
+        {
+            var b = bar * 4.0;
+            N(kick.Id, 36, b, 0.4, 120);
+            N(kick.Id, 36, b + 2, 0.35, 114);
+            N(snare.Id, 38, b + 1, 0.25, bar >= 4 ? 110 : 96);
+            N(snare.Id, 38, b + 3, 0.25, bar >= 4 ? 112 : 98);
+            if (bar is 3 or 7)
+            {
+                N(toms.Id, 47, b + 2.5, 0.2, 118);
+                N(toms.Id, 45, b + 2.75, 0.2, 120);
+                N(toms.Id, 43, b + 3.0, 0.2, 122);
+                N(toms.Id, 41, b + 3.25, 0.35, 124);
+            }
+
+            N(timp.Id, 36, b, 0.5, 100);
+        }
+
+        // Rising brass motif (original)
+        int[] motif = [67, 70, 74, 79, 74, 70, 67, 62];
+        for (var i = 0; i < motif.Length; i++)
+            N(brass.Id, motif[i], i * 0.5, 0.45, 110 + i);
+
+        Chord(horns.Id, [55, 62, 67], 0, 4, 78);
+        Chord(horns.Id, [53, 60, 65], 4, 4, 80);
+        Chord(horns.Id, [50, 57, 62], 8, 4, 84);
+        Chord(horns.Id, [55, 62, 67, 74], 12, 4, 90);
+
+        int[] answer = [74, 72, 70, 67, 65, 67, 70, 74, 79, 77, 74, 70, 67, 70, 74, 79];
+        for (var i = 0; i < answer.Length; i++)
+            N(brass.Id, answer[i], 8 + i * 0.5, 0.45, 112);
+
+        Chord(strings.Id, [43, 50, 55, 62], 0, 8, 55);
+        Chord(strings.Id, [41, 48, 53, 60], 8, 8, 60);
+        Chord(strings.Id, [38, 45, 50, 57], 16, 8, 64);
+        Chord(strings.Id, [43, 50, 55, 62, 67], 24, 8, 70);
+
+        for (var i = 0; i < 8; i++)
+            N(bass.Id, 31 + (i % 2 == 0 ? 0 : 5), i * 4.0, 3.5, 108);
+
+        // Big close
+        N(brass.Id, 79, 28, 0.5, 122);
+        N(brass.Id, 82, 28.5, 0.5, 124);
+        N(brass.Id, 86, 29, 1.0, 127);
+        Chord(horns.Id, [55, 62, 67, 74], 28, 4, 100);
+        N(kick.Id, 36, 30, 0.5, 127);
+        N(timp.Id, 36, 30, 1.5, 124);
+
+        score.SelectTrack(brass.Id);
+        return score;
+    }
+
+    /// <summary>Soft string chorale with muted brass answers.</summary>
+    public static MusicScore CreateStringAdagio()
+    {
+        var score = new MusicScore("Northern Adagio", tempoBpm: 72, beatsPerBar: 4, beatUnit: 4, barCount: 10)
+        {
+            Composer = "Novolis",
+            SnapBeats = 0.5,
+            DefaultDurationBeats = 2,
+            InstrumentName = "Orchestra · Strings",
+        };
+
+        var strings = score.AddTrack(new ScoreTrack("Strings", "pad.strings", 0, clef: ScoreClef.Grand));
+        var horns = score.AddTrack(new ScoreTrack("Horns", "brass.horn", 1, clef: ScoreClef.Treble));
+        var bass = score.AddTrack(new ScoreTrack("Bass", "bass.finger", 2, clef: ScoreClef.Bass));
+
+        void Chord(Guid t, ReadOnlySpan<int> midis, double s, double d, int v)
+        {
+            foreach (var m in midis)
+                score.Add(new ScoreNote(m, s, d, v, trackId: t));
+        }
+
+        Chord(strings.Id, [48, 55, 60, 64], 0, 8, 70);
+        Chord(strings.Id, [50, 57, 62, 65], 8, 8, 72);
+        Chord(strings.Id, [45, 52, 57, 60], 16, 8, 68);
+        Chord(strings.Id, [47, 54, 59, 62], 24, 8, 74);
+        Chord(strings.Id, [48, 55, 60, 67], 32, 8, 76);
+
+        score.Add(new ScoreNote(67, 4, 3, 88, trackId: horns.Id));
+        score.Add(new ScoreNote(69, 12, 3, 90, trackId: horns.Id));
+        score.Add(new ScoreNote(65, 20, 3, 86, trackId: horns.Id));
+        score.Add(new ScoreNote(67, 28, 3, 92, trackId: horns.Id));
+        score.Add(new ScoreNote(72, 36, 4, 94, trackId: horns.Id));
+
+        for (var i = 0; i < 5; i++)
+            score.Add(new ScoreNote(36 + (i % 3 == 2 ? 2 : 0), i * 8.0, 7.5, 96, trackId: bass.Id));
+
+        score.SelectTrack(strings.Id);
+        return score;
+    }
+
+    /// <summary>Martial brass parade with snare cadence.</summary>
+    public static MusicScore CreateMarchingBrass()
+    {
+        var score = new MusicScore("Iron Parade", tempoBpm: 112, beatsPerBar: 4, beatUnit: 4, barCount: 8)
+        {
+            Composer = "Novolis",
+            SnapBeats = 0.25,
+            InstrumentName = "Orchestra · March",
+        };
+
+        var snare = score.AddTrack(new ScoreTrack("Snare", "perc.snare", 0, clef: ScoreClef.Bass));
+        var trumpets = score.AddTrack(new ScoreTrack("Trumpets", "brass.trumpet", 1, clef: ScoreClef.Treble));
+        var trombones = score.AddTrack(new ScoreTrack("Trombones", "brass.trombone", 2, clef: ScoreClef.Bass));
+        var bass = score.AddTrack(new ScoreTrack("Bass", "bass.finger", 3, clef: ScoreClef.Bass));
+
+        for (var bar = 0; bar < 8; bar++)
+        {
+            var b = bar * 4.0;
+            score.Add(new ScoreNote(38, b + 0, 0.2, 100, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 0.5, 0.15, 88, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 1, 0.2, 104, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 1.5, 0.15, 90, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 2, 0.2, 100, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 2.5, 0.15, 88, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 3, 0.2, 108, trackId: snare.Id));
+            score.Add(new ScoreNote(38, b + 3.5, 0.15, 92, trackId: snare.Id));
+        }
+
+        int[] fanfare = [67, 67, 69, 71, 72, 71, 69, 67, 64, 67, 69, 72, 71, 69, 67, 64];
+        for (var i = 0; i < fanfare.Length; i++)
+            score.Add(new ScoreNote(fanfare[i], i * 1.0, 0.9, 114, trackId: trumpets.Id));
+
+        for (var i = 0; i < 8; i++)
+        {
+            score.Add(new ScoreNote(48, i * 4.0, 1.8, 100, trackId: trombones.Id));
+            score.Add(new ScoreNote(43, i * 4.0 + 2, 1.8, 98, trackId: trombones.Id));
+            score.Add(new ScoreNote(36, i * 4.0, 3.8, 110, trackId: bass.Id));
+        }
+
+        score.SelectTrack(trumpets.Id);
+        return score;
+    }
+
+    /// <summary>Light 3/4 waltz for piano trio.</summary>
+    public static MusicScore CreateWaltzTrio()
+    {
+        var score = new MusicScore("Harbor Waltz", tempoBpm: 138, beatsPerBar: 3, beatUnit: 4, barCount: 16)
+        {
+            Composer = "Novolis",
+            SnapBeats = 0.5,
+            InstrumentName = "Trio · Waltz",
+        };
+
+        var piano = score.AddTrack(new ScoreTrack("Piano", "keys.grand-soft", 0, clef: ScoreClef.Grand));
+        var cello = score.AddTrack(new ScoreTrack("Cello", "pad.strings", 1, clef: ScoreClef.Bass));
+        var violin = score.AddTrack(new ScoreTrack("Violin", "lead.soft-sine", 2, clef: ScoreClef.Treble));
+
+        int[] bassRoots = [48, 45, 41, 43, 48, 50, 43, 48];
+        for (var bar = 0; bar < 16; bar++)
+        {
+            var b = bar * 3.0;
+            var root = bassRoots[bar % bassRoots.Length];
+            score.Add(new ScoreNote(root, b, 0.9, 92, trackId: piano.Id));
+            score.Add(new ScoreNote(root + 4, b + 1, 0.9, 80, trackId: piano.Id));
+            score.Add(new ScoreNote(root + 7, b + 2, 0.9, 80, trackId: piano.Id));
+            score.Add(new ScoreNote(root - 12, b, 2.8, 96, trackId: cello.Id));
+        }
+
+        int[] melody =
+        [
+            72, 74, 76, 77, 76, 74, 72, 69, 71, 72, 74, 76, 74, 72, 71, 69,
+            67, 69, 71, 72, 71, 69, 67, 64, 65, 67, 69, 71, 72, 74, 76, 72,
+        ];
+        for (var i = 0; i < melody.Length; i++)
+            score.Add(new ScoreNote(melody[i], i * 1.5, 1.4, 108, trackId: violin.Id));
+
+        score.SelectTrack(piano.Id);
         return score;
     }
 

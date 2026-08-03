@@ -35,8 +35,9 @@ ScorePdfExporter.ExportToFile(score, @"d:\temp\score.pdf");
 | `MusicScore` / `ScoreNote` | Full score on a beat grid (bars, snap, place/remove) |
 | `InstrumentBank` | Built-in catalog of many synth / keys / pad / perc patches |
 | `MidiSequence` / `StandardMidiFile` | Timed notes + Type-0 SMF `.mid` |
+| `MusicScoreExchange` | Bridges to `Novolis.Audio.MusicXml` (MusicXML / MusicJSON / Novolis JSON / MNX-lite) |
 | `MidiSynth` / `SoundFontEngine` | Render via MeltySynth + TimGM6mb GM bank (parametric fallback) |
 | `ScorePdfExporter` | Landscape PDF: orchestral systems, piano-roll page, note list |
 | `MidiPianoSession` | Interactive session binding score + bank + record |
 
-Pair with `Novolis.Avalonia.Audio` (`MidiPianoWorkspace`, `PianoRollControl`, `ScoreStaffControl`).
+Pair with `Novolis.Avalonia.Audio` (`MidiPianoWorkspace`, `PianoRollControl`, `ScoreStaffControl`) and `Novolis.Audio.MusicXml` for notation interchange.

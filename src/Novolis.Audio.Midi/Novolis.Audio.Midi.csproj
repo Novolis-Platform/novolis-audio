@@ -8,9 +8,9 @@
     <AssemblyName>Novolis.Audio.Midi</AssemblyName>
     <PackageId>Novolis.Audio.Midi</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>MIDI piano, music score / piano-roll model, SMF I/O, patches, and QuestPDF score export.</Description>
+    <Description>MIDI piano, music score / piano-roll model, SMF I/O, MusicXML/JSON bridges, patches, and QuestPDF score export.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>audio;midi;piano;score;piano-roll;synth;smf;questpdf</PackageTags>
+    <PackageTags>audio;midi;piano;score;piano-roll;synth;smf;musicxml;questpdf</PackageTags>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -19,5 +19,6 @@
     <PackageReference Include="MeltySynth" />
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
     <ProjectReference Include="..\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.MusicXml\Novolis.Audio.MusicXml.csproj" />
   </ItemGroup>
 </Project>

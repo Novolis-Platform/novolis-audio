@@ -147,6 +147,27 @@ public sealed class MidiCoreTests
     }
 
     [Test]
+    public async Task MusicScore_exchanges_MusicXml_and_Novolis_JSON()
+    {
+        var score = MusicScore.CreateDemo();
+        var dir = Path.Combine(Path.GetTempPath(), "novolis-musicxml-tests");
+        Directory.CreateDirectory(dir);
+        var xmlPath = Path.Combine(dir, "demo.musicxml");
+        var jsonPath = Path.Combine(dir, "demo.novolis.json");
+
+        MusicScoreExchange.WriteMusicXmlFile(score, xmlPath);
+        MusicScoreExchange.WriteNovolisJsonFile(score, jsonPath);
+
+        var fromXml = MusicScoreExchange.ReadMusicXmlFile(xmlPath);
+        var fromJson = MusicScoreExchange.ReadNovolisJsonFile(jsonPath);
+
+        await Assert.That(fromXml.Title).IsEqualTo(score.Title);
+        await Assert.That(fromJson.Title).IsEqualTo(score.Title);
+        await Assert.That(fromXml.Notes.Count).IsGreaterThan(10);
+        await Assert.That(fromJson.Notes.Count).IsEqualTo(score.Notes.Count);
+    }
+
+    [Test]
     public async Task SoundFont_renders_when_installed()
     {
         SoundFontEngine.ForceParametric = false;

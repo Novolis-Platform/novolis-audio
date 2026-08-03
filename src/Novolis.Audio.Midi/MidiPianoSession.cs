@@ -163,7 +163,38 @@ public sealed class MidiPianoSession
         Changed?.Invoke();
     }
 
+    /// <summary>Replaces the bound score document in-place (keeps UI subscriptions).</summary>
+    public void ReplaceScore(MusicScore source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        Score.ReplaceContent(source);
+        Score.EnsureDefaultTrack();
+        SelectedNoteId = null;
+        var patchId = Score.ActiveTrack?.PatchId ?? Score.InstrumentPatchId;
+        if (Bank.Find(patchId ?? "") is { } patch)
+            SelectedPatch = patch;
+        else if (Score.ActiveTrack is { } track)
+            SelectedPatch = Bank.Find(track.PatchId) ?? Bank.Patches[0];
+        Changed?.Invoke();
+    }
+
     public void ExportPdf(string path) => ScorePdfExporter.ExportToFile(Score, path);
+
+    public void SaveMusicXml(string path) => MusicScoreExchange.WriteMusicXmlFile(Score, path);
+
+    public void LoadMusicXml(string path) => ReplaceScore(MusicScoreExchange.ReadMusicXmlFile(path));
+
+    public void SaveNovolisJson(string path) => MusicScoreExchange.WriteNovolisJsonFile(Score, path);
+
+    public void LoadNovolisJson(string path) => ReplaceScore(MusicScoreExchange.ReadNovolisJsonFile(path));
+
+    public void SaveMusicJson(string path) => MusicScoreExchange.WriteMusicJsonFile(Score, path);
+
+    public void LoadMusicJson(string path) => ReplaceScore(MusicScoreExchange.ReadMusicJsonFile(path));
+
+    public void SaveMnxJson(string path) => MusicScoreExchange.WriteMnxJsonFile(Score, path);
+
+    public void LoadScoreExchange(string path) => ReplaceScore(MusicScoreExchange.ReadAutoFile(path));
 
     public void SaveSelectedPatch(string path) => InstrumentPatchStore.SavePatch(path, SelectedPatch);
 
