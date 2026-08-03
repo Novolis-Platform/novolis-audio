@@ -68,8 +68,9 @@ public static class ScorePdfExporter
                     {
                         var end = Math.Min(score.BarCount, bar + barsPerSystem);
                         var barStart = bar;
-                        col.Item().Height(160).Svg(size =>
-                            BuildGrandStaffSvg(score, barStart, end, size.Width, size.Height));
+                        var systemH = Math.Max(160f, OrchestralSystemHeight(score));
+                        col.Item().Height(systemH).Svg(size =>
+                            BuildOrchestralSystemSvg(score, barStart, end, size.Width, size.Height));
                     }
 
                     col.Item().PaddingTop(8).Text("Piano roll").FontSize(14).SemiBold();
@@ -113,60 +114,116 @@ public static class ScorePdfExporter
         }).GeneratePdf();
     }
 
-    internal static string BuildGrandStaffSvg(MusicScore score, int barStart, int barEnd, float width, float height)
+    internal static float OrchestralSystemHeight(MusicScore score)
+    {
+        const float spacing = 7f;
+        const float partGap = 16f;
+        if (score.Tracks.Count == 0)
+            return 150f;
+        float h = 20f;
+        foreach (var t in score.Tracks)
+            h += (t.Clef is ScoreClef.Grand ? 4 * spacing + 24 + 4 * spacing : 4 * spacing + 6) + partGap;
+        return h;
+    }
+
+    internal static string BuildOrchestralSystemSvg(MusicScore score, int barStart, int barEnd, float width, float height)
     {
         var sb = new StringBuilder();
         sb.Append(CultureInfo.InvariantCulture,
             $"<svg xmlns='http://www.w3.org/2000/svg' width='{width}' height='{height}' viewBox='0 0 {width} {height}'>");
         sb.Append("<rect width='100%' height='100%' fill='white'/>");
 
-        const float left = 48f;
+        const float left = 96f;
         var right = width - 8f;
-        const float trebleTop = 18f;
-        const float bassTop = 92f;
         const float spacing = 7f;
+        const float partGap = 16f;
         var bars = Math.Max(1, barEnd - barStart);
         var beatWidth = (right - left) / (bars * score.BeatsPerBar);
 
-        AppendStaff(sb, left, right, trebleTop, spacing);
-        AppendStaff(sb, left, right, bassTop, spacing);
-        Line(sb, left, trebleTop, left, bassTop + 4 * spacing, "#111", 1.5f);
+        var tracks = score.Tracks.Count > 0
+            ? score.Tracks.ToList()
+            : [new ScoreTrack("Piano", "keys.grand-soft", clef: ScoreClef.Grand)];
 
+        Line(sb, 14, 8, 14, height - 10, "#222", 3f);
+        Line(sb, 20, 8, 20, height - 10, "#444", 1.2f);
+
+        var staffSlots = new List<(ScoreTrack Track, float TrebleTop, float? BassTop)>();
+        var cursor = 14f;
+        foreach (var track in tracks)
+        {
+            if (track.Clef is ScoreClef.Grand)
+            {
+                var trebleTop = cursor;
+                var bassTop = cursor + 4 * spacing + 20;
+                AppendStaff(sb, left, right, trebleTop, spacing);
+                AppendStaff(sb, left, right, bassTop, spacing);
+                Line(sb, left, trebleTop, left, bassTop + 4 * spacing, "#111", 1.5f);
+                Text(sb, left - 22, trebleTop + 2.8f * spacing, "G", 14, "#111");
+                Text(sb, left - 22, bassTop + 2.4f * spacing, "F", 14, "#111");
+                staffSlots.Add((track, trebleTop, bassTop));
+                cursor = bassTop + 4 * spacing + partGap;
+            }
+            else
+            {
+                AppendStaff(sb, left, right, cursor, spacing);
+                Line(sb, left, cursor, left, cursor + 4 * spacing, "#111", 1.5f);
+                Text(sb, left - 22, cursor + 2.6f * spacing, ScoreNotation.ClefAscii(track.Clef), 14, "#111");
+                staffSlots.Add((track, cursor, null));
+                cursor += 4 * spacing + partGap;
+            }
+
+            var color = ScoreTrackColors.Css(track.ColorIndex);
+            Text(sb, 26, staffSlots[^1].TrebleTop + 4, track.Name, 10, color);
+        }
+
+        var systemBottom = cursor - partGap;
         for (var b = 0; b <= bars; b++)
         {
             var x = left + b * score.BeatsPerBar * beatWidth;
-            Line(sb, x, trebleTop, x, bassTop + 4 * spacing, "#111", 1.2f);
+            Line(sb, x, 8, x, systemBottom, "#111", 1.1f);
         }
 
         for (var b = barStart; b < barEnd; b++)
         {
             var x = left + (b - barStart) * score.BeatsPerBar * beatWidth + 4;
-            Text(sb, x, trebleTop - 4, $"{b + 1}", 10, "#333");
+            Text(sb, x, 12, $"{b + 1}", 9, "#333");
         }
 
-        Text(sb, 10, trebleTop + 3.2f * spacing, "G", 16, "#111");
-        Text(sb, 10, bassTop + 2.4f * spacing, "F", 16, "#111");
+        Text(sb, left + 4, 12, $"{score.BeatsPerBar}/{score.BeatUnit}  q={score.TempoBpm:0}", 9, "#555");
 
         var startBeat = barStart * score.BeatsPerBar;
         var endBeat = barEnd * score.BeatsPerBar;
         foreach (var note in score.Notes.Where(n => n.StartBeat < endBeat && n.EndBeat > startBeat))
         {
+            var track = score.FindTrack(note.TrackId) ?? tracks[0];
+            var slot = staffSlots.FirstOrDefault(s => s.Track.Id == track.Id);
+            if (slot.Track is null)
+                continue;
+
             var local = note.StartBeat - startBeat;
             var x = left + (float)(local * beatWidth) + 6f;
-            var bass = ScoreNotation.PreferBassStaff(note.MidiNumber);
-            var staffTop = bass ? bassTop : trebleTop;
-            var steps = StaffYSteps(note.MidiNumber, bass);
+            var useBass = ScoreNotation.UseBassStaff(track.Clef, note.MidiNumber);
+            var staffTop = useBass && slot.BassTop is { } bt ? bt : slot.TrebleTop;
+            var clef = track.Clef is ScoreClef.Grand
+                ? (useBass ? ScoreClef.Bass : ScoreClef.Treble)
+                : track.Clef;
+            var steps = (float)ScoreNotation.StaffYSteps(note.MidiNumber, clef, useBass);
             var y = staffTop + steps * (spacing / 2f);
+            var fill = ScoreTrackColors.Css(track.ColorIndex);
             AppendLedgers(sb, x + 5, y, staffTop, spacing);
             sb.Append(CultureInfo.InvariantCulture,
-                $"<ellipse cx='{x + 5}' cy='{y}' rx='5' ry='3.5' fill='{ScoreTrackColors.Css(score.FindTrack(note.TrackId)?.ColorIndex ?? 0)}'/>");
+                $"<ellipse cx='{x + 5}' cy='{y}' rx='5' ry='3.5' fill='{fill}'/>");
             if (ScoreNotation.NoteValue(note.DurationBeats) != ScoreNoteValue.Whole)
-                Line(sb, x + 10, y, x + 10, y - 18, ScoreTrackColors.Css(score.FindTrack(note.TrackId)?.ColorIndex ?? 0), 1.2f);
+                Line(sb, x + 10, y, x + 10, y - 16, fill, 1.2f);
         }
 
         sb.Append("</svg>");
         return sb.ToString();
     }
+
+    /// <summary>Legacy single grand-staff SVG (tests / callers).</summary>
+    internal static string BuildGrandStaffSvg(MusicScore score, int barStart, int barEnd, float width, float height) =>
+        BuildOrchestralSystemSvg(score, barStart, barEnd, width, height);
 
     internal static string BuildPianoRollSvg(MusicScore score, float width, float height)
     {
@@ -225,24 +282,6 @@ public static class ScorePdfExporter
     {
         var pc = midi % 12;
         return pc is 1 or 3 or 6 or 8 or 10;
-    }
-
-    static float StaffYSteps(int midi, bool bass)
-    {
-        static int WhiteIndex(int m)
-        {
-            var octave = m / 12;
-            var pc = m % 12;
-            var white = pc switch
-            {
-                0 => 0, 1 => 0, 2 => 1, 3 => 1, 4 => 2, 5 => 3, 6 => 3, 7 => 4, 8 => 4, 9 => 5, 10 => 5, 11 => 6,
-                _ => 0,
-            };
-            return octave * 7 + white;
-        }
-
-        var topMidi = bass ? 57 : 77;
-        return WhiteIndex(topMidi) - WhiteIndex(midi);
     }
 
     static void AppendStaff(StringBuilder sb, float left, float right, float top, float spacing)

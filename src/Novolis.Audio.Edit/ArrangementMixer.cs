@@ -16,9 +16,12 @@ public static class ArrangementMixer
         var frames = Math.Max(1, (int)(project.Format.SampleRate * total.TotalSeconds));
         var mix = new float[frames];
 
+        var anySolo = project.Tracks.Any(t => t.Solo);
         foreach (var track in project.Tracks)
         {
             if (track.Mute)
+                continue;
+            if (anySolo && !track.Solo)
                 continue;
 
             foreach (var clip in track.Clips)

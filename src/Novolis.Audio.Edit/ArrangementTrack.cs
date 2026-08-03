@@ -16,6 +16,7 @@ public sealed class ArrangementTrack
     public string Name { get; set; }
     public float Gain { get; set; } = 1f;
     public bool Mute { get; set; }
+    public bool Solo { get; set; }
     public IReadOnlyList<ArrangementClip> Clips => _clips;
     internal List<ArrangementClip> MutableClips => _clips;
 

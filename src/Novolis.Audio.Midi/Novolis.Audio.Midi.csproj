@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
     <PackageReference Include="QuestPDF" />
+    <PackageReference Include="MeltySynth" />
     <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
     <ProjectReference Include="..\Novolis.Audio.MusicTheory\Novolis.Audio.MusicTheory.csproj" />
   </ItemGroup>

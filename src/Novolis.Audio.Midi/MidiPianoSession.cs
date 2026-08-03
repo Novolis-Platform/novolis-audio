@@ -14,7 +14,7 @@ public sealed class MidiPianoSession
     {
         Bank = bank ?? InstrumentBank.CreateDefault();
         Format = format ?? new PcmFormat(44_100, Channels: 1, PcmSampleFormat.Int16);
-        Score = score ?? MusicScore.CreateDemo();
+        Score = score ?? MusicScore.CreateCinematicFanfare();
         Score.EnsureDefaultTrack();
         var patchId = Score.ActiveTrack?.PatchId ?? Score.InstrumentPatchId;
         SelectedPatch = Bank.Find(patchId ?? "") ?? Bank.Patches[0];

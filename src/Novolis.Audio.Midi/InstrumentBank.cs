@@ -43,7 +43,7 @@ public sealed class InstrumentBank
         return true;
     }
 
-    /// <summary>Built-in bank with many playable sounds (parametric synth, not sample packs).</summary>
+    /// <summary>Built-in bank (SoundFont GM mapping preferred at render time; params are fallback).</summary>
     public static InstrumentBank CreateDefault()
     {
         var list = new List<InstrumentPatch>();
@@ -62,16 +62,16 @@ public sealed class InstrumentBank
             float gain = 0.28f) =>
             list.Add(new InstrumentPatch(id, name, category, wave, a, d, s, r, bright, detune, gain));
 
-        // Keys
-        Add("keys.grand-soft", "Grand Soft", "Keys", SynthWaveform.Sine, 0.008f, 0.35f, 0.35f, 0.55f, 0.35f, 0, 0.3f);
-        Add("keys.bright-piano", "Bright Piano", "Keys", SynthWaveform.Triangle, 0.005f, 0.28f, 0.25f, 0.4f, 0.75f, 3, 0.28f);
-        Add("keys.electric", "Electric Piano", "Keys", SynthWaveform.Bell, 0.01f, 0.4f, 0.4f, 0.5f, 0.65f, 6, 0.26f);
-        Add("keys.clav", "Clavinet", "Keys", SynthWaveform.Pulse, 0.003f, 0.12f, 0.2f, 0.12f, 0.85f, 0, 0.24f);
-        Add("keys.harpsichord", "Harpsichord", "Keys", SynthWaveform.Saw, 0.002f, 0.18f, 0.15f, 0.08f, 0.7f, 0, 0.22f);
-        Add("keys.pipe-organ", "Pipe Organ", "Keys", SynthWaveform.Organ, 0.04f, 0.1f, 0.85f, 0.3f, 0.55f, 2, 0.25f);
-        Add("keys.reed-organ", "Reed Organ", "Keys", SynthWaveform.Square, 0.05f, 0.12f, 0.8f, 0.25f, 0.45f, 0, 0.22f);
-        Add("keys.accordion", "Accordion", "Keys", SynthWaveform.Organ, 0.03f, 0.15f, 0.75f, 0.2f, 0.6f, 8, 0.24f);
-        Add("keys.celesta", "Celesta", "Keys", SynthWaveform.Bell, 0.005f, 0.5f, 0.15f, 0.7f, 0.8f, 0, 0.22f);
+        // Keys (piano ids use additive hammer model; organs/clav keep their wave)
+        Add("keys.grand-soft", "Grand Soft", "Keys", SynthWaveform.Sine, 0.004f, 0.42f, 0.28f, 0.7f, 0.42f, 0, 0.34f);
+        Add("keys.bright-piano", "Bright Piano", "Keys", SynthWaveform.Triangle, 0.003f, 0.32f, 0.22f, 0.5f, 0.78f, 2, 0.32f);
+        Add("keys.electric", "Electric Piano", "Keys", SynthWaveform.Bell, 0.008f, 0.45f, 0.38f, 0.55f, 0.62f, 5, 0.28f);
+        Add("keys.clav", "Clavinet", "Keys", SynthWaveform.Pulse, 0.002f, 0.1f, 0.18f, 0.1f, 0.88f, 0, 0.26f);
+        Add("keys.harpsichord", "Harpsichord", "Keys", SynthWaveform.Saw, 0.001f, 0.16f, 0.12f, 0.08f, 0.72f, 0, 0.24f);
+        Add("keys.pipe-organ", "Pipe Organ", "Keys", SynthWaveform.Organ, 0.04f, 0.1f, 0.88f, 0.35f, 0.55f, 2, 0.28f);
+        Add("keys.reed-organ", "Reed Organ", "Keys", SynthWaveform.Square, 0.05f, 0.12f, 0.82f, 0.28f, 0.48f, 0, 0.24f);
+        Add("keys.accordion", "Accordion", "Keys", SynthWaveform.Organ, 0.03f, 0.15f, 0.78f, 0.22f, 0.58f, 8, 0.26f);
+        Add("keys.celesta", "Celesta", "Keys", SynthWaveform.Bell, 0.004f, 0.55f, 0.12f, 0.8f, 0.82f, 0, 0.24f);
 
         // Leads
         Add("lead.soft-sine", "Soft Sine", "Leads", SynthWaveform.Sine, 0.02f, 0.1f, 0.7f, 0.2f, 0.3f, 0, 0.3f);
@@ -118,7 +118,9 @@ public sealed class InstrumentBank
         // Brass / wind
         Add("brass.trumpet", "Trumpet", "Brass", SynthWaveform.Saw, 0.05f, 0.15f, 0.7f, 0.2f, 0.7f, 2, 0.22f);
         Add("brass.horn", "French Horn", "Brass", SynthWaveform.Triangle, 0.08f, 0.2f, 0.75f, 0.3f, 0.4f, 0, 0.24f);
+        Add("brass.trombone", "Trombone", "Brass", SynthWaveform.Saw, 0.06f, 0.18f, 0.72f, 0.28f, 0.55f, 1, 0.24f);
         Add("brass.synth", "Synth Brass", "Brass", SynthWaveform.Saw, 0.04f, 0.18f, 0.65f, 0.22f, 0.8f, 10, 0.2f);
+        Add("orch.timpani", "Timpani", "Orchestra", SynthWaveform.Kick, 0.002f, 0.35f, 0.1f, 0.45f, 0.25f, 0, 0.4f);
         Add("wind.flute", "Flute", "Wind", SynthWaveform.Sine, 0.08f, 0.12f, 0.75f, 0.2f, 0.35f, 1, 0.26f);
         Add("wind.clarinet", "Clarinet", "Wind", SynthWaveform.Square, 0.06f, 0.15f, 0.7f, 0.22f, 0.45f, 0, 0.22f);
         Add("wind.oboe", "Oboe", "Wind", SynthWaveform.Saw, 0.07f, 0.16f, 0.65f, 0.2f, 0.55f, 0, 0.2f);

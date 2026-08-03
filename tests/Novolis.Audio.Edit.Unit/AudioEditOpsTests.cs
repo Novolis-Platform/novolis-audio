@@ -32,6 +32,21 @@ public sealed class AudioEditOpsTests
     }
 
     [Test]
+    public async Task MoveClipToTrack_RelocatesClip()
+    {
+        var project = new MusicProject("Move");
+        var a = AudioEditOps.AddTrack(project, "A");
+        var b = AudioEditOps.AddTrack(project, "B");
+        var tone = AudioEditOps.AddTone(project, "Tone", 220, TimeSpan.FromSeconds(0.4));
+        var clip = AudioEditOps.PlaceClip(project, a, tone, TimeSpan.FromMilliseconds(100));
+        var ok = AudioEditOps.MoveClipToTrack(project, clip.Id, b.Id, TimeSpan.FromMilliseconds(250));
+        await Assert.That(ok).IsTrue();
+        await Assert.That(a.Clips.Count).IsEqualTo(0);
+        await Assert.That(b.Clips.Count).IsEqualTo(1);
+        await Assert.That(b.Clips[0].TimelineStart).IsEqualTo(TimeSpan.FromMilliseconds(250));
+    }
+
+    [Test]
     public async Task ExportWav_WritesFile()
     {
         var dir = Path.Combine(Path.GetTempPath(), "novolis-audio-edit-" + Guid.NewGuid().ToString("N"));
