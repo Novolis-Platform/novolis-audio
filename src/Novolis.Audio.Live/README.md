@@ -48,4 +48,4 @@ var snapshot = session.CreateSnapshot();
 | [`Novolis.Audio.Live.Render`](../Novolis.Audio.Live.Render/README.md) | Oscillator audio engine |
 | [`Novolis.Audio.Live.Visuals`](../Novolis.Audio.Live.Visuals/README.md) | UI projections |
 | [LiveStudio](../../../novolis-apps/src/LiveStudio) | Host + studio dashboard |
-| [LiveAvalonia](../../../novolis-avalonia/samples/LiveAvalonia) | Sample app |
+| [Live Studio](../../../novolis-apps/src/LiveStudio) | Product host |
