@@ -2,7 +2,7 @@ using Novolis.Audio.Core;
 
 namespace Novolis.Audio.Midi;
 
-/// <summary>Interactive piano + full-score session: patch bank, score/piano-roll, record, export.</summary>
+/// <summary>Interactive piano + multi-track score session.</summary>
 public sealed class MidiPianoSession
 {
     readonly Dictionary<int, DateTimeOffset> _held = [];
@@ -15,9 +15,13 @@ public sealed class MidiPianoSession
         Bank = bank ?? InstrumentBank.CreateDefault();
         Format = format ?? new PcmFormat(44_100, Channels: 1, PcmSampleFormat.Int16);
         Score = score ?? MusicScore.CreateDemo();
-        SelectedPatch = Bank.Find(Score.InstrumentPatchId ?? "") ?? Bank.Patches[0];
+        Score.EnsureDefaultTrack();
+        var patchId = Score.ActiveTrack?.PatchId ?? Score.InstrumentPatchId;
+        SelectedPatch = Bank.Find(patchId ?? "") ?? Bank.Patches[0];
+        if (Score.ActiveTrack is { } track)
+            track.PatchId = SelectedPatch.Id;
         Score.InstrumentPatchId = SelectedPatch.Id;
-        Score.InstrumentName = SelectedPatch.Name;
+        Score.InstrumentName = Score.ActiveTrack?.Name ?? SelectedPatch.Name;
         Score.Changed += () => Changed?.Invoke();
     }
 
@@ -26,29 +30,61 @@ public sealed class MidiPianoSession
     public MusicScore Score { get; }
     public InstrumentPatch SelectedPatch { get; private set; }
     public bool IsRecording { get; private set; }
+    public bool IsPlaying { get; private set; }
+    public double PlayheadBeat { get; private set; }
     public Guid? SelectedNoteId { get; private set; }
     public IReadOnlyCollection<int> HeldMidiNumbers => _held.Keys;
-
-    /// <summary>Timed view of the score (for MIDI I/O / synth).</summary>
     public MidiSequence Sequence => Score.ToSequence();
-
     public event Action? Changed;
+
+    public void SelectTrack(Guid trackId)
+    {
+        Score.SelectTrack(trackId);
+        if (Score.ActiveTrack is { } track && Bank.Find(track.PatchId) is { } patch)
+            SelectedPatch = patch;
+        Changed?.Invoke();
+    }
 
     public void SelectPatch(InstrumentPatch patch)
     {
         ArgumentNullException.ThrowIfNull(patch);
         SelectedPatch = patch;
+        Score.EnsureDefaultTrack();
+        if (Score.ActiveTrack is { } track)
+        {
+            track.PatchId = patch.Id;
+            track.Name = string.IsNullOrWhiteSpace(track.Name) ? patch.Name : track.Name;
+        }
+
         Score.InstrumentPatchId = patch.Id;
-        Score.InstrumentName = patch.Name;
+        Score.InstrumentName = Score.ActiveTrack?.Name ?? patch.Name;
+        Score.NotifyChanged();
         Changed?.Invoke();
     }
 
     public void SelectPatchById(string id) => SelectPatch(Bank.GetRequired(id));
 
+    public void SetTempoBpm(double bpm)
+    {
+        Score.SetTempoBpm(bpm);
+        Changed?.Invoke();
+    }
+
     public void SelectNote(Guid? id)
     {
         SelectedNoteId = id;
         Changed?.Invoke();
+    }
+
+    public void SetPlayhead(double beat, bool playing)
+    {
+        PlayheadBeat = Math.Max(0, beat);
+        IsPlaying = playing;
+    }
+
+    public void StopPlaybackUi()
+    {
+        IsPlaying = false;
     }
 
     public void StartRecording(bool clearExisting = false)
@@ -58,8 +94,8 @@ public sealed class MidiPianoSession
         _recordOn.Clear();
         _recordStarted = DateTimeOffset.UtcNow;
         _recordCursorBeat = clearExisting || Score.Notes.Count == 0
-            ? 0
-            : Score.Notes.Max(n => n.EndBeat);
+            ? PlayheadBeat
+            : Math.Max(PlayheadBeat, Score.ContentEndBeat);
         IsRecording = true;
         Changed?.Invoke();
     }
@@ -113,8 +149,7 @@ public sealed class MidiPianoSession
             NoteOff(midi);
     }
 
-    public PcmBuffer RenderSequence() =>
-        MidiSynth.RenderSequence(Format, SelectedPatch, Sequence);
+    public PcmBuffer RenderSequence() => MidiSynth.RenderScore(Format, Bank, Score);
 
     public void SaveMidi(string path) => StandardMidiFile.Write(path, Sequence);
 
@@ -153,8 +188,7 @@ public sealed class MidiPianoSession
             return;
         var startSec = (onAt - _recordStarted.Value).TotalMinutes * Score.TempoBpm;
         var durSec = Math.Max(Score.SnapBeats, (offAt - onAt).TotalMinutes * Score.TempoBpm);
-        // Place after previous recorded material when recording into existing score
         var start = Score.Snap(_recordCursorBeat + startSec);
-        Score.Place(midi, start, Score.Snap(durSec));
+        Score.Place(midi, start, Score.Snap(durSec), trackId: Score.ActiveTrackId);
     }
 }

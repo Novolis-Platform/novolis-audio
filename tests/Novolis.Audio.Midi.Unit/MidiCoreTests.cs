@@ -86,7 +86,11 @@ public sealed class MidiCoreTests
     public async Task Score_roundtrips_through_midi_and_pdf()
     {
         var score = MusicScore.CreateDemo();
-        await Assert.That(score.Notes.Count).IsGreaterThan(5);
+        await Assert.That(score.Notes.Count).IsGreaterThan(40);
+        await Assert.That(score.Tracks.Count).IsEqualTo(3);
+        var bar0 = score.Notes.Count(n => n.StartBeat < 0.01);
+        await Assert.That(bar0).IsGreaterThanOrEqualTo(5);
+
         var seq = score.ToSequence();
         var reloaded = new MusicScore();
         reloaded.ReplaceFromSequence(seq);
@@ -95,5 +99,24 @@ public sealed class MidiCoreTests
         var pdf = ScorePdfExporter.ExportToBytes(score);
         await Assert.That(pdf.Length).IsGreaterThan(500);
         await Assert.That(pdf[0]).IsEqualTo((byte)'%'); // %PDF
+    }
+
+    [Test]
+    public async Task Multi_track_render_mixes_instruments()
+    {
+        var score = MusicScore.CreateDemo();
+        var bank = InstrumentBank.CreateDefault();
+        var format = new PcmFormat(22_050, 1, PcmSampleFormat.Int16);
+        var pcm = MidiSynth.RenderScore(format, bank, score);
+        await Assert.That(pcm.Duration.TotalSeconds).IsGreaterThan(2);
+    }
+
+    [Test]
+    public async Task Harmony_builds_seventh_voicings()
+    {
+        var tones = ScoreHarmony.CloseVoicing(60, Novolis.Audio.MusicTheory.ChordQuality.MajorSeventh);
+        await Assert.That(tones).IsEquivalentTo([60, 64, 67, 71]);
+        var shell = ScoreHarmony.BassShell(48);
+        await Assert.That(shell).IsEquivalentTo([48, 55]);
     }
 }

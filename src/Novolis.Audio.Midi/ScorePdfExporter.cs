@@ -44,6 +44,12 @@ public static class ScorePdfExporter
                             .FontSize(11).FontColor(Colors.Grey.Darken2);
                         if (!string.IsNullOrWhiteSpace(score.Composer))
                             col.Item().Text(score.Composer).Italic().FontSize(10);
+                        if (score.Tracks.Count > 0)
+                        {
+                            col.Item().PaddingTop(4).Text(string.Join("  ·  ",
+                                    score.Tracks.Select(t => $"{t.Name} [{ScoreTrackColors.Palette[t.ColorIndex % ScoreTrackColors.Palette.Length].Name}]")))
+                                .FontSize(9).FontColor(Colors.Grey.Darken1);
+                        }
                     });
                     row.ConstantItem(120).AlignRight().Text($"{score.Notes.Count} notes\n{score.BarCount} bars")
                         .FontSize(9).FontColor(Colors.Grey.Darken1);
@@ -76,14 +82,16 @@ public static class ScorePdfExporter
                         table.ColumnsDefinition(c =>
                         {
                             c.RelativeColumn(1.2f);
+                            c.RelativeColumn(1.4f);
                             c.RelativeColumn(1);
                             c.RelativeColumn(1);
                             c.RelativeColumn(1);
-                            c.RelativeColumn(2);
+                            c.RelativeColumn(1.2f);
                         });
                         table.Header(h =>
                         {
                             h.Cell().Text("Pitch").SemiBold();
+                            h.Cell().Text("Part").SemiBold();
                             h.Cell().Text("Start").SemiBold();
                             h.Cell().Text("Dur").SemiBold();
                             h.Cell().Text("Vel").SemiBold();
@@ -91,7 +99,9 @@ public static class ScorePdfExporter
                         });
                         foreach (var n in score.Notes.OrderBy(x => x.StartBeat).ThenByDescending(x => x.MidiNumber))
                         {
+                            var part = score.FindTrack(n.TrackId)?.Name ?? "—";
                             table.Cell().Text(ScoreNotation.Name(n.MidiNumber));
+                            table.Cell().Text(part);
                             table.Cell().Text(F(n.StartBeat));
                             table.Cell().Text(F(n.DurationBeats));
                             table.Cell().Text(n.Velocity.ToString(CultureInfo.InvariantCulture));
@@ -149,9 +159,9 @@ public static class ScorePdfExporter
             var y = staffTop + steps * (spacing / 2f);
             AppendLedgers(sb, x + 5, y, staffTop, spacing);
             sb.Append(CultureInfo.InvariantCulture,
-                $"<ellipse cx='{x + 5}' cy='{y}' rx='5' ry='3.5' fill='#111'/>");
+                $"<ellipse cx='{x + 5}' cy='{y}' rx='5' ry='3.5' fill='{ScoreTrackColors.Css(score.FindTrack(note.TrackId)?.ColorIndex ?? 0)}'/>");
             if (ScoreNotation.NoteValue(note.DurationBeats) != ScoreNoteValue.Whole)
-                Line(sb, x + 10, y, x + 10, y - 18, "#111", 1.2f);
+                Line(sb, x + 10, y, x + 10, y - 18, ScoreTrackColors.Css(score.FindTrack(note.TrackId)?.ColorIndex ?? 0), 1.2f);
         }
 
         sb.Append("</svg>");
@@ -202,8 +212,9 @@ public static class ScorePdfExporter
             var x = left + (float)n.StartBeat * beatW;
             var y = top + (high - n.MidiNumber) * rowH;
             var w = Math.Max(3f, (float)n.DurationBeats * beatW - 1f);
+            var fill = ScoreTrackColors.Css(score.FindTrack(n.TrackId)?.ColorIndex ?? 0);
             sb.Append(CultureInfo.InvariantCulture,
-                $"<rect x='{x}' y='{y + 1}' width='{w}' height='{rowH - 2}' rx='2' fill='#2878a0'/>");
+                $"<rect x='{x}' y='{y + 1}' width='{w}' height='{rowH - 2}' rx='2' fill='{fill}'/>");
         }
 
         sb.Append("</svg>");

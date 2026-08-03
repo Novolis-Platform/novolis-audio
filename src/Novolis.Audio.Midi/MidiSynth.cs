@@ -78,7 +78,45 @@ public static class MidiSynth
 
         var frames = Math.Max(1, (int)(format.SampleRate * duration.TotalSeconds));
         var mix = new float[frames];
+        MixSequenceInto(format, patch, sequence, mix);
+        for (var i = 0; i < mix.Length; i++)
+            mix[i] = MathF.Tanh(mix[i]);
+        return ToPcm(format, mix);
+    }
 
+    /// <summary>Renders every non-muted score track with its own patch and mixes the result.</summary>
+    public static PcmBuffer RenderScore(PcmFormat format, InstrumentBank bank, MusicScore score)
+    {
+        ArgumentNullException.ThrowIfNull(bank);
+        ArgumentNullException.ThrowIfNull(score);
+        if (format.SampleFormat != PcmSampleFormat.Int16 || format.Channels != 1)
+            throw new NotSupportedException("MidiSynth supports mono Int16 only.");
+
+        score.EnsureDefaultTrack();
+        var endBeat = Math.Max(score.TotalBeats, score.ContentEndBeat);
+        var duration = TimeSpan.FromMinutes(endBeat / Math.Max(40, score.TempoBpm))
+                       + TimeSpan.FromSeconds(0.6);
+        var frames = Math.Max(1, (int)(format.SampleRate * duration.TotalSeconds));
+        var mix = new float[frames];
+
+        foreach (var track in score.Tracks)
+        {
+            if (track.Mute)
+                continue;
+            var patch = bank.Find(track.PatchId) ?? bank.Patches[0];
+            var seq = score.ToSequence(track.Id);
+            if (seq.Notes.Count == 0)
+                continue;
+            MixSequenceInto(format, patch, seq, mix);
+        }
+
+        for (var i = 0; i < mix.Length; i++)
+            mix[i] = MathF.Tanh(mix[i]);
+        return ToPcm(format, mix);
+    }
+
+    static void MixSequenceInto(PcmFormat format, InstrumentPatch patch, MidiSequence sequence, float[] mix)
+    {
         foreach (var note in sequence.Notes)
         {
             var notePcm = RenderNote(format, patch, note.MidiNumber, note.Duration, note.Velocity);
@@ -87,17 +125,11 @@ public static class MidiSynth
             for (var i = 0; i < notePcm.FrameCount; i++)
             {
                 var dst = start + i;
-                if (dst < 0 || dst >= frames)
+                if (dst < 0 || dst >= mix.Length)
                     continue;
                 mix[dst] += BinaryPrimitives.ReadInt16LittleEndian(src.Slice(i * 2, 2)) / (float)short.MaxValue;
             }
         }
-
-        // Soft clip
-        for (var i = 0; i < mix.Length; i++)
-            mix[i] = MathF.Tanh(mix[i]);
-
-        return ToPcm(format, mix);
     }
 
     static float Envelope(float t, float attack, float decay, float sustain, float hold, float release)
