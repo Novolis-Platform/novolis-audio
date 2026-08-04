@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Catalog</RootNamespace>
+    <AssemblyName>Novolis.Audio.Catalog</AssemblyName>
+    <PackageId>Novolis.Audio.Catalog</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>
+      Browse curated free/CC media collections, download/cache licensed items, and run explore transformers
+      (PCM decode, audio→MIDI sketch). Does not scrape commercial catalogs (Artlist, Epidemic, …).
+    </Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>audio;catalog;media;download;transformer;midi;mixkit;mutopia</PackageTags>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="NAudio" />
+    <ProjectReference Include="..\Novolis.Audio.Core\Novolis.Audio.Core.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Midi\Novolis.Audio.Midi.csproj" />
+  </ItemGroup>
+</Project>
