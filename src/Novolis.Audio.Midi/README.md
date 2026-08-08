@@ -8,7 +8,7 @@
 
 # Novolis.Audio.Midi
 
-MIDI piano instruments, beat-grid **music score / piano-roll**, Standard MIDI File I/O, patch libraries, and **QuestPDF** full-score export.
+MIDI piano instruments, beat-grid **music score / piano-roll**, Standard MIDI File I/O, patch libraries, and **SkiaSharp** full-score PDF export.
 
 ## Install
 
@@ -23,7 +23,6 @@ dotnet add package Novolis.Audio.Midi
 ```csharp
 using Novolis.Audio.Midi;
 
-ScorePdfExporter.EnsureCommunityLicense();
 var score = MusicScore.CreateDemo();
 ScorePdfExporter.ExportToFile(score, @"d:\temp\score.pdf");
 ```

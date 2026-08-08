@@ -1,17 +1,22 @@
 using System.Globalization;
 using System.Text;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
+using SkiaSharp;
 
 namespace Novolis.Audio.Midi;
 
-/// <summary>Exports a <see cref="MusicScore"/> as a printable full score + piano-roll PDF via QuestPDF.</summary>
+/// <summary>Exports a <see cref="MusicScore"/> as a printable full score + piano-roll PDF via SkiaSharp.</summary>
 public static class ScorePdfExporter
 {
-    /// <summary>Call once at app startup when using PDF export.</summary>
-    public static void EnsureCommunityLicense() =>
-        QuestPDF.Settings.License = LicenseType.Community;
+    const float PageWidth = 842f; // A4 landscape, points
+    const float PageHeight = 595f;
+    const float Margin = 36f;
+    const float ColumnSpacing = 16f;
+    const float FooterHeight = 20f;
+    const int BarsPerSystem = 4;
+
+    static readonly SKColor GreyDarken1 = new(0x75, 0x75, 0x75);
+    static readonly SKColor GreyDarken2 = new(0x61, 0x61, 0x61);
+    static readonly SKColor GreyLighten2 = new(0xEE, 0xEE, 0xEE);
 
     public static void ExportToFile(MusicScore score, string outputPath)
     {
@@ -26,92 +31,308 @@ public static class ScorePdfExporter
     public static byte[] ExportToBytes(MusicScore score)
     {
         ArgumentNullException.ThrowIfNull(score);
-        EnsureCommunityLicense();
 
-        return Document.Create(container =>
+        using var regular = LoadTypeface(bold: false, italic: false);
+        using var bold = LoadTypeface(bold: true, italic: false);
+        using var italic = LoadTypeface(bold: false, italic: true);
+
+        var contentWidth = PageWidth - Margin * 2f;
+        var headerHeight = MeasureHeaderHeight(score);
+        var contentTop = Margin + headerHeight + 12f;
+        var contentBottom = PageHeight - Margin - FooterHeight;
+
+        var flow = new PageFlow(contentTop, contentBottom);
+        BuildContent(flow, score, contentWidth, regular, bold);
+
+        using var stream = new MemoryStream();
+        using (var pdf = SKDocument.CreatePdf(stream))
         {
-            container.Page(page =>
+            ArgumentNullException.ThrowIfNull(pdf);
+            var pageCount = flow.PageCount;
+            for (var p = 0; p < pageCount; p++)
             {
-                page.Size(PageSizes.A4.Landscape());
-                page.Margin(36);
-                page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Times New Roman"));
-                page.Header().Row(row =>
+                using var canvas = pdf.BeginPage(PageWidth, PageHeight);
+                canvas.Clear(SKColors.White);
+                DrawHeader(canvas, score, regular, bold, italic, Margin, Margin, contentWidth);
+                DrawFooter(canvas, regular, p + 1, Margin, contentWidth);
+                foreach (var item in flow.Items)
                 {
-                    row.RelativeItem().Column(col =>
-                    {
-                        col.Item().Text(score.Title).FontSize(20).SemiBold();
-                        col.Item().Text($"{score.InstrumentName}  ·  {score.TempoBpm:0} BPM  ·  {score.BeatsPerBar}/{score.BeatUnit}")
-                            .FontSize(11).FontColor(Colors.Grey.Darken2);
-                        if (!string.IsNullOrWhiteSpace(score.Composer))
-                            col.Item().Text(score.Composer).Italic().FontSize(10);
-                        if (score.Tracks.Count > 0)
-                        {
-                            col.Item().PaddingTop(4).Text(string.Join("  ·  ",
-                                    score.Tracks.Select(t => $"{t.Name} [{ScoreTrackColors.Palette[t.ColorIndex % ScoreTrackColors.Palette.Length].Name}]")))
-                                .FontSize(9).FontColor(Colors.Grey.Darken1);
-                        }
-                    });
-                    row.ConstantItem(120).AlignRight().Text($"{score.Notes.Count} notes\n{score.BarCount} bars")
-                        .FontSize(9).FontColor(Colors.Grey.Darken1);
-                });
-                page.Footer().AlignCenter().Text(t =>
-                {
-                    t.Span("Novolis full score  ·  page ");
-                    t.CurrentPageNumber();
-                });
+                    if (item.Page != p)
+                        continue;
+                    item.Draw(canvas, Margin, item.Y, contentWidth);
+                }
 
-                page.Content().PaddingTop(12).Column(col =>
-                {
-                    col.Spacing(16);
-                    const int barsPerSystem = 4;
-                    for (var bar = 0; bar < score.BarCount; bar += barsPerSystem)
-                    {
-                        var end = Math.Min(score.BarCount, bar + barsPerSystem);
-                        var barStart = bar;
-                        var systemH = Math.Max(160f, OrchestralSystemHeight(score));
-                        col.Item().Height(systemH).Svg(size =>
-                            BuildOrchestralSystemSvg(score, barStart, end, size.Width, size.Height));
-                    }
+                pdf.EndPage();
+            }
 
-                    col.Item().PaddingTop(8).Text("Piano roll").FontSize(14).SemiBold();
-                    col.Item().Height(220).Border(1).BorderColor(Colors.Grey.Lighten2)
-                        .Svg(size => BuildPianoRollSvg(score, size.Width, size.Height));
+            pdf.Close();
+        }
 
-                    col.Item().PaddingTop(8).Text("Note list").FontSize(12).SemiBold();
-                    col.Item().Table(table =>
-                    {
-                        table.ColumnsDefinition(c =>
-                        {
-                            c.RelativeColumn(1.2f);
-                            c.RelativeColumn(1.4f);
-                            c.RelativeColumn(1);
-                            c.RelativeColumn(1);
-                            c.RelativeColumn(1);
-                            c.RelativeColumn(1.2f);
-                        });
-                        table.Header(h =>
-                        {
-                            h.Cell().Text("Pitch").SemiBold();
-                            h.Cell().Text("Part").SemiBold();
-                            h.Cell().Text("Start").SemiBold();
-                            h.Cell().Text("Dur").SemiBold();
-                            h.Cell().Text("Vel").SemiBold();
-                            h.Cell().Text("Value").SemiBold();
-                        });
-                        foreach (var n in score.Notes.OrderBy(x => x.StartBeat).ThenByDescending(x => x.MidiNumber))
-                        {
-                            var part = score.FindTrack(n.TrackId)?.Name ?? "—";
-                            table.Cell().Text(ScoreNotation.Name(n.MidiNumber));
-                            table.Cell().Text(part);
-                            table.Cell().Text(F(n.StartBeat));
-                            table.Cell().Text(F(n.DurationBeats));
-                            table.Cell().Text(n.Velocity.ToString(CultureInfo.InvariantCulture));
-                            table.Cell().Text(ScoreNotation.NoteValue(n.DurationBeats).ToString());
-                        }
-                    });
-                });
-            });
-        }).GeneratePdf();
+        return stream.ToArray();
+    }
+
+    static void BuildContent(
+        PageFlow flow,
+        MusicScore score,
+        float width,
+        SKTypeface regular,
+        SKTypeface bold)
+    {
+        var systemH = Math.Max(160f, OrchestralSystemHeight(score));
+        var first = true;
+        for (var bar = 0; bar < score.BarCount; bar += BarsPerSystem)
+        {
+            var barStart = bar;
+            var end = Math.Min(score.BarCount, bar + BarsPerSystem);
+            var spacing = first ? 0f : ColumnSpacing;
+            first = false;
+            flow.Place(systemH, spacing, (canvas, x, y, w) =>
+                DrawSvgMarkup(canvas, BuildOrchestralSystemSvg(score, barStart, end, w, systemH), x, y, w, systemH));
+        }
+
+        const float sectionTitleSize = 14f;
+        flow.Place(sectionTitleSize * 1.2f, ColumnSpacing + 8f, (canvas, x, y, _) =>
+            DrawText(canvas, "Piano roll", bold, sectionTitleSize, SKColors.Black, x, y));
+
+        const float pianoRollHeight = 220f;
+        flow.Place(pianoRollHeight, ColumnSpacing, (canvas, x, y, w) =>
+            DrawBorderedSvg(canvas, BuildPianoRollSvg(score, w, pianoRollHeight), x, y, w, pianoRollHeight));
+
+        const float noteListTitleSize = 12f;
+        flow.Place(noteListTitleSize * 1.2f, ColumnSpacing + 8f, (canvas, x, y, _) =>
+            DrawText(canvas, "Note list", bold, noteListTitleSize, SKColors.Black, x, y));
+
+        BuildNoteTable(flow, score, width, regular, bold);
+    }
+
+    static void BuildNoteTable(
+        PageFlow flow,
+        MusicScore score,
+        float width,
+        SKTypeface regular,
+        SKTypeface bold)
+    {
+        var fractions = new[] { 1.2f, 1.4f, 1f, 1f, 1f, 1.2f };
+        var colWidths = ResolveColumnWidths(fractions, width);
+        var headers = new[] { "Pitch", "Part", "Start", "Dur", "Vel", "Value" };
+
+        const float fontSize = 9f;
+        const float lineHeight = 1.3f;
+        const float padding = 4f;
+        var rowHeight = fontSize * lineHeight + padding * 2f;
+
+        void PlaceHeaderRow(float spacingBefore) =>
+            flow.Place(rowHeight, spacingBefore, (canvas, x, y, _) =>
+                DrawTableRow(canvas, x, y, headers, colWidths, bold, fontSize, padding));
+
+        PlaceHeaderRow(ColumnSpacing);
+
+        foreach (var n in score.Notes.OrderBy(x => x.StartBeat).ThenByDescending(x => x.MidiNumber))
+        {
+            if (!flow.WouldFit(rowHeight))
+            {
+                flow.ForcePageBreak();
+                PlaceHeaderRow(0f);
+            }
+
+            var part = score.FindTrack(n.TrackId)?.Name ?? "—";
+            var cells = new[]
+            {
+                ScoreNotation.Name(n.MidiNumber),
+                part,
+                F(n.StartBeat),
+                F(n.DurationBeats),
+                n.Velocity.ToString(CultureInfo.InvariantCulture),
+                ScoreNotation.NoteValue(n.DurationBeats).ToString(),
+            };
+            flow.Place(rowHeight, 0f, (canvas, x, y, _) =>
+                DrawTableRow(canvas, x, y, cells, colWidths, regular, fontSize, padding));
+        }
+    }
+
+    static void DrawTableRow(
+        SKCanvas canvas,
+        float x,
+        float y,
+        IReadOnlyList<string> cells,
+        float[] colWidths,
+        SKTypeface typeface,
+        float fontSize,
+        float padding)
+    {
+        using var paint = new SKPaint { IsAntialias = true, Color = SKColors.Black };
+        using var font = new SKFont(typeface, fontSize);
+        var cx = x;
+        for (var c = 0; c < colWidths.Length; c++)
+        {
+            var text = c < cells.Count ? cells[c] : string.Empty;
+            canvas.DrawText(text, cx + padding, y + padding + fontSize * 0.85f, SKTextAlign.Left, font, paint);
+            cx += colWidths[c];
+        }
+    }
+
+    static float[] ResolveColumnWidths(float[] fractions, float totalWidth)
+    {
+        var sum = fractions.Sum();
+        var widths = new float[fractions.Length];
+        for (var i = 0; i < fractions.Length; i++)
+            widths[i] = totalWidth * fractions[i] / sum;
+        return widths;
+    }
+
+    static float MeasureHeaderHeight(MusicScore score)
+    {
+        const float titleLine = 20f * 1.2f;
+        const float metaLine = 11f * 1.2f;
+        var h = titleLine + metaLine;
+        if (!string.IsNullOrWhiteSpace(score.Composer))
+            h += 10f * 1.2f;
+        if (score.Tracks.Count > 0)
+            h += 4f + 9f * 1.2f;
+        var right = 9f * 1.2f * 2f;
+        return Math.Max(h, right);
+    }
+
+    static void DrawHeader(
+        SKCanvas canvas,
+        MusicScore score,
+        SKTypeface regular,
+        SKTypeface bold,
+        SKTypeface italic,
+        float x,
+        float y,
+        float width)
+    {
+        var cursor = y;
+        DrawText(canvas, score.Title, bold, 20f, SKColors.Black, x, cursor);
+        cursor += 20f * 1.2f;
+        DrawText(canvas,
+            $"{score.InstrumentName}  \u00b7  {score.TempoBpm:0} BPM  \u00b7  {score.BeatsPerBar}/{score.BeatUnit}",
+            regular, 11f, GreyDarken2, x, cursor);
+        cursor += 11f * 1.2f;
+        if (!string.IsNullOrWhiteSpace(score.Composer))
+        {
+            DrawText(canvas, score.Composer, italic, 10f, SKColors.Black, x, cursor);
+            cursor += 10f * 1.2f;
+        }
+
+        if (score.Tracks.Count > 0)
+        {
+            cursor += 4f;
+            var line = string.Join("  \u00b7  ", score.Tracks.Select(t =>
+                $"{t.Name} [{ScoreTrackColors.Palette[t.ColorIndex % ScoreTrackColors.Palette.Length].Name}]"));
+            DrawText(canvas, line, regular, 9f, GreyDarken1, x, cursor);
+        }
+
+        var rightEdge = x + width;
+        DrawText(canvas, $"{score.Notes.Count} notes", regular, 9f, GreyDarken1, rightEdge, y, SKTextAlign.Right);
+        DrawText(canvas, $"{score.BarCount} bars", regular, 9f, GreyDarken1, rightEdge, y + 9f * 1.2f, SKTextAlign.Right);
+    }
+
+    static void DrawFooter(SKCanvas canvas, SKTypeface regular, int pageNumber, float x, float width)
+    {
+        var text = $"Novolis full score  \u00b7  page {pageNumber}";
+        var y = PageHeight - Margin - FooterHeight + 4f;
+        DrawText(canvas, text, regular, 10f, SKColors.Black, x + width / 2f, y, SKTextAlign.Center);
+    }
+
+    static void DrawText(
+        SKCanvas canvas,
+        string text,
+        SKTypeface typeface,
+        float size,
+        SKColor color,
+        float x,
+        float y,
+        SKTextAlign align = SKTextAlign.Left)
+    {
+        using var font = new SKFont(typeface, size);
+        using var paint = new SKPaint { IsAntialias = true, Color = color };
+        canvas.DrawText(text, x, y + size * 0.85f, align, font, paint);
+    }
+
+    static void DrawSvgMarkup(SKCanvas canvas, string svgMarkup, float x, float y, float width, float height)
+    {
+        using var svg = new Svg.Skia.SKSvg();
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(svgMarkup));
+        if (svg.Load(stream) is null || svg.Picture is null)
+            return;
+
+        var bounds = svg.Picture.CullRect;
+        if (bounds.Width <= 0f || bounds.Height <= 0f)
+            return;
+
+        var scale = Math.Min(width / bounds.Width, height / bounds.Height);
+        canvas.Save();
+        canvas.Translate(x, y);
+        canvas.Scale(scale);
+        canvas.DrawPicture(svg.Picture);
+        canvas.Restore();
+    }
+
+    static void DrawBorderedSvg(SKCanvas canvas, string svgMarkup, float x, float y, float width, float height)
+    {
+        using var border = new SKPaint
+        {
+            IsAntialias = true,
+            Color = GreyLighten2,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 1f,
+        };
+        canvas.DrawRect(x, y, width, height, border);
+        DrawSvgMarkup(canvas, svgMarkup, x, y, width, height);
+    }
+
+    static SKTypeface LoadTypeface(bool bold, bool italic) =>
+        SKTypeface.FromFamilyName(
+            "Times New Roman",
+            bold ? SKFontStyleWeight.SemiBold : SKFontStyleWeight.Normal,
+            SKFontStyleWidth.Normal,
+            italic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+    /// <summary>Flows fixed-height items top-to-bottom across pages, breaking only between items.</summary>
+    sealed class PageFlow
+    {
+        readonly float _contentTop;
+        readonly float _contentBottom;
+        float _y;
+        bool _hasContent;
+
+        public PageFlow(float contentTop, float contentBottom)
+        {
+            _contentTop = contentTop;
+            _contentBottom = contentBottom;
+            _y = contentTop;
+        }
+
+        public readonly List<(int Page, float Y, Action<SKCanvas, float, float, float> Draw)> Items = [];
+
+        public int Page { get; private set; }
+        public int PageCount => Page + 1;
+
+        public void Place(float height, float spacingBefore, Action<SKCanvas, float, float, float> draw)
+        {
+            var startY = _y + (_hasContent ? spacingBefore : 0f);
+            if (startY + height > _contentBottom && _hasContent)
+            {
+                Page++;
+                _y = _contentTop;
+                startY = _y;
+            }
+
+            Items.Add((Page, startY, draw));
+            _y = startY + height;
+            _hasContent = true;
+        }
+
+        public bool WouldFit(float height) => _y + height <= _contentBottom + 0.01f;
+
+        public void ForcePageBreak()
+        {
+            Page++;
+            _y = _contentTop;
+            _hasContent = false;
+        }
     }
 
     internal static float OrchestralSystemHeight(MusicScore score)
