@@ -25,9 +25,15 @@
           Condition="'$(RunAudioCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
           Inputs="@(AudioCodegenInput)"
           Outputs="@(AudioCodegenOutput)">
-    <Exec Command="dotnet run --project &quot;$(AudioCodegenProject)&quot; -- run generate"
+    <!-- Forward ProjectRef mode so nested codegen restores sibling Novolis.CodeGen.* projects. -->
+    <PropertyGroup>
+      <_AudioCodegenProjectRefArg Condition="'$(NovolisUseProjectReferences)' == 'true'"> -p:NovolisUseProjectReferences=true</_AudioCodegenProjectRefArg>
+      <_AudioCodegenProjectRefArg Condition="'$(SolutionName)' == 'Novolis.Platform'"> -p:NovolisUseProjectReferences=true</_AudioCodegenProjectRefArg>
+    </PropertyGroup>
+    <Exec Command="dotnet run --project &quot;$(AudioCodegenProject)&quot;$(_AudioCodegenProjectRefArg) -- run generate"
           WorkingDirectory="$(AudioCodegenRepoRoot)"
           StandardOutputImportance="high"
           StandardErrorImportance="high" />
   </Target>
 </Project>
+
