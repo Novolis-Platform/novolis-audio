@@ -3,6 +3,7 @@ using Novolis.Audio.Midi;
 
 namespace Novolis.Audio.Midi.Unit;
 
+[NotInParallel("midi-force-parametric")]
 public sealed class MidiCoreTests
 {
     [Test]

@@ -5,6 +5,7 @@ using Novolis.Audio.MusicTheory;
 
 namespace Novolis.Audio.Midi.Unit;
 
+[NotInParallel("midi-force-parametric")]
 public sealed class MidiCoverageTests
 {
     [Test]
