@@ -10,11 +10,23 @@
     <AssemblyName>Novolis.Audio.Voice.EdgeTts</AssemblyName>
     <PackageId>Novolis.Audio.Voice.EdgeTts</PackageId>
     <IsPackable>true</IsPackable>
+    <!-- Derived from rany2/edge-tts (LGPLv3); override repo-wide MIT. -->
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <Description>
       Online TTS client for Microsoft Edge Read Aloud (same service as edge-tts).
       Requires network access; no Edge browser or Windows install required. Returns MP3 audio.
+      Unofficial protocol adapter; LGPL-3.0 due to derivation from edge-tts.
     </Description>
-    <PackageTags>audio;tts;edge-tts;speech;read-aloud;requires-network;cross-platform</PackageTags>
+    <PackageTags>audio;tts;edge-tts;speech;read-aloud;requires-network;cross-platform;lgpl</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSES\LGPL-3.0.txt" Pack="true" PackagePath="LICENSES\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Audio.Unit" />
+  </ItemGroup>
 
 </Project>

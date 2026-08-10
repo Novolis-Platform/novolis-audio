@@ -10,12 +10,28 @@ internal static class EdgeTtsDrm
     private const long WinEpochSeconds = 11_644_473_600L;
 
     private static double _clockSkewSeconds;
+    private static Func<DateTimeOffset>? _utcNow;
+
+    /// <summary>Test hook: UTC clock used for GEC timestamps (defaults to <see cref="DateTimeOffset.UtcNow"/>).</summary>
+    internal static Func<DateTimeOffset> UtcNow
+    {
+        get => _utcNow ?? (() => DateTimeOffset.UtcNow);
+        set => _utcNow = value;
+    }
 
     public static void AdjustClockSkewSeconds(double skewSeconds) =>
         _clockSkewSeconds += skewSeconds;
 
+    public static double ClockSkewSeconds => _clockSkewSeconds;
+
+    public static void ResetForTests()
+    {
+        _clockSkewSeconds = 0;
+        _utcNow = null;
+    }
+
     public static double GetUnixTimestamp() =>
-        DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0 + _clockSkewSeconds;
+        UtcNow().ToUnixTimeMilliseconds() / 1000.0 + _clockSkewSeconds;
 
     public static string GenerateSecMsGec()
     {
@@ -50,5 +66,21 @@ internal static class EdgeTtsDrm
 
         AdjustClockSkewSeconds(serverTime.ToUnixTimeSeconds() - GetUnixTimestamp());
         return true;
+    }
+
+    public static bool TryAdjustSkewFromHeaders(IReadOnlyDictionary<string, IEnumerable<string>>? headers)
+    {
+        if (headers is null)
+            return false;
+
+        foreach (var (key, values) in headers)
+        {
+            if (!key.Equals("Date", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return TryAdjustSkewFromDateHeader(values.FirstOrDefault());
+        }
+
+        return false;
     }
 }

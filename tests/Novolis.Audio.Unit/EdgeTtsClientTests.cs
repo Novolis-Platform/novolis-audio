@@ -47,13 +47,55 @@ public class EdgeTtsClientTests
     }
 
     [Test]
-    [Skip("Network smoke: Edge Read Aloud")]
-    public async Task SynthesizeToMp3_returns_mpeg_bytes()
+    public async Task Client_options_defaults_match_edge_tts()
     {
+        var options = new EdgeTtsClientOptions();
+        await Assert.That(options.ConnectTimeout).IsEqualTo(TimeSpan.FromSeconds(10));
+        await Assert.That(options.ReceiveTimeout).IsEqualTo(TimeSpan.FromSeconds(60));
+    }
+
+    [Test]
+    public async Task SynthesizeAsync_rejects_null_or_non_writable_destination()
+    {
+        using var client = new EdgeTtsClient();
+        await Assert.That(async () => await client.SynthesizeAsync("hi", null!))
+            .ThrowsExactly<ArgumentNullException>();
+
+        await using var readOnly = new MemoryStream(new byte[] { 1 }, writable: false);
+        await Assert.That(async () => await client.SynthesizeAsync("hi", readOnly))
+            .ThrowsExactly<ArgumentException>();
+    }
+
+    [Test]
+    public async Task SaveMp3Async_and_SynthesizeToMp3_share_stream_path_signatures()
+    {
+        // Structural smoke: wrappers exist and validate args without requiring live network.
+        using var client = new EdgeTtsClient();
+        await Assert.That(async () => await client.SynthesizeToMp3Async(" "))
+            .ThrowsExactly<ArgumentException>();
+        await Assert.That(async () => await client.SaveMp3Async("hi", " "))
+            .ThrowsExactly<ArgumentException>();
+    }
+
+    [Test]
+    public async Task Live_synthesize_returns_mpeg_bytes()
+    {
+        if (!string.Equals(
+                Environment.GetEnvironmentVariable("NOVOLIS_EDGE_TTS_LIVE"),
+                "1",
+                StringComparison.Ordinal))
+        {
+            // Opt-in only — never required for ordinary CI.
+            return;
+        }
+
         using var client = new EdgeTtsClient();
         var mp3 = await client.SynthesizeToMp3Async("Hello from Novolis.");
         await Assert.That(mp3.Length).IsGreaterThan(100);
-        // MP3 frames often start with 0xFF 0xFB / 0xFF 0xF3, but Edge may prepend ID3.
         await Assert.That(mp3[0] == 0xFF || mp3[0] == (byte)'I').IsTrue();
+
+        await using var stream = new MemoryStream();
+        await client.SynthesizeAsync("Hello stream.", stream);
+        await Assert.That(stream.Length).IsGreaterThan(100);
     }
 }

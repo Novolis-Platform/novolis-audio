@@ -1,13 +1,18 @@
 namespace Novolis.Audio.Voice.EdgeTts;
 
+/// <summary>
+/// Compatibility constants for Microsoft Edge Read Aloud (unofficial protocol).
+/// Derived from the consumer Edge / edge-tts fingerprint; update here when the wire protocol changes.
+/// </summary>
 internal static class EdgeTtsConstants
 {
-    // Same consumer Read Aloud endpoint used by Microsoft Edge / edge-tts.
     public const string TrustedClientToken = "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
     public const string BasePath = "speech.platform.bing.com/consumer/speech/synthesize/readaloud";
-
+    public const string ExtensionOrigin = "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold";
+    public const string OutputFormat = "audio-24khz-48kbitrate-mono-mp3";
     public const string DefaultVoice = "en-US-AvaNeural";
     public const string ChromiumFullVersion = "143.0.3650.75";
+    public const int MaxSsmlUtf8Bytes = 4096;
 
     public static string ChromiumMajorVersion { get; } = ChromiumFullVersion.Split('.')[0];
     public static string SecMsGecVersion { get; } = $"1-{ChromiumFullVersion}";

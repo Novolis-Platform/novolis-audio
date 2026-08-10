@@ -184,3 +184,13 @@ dotnet build Novolis.Audio.slnx -c Release
 - [docs/release.md](docs/release.md)
 - [src/Novolis.Audio.Live.Protocol/README.md](src/Novolis.Audio.Live.Protocol/README.md)
 
+## License
+
+This repository is licensed under the **MIT** license ([LICENSE](LICENSE)), except:
+
+| Package | License |
+|---------|---------|
+| `Novolis.Audio.Voice.EdgeTts` | **LGPL-3.0-only** (derived from [rany2/edge-tts](https://github.com/rany2/edge-tts); see [THIRD-PARTY-NOTICES.md](src/Novolis.Audio.Voice.EdgeTts/THIRD-PARTY-NOTICES.md) and [LICENSES/LGPL-3.0.txt](LICENSES/LGPL-3.0.txt)) |
+
+All other Novolis Audio packages retain MIT (or their own declared license).
+
