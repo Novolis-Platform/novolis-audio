@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-audio">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Audio.Voice.AzureSpeech
 
 Thin Azure Speech synthesis for applications that bring their own Speech resource.
@@ -32,3 +40,4 @@ var mp3 = await client.SynthesizeToMp3Async(
 
 Azure billing, quotas, endpoint selection, and credential storage remain the
 application owner's responsibility.
+

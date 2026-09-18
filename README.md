@@ -44,6 +44,7 @@
 | `Novolis.Audio` | `dotnet add package Novolis.Audio` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio/README.md) |
 | `Novolis.Audio.Abstractions` | `dotnet add package Novolis.Audio.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Abstractions/README.md) |
 | `Novolis.Audio.Bindings` | `dotnet add package Novolis.Audio.Bindings` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Bindings/README.md) |
+| `Novolis.Audio.Catalog` | `dotnet add package Novolis.Audio.Catalog` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Catalog/README.md) |
 | `Novolis.Audio.Codecs` | `dotnet add package Novolis.Audio.Codecs` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Codecs/README.md) |
 | `Novolis.Audio.Core` | `dotnet add package Novolis.Audio.Core` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Core/README.md) |
 | `Novolis.Audio.Edit` | `dotnet add package Novolis.Audio.Edit` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Edit/README.md) |
@@ -57,6 +58,7 @@
 | `Novolis.Audio.Manifests` | `dotnet add package Novolis.Audio.Manifests` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/codegen/Novolis.Audio.Manifests/README.md) |
 | `Novolis.Audio.Midi` | `dotnet add package Novolis.Audio.Midi` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Midi/README.md) |
 | `Novolis.Audio.MusicTheory` | `dotnet add package Novolis.Audio.MusicTheory` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.MusicTheory/README.md) |
+| `Novolis.Audio.MusicXml` | `dotnet add package Novolis.Audio.MusicXml` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.MusicXml/README.md) |
 | `Novolis.Audio.Native` | `dotnet add package Novolis.Audio.Native` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Native/README.md) |
 | `Novolis.Audio.Output.Abstractions` | `dotnet add package Novolis.Audio.Output.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Output.Abstractions/README.md) |
 | `Novolis.Audio.Output.NAudio` | `dotnet add package Novolis.Audio.Output.NAudio` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Output.NAudio/README.md) |
@@ -68,7 +70,6 @@
 | `Novolis.Audio.Voice.AzureSpeech` | `dotnet add package Novolis.Audio.Voice.AzureSpeech` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.AzureSpeech/README.md) |
 | `Novolis.Audio.Voice.Design` | `dotnet add package Novolis.Audio.Voice.Design` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Design/README.md) |
 | `Novolis.Audio.Voice.Kokoro` | `dotnet add package Novolis.Audio.Voice.Kokoro` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Kokoro/README.md) |
-| `Novolis.Audio.Voice.Manuscript` | `dotnet add package Novolis.Audio.Voice.Manuscript` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Manuscript/README.md) |
 | `Novolis.Audio.Voice.Phraseology` | `dotnet add package Novolis.Audio.Voice.Phraseology` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Phraseology/README.md) |
 | `Novolis.Audio.Voice.Platform.Abstractions` | `dotnet add package Novolis.Audio.Voice.Platform.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Abstractions/README.md) |
 | `Novolis.Audio.Voice.Platform.Android` | `dotnet add package Novolis.Audio.Voice.Platform.Android` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Android/README.md) |
