@@ -12,6 +12,8 @@ or provide application settings.
 Add a package reference to `Novolis.Audio.Voice.AzureSpeech`, then construct
 `AzureSpeechClient` with the user's endpoint and Azure SDK credential.
 
+## Usage
+
 ```csharp
 using Azure;
 using Novolis.Audio.Voice.AzureSpeech;
