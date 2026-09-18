@@ -7,6 +7,11 @@ The package accepts either an `Azure.AzureKeyCredential` or an Azure
 returns Azure's MP3 bytes. It does not persist credentials, select providers,
 or provide application settings.
 
+## Install
+
+Add a package reference to `Novolis.Audio.Voice.AzureSpeech`, then construct
+`AzureSpeechClient` with the user's endpoint and Azure SDK credential.
+
 ```csharp
 using Azure;
 using Novolis.Audio.Voice.AzureSpeech;
