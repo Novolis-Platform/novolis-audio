@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.AzureSpeech</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.AzureSpeech</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.AzureSpeech</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Thin Azure Speech synthesis client with key or Microsoft Entra credentials and MP3 output.</Description>
+    <PackageTags>audio;tts;speech;azure;mp3;cross-platform</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Core" />
+    <PackageReference Include="Microsoft.CognitiveServices.Speech" />
+  </ItemGroup>
+
+</Project>

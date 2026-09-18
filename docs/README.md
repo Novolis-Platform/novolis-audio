@@ -45,11 +45,12 @@ Published docs: [https://novolis-platform.github.io/.github/novolis-audio/](http
 | `Novolis.Audio.Runtime` |
 | `Novolis.Audio.Voice` |
 | `Novolis.Audio.Voice.Abstractions` |
+| `Novolis.Audio.Voice.AzureSpeech` |
 | `Novolis.Audio.Voice.Design` |
-| `Novolis.Audio.Voice.EdgeTts` |
 | `Novolis.Audio.Voice.Kokoro` |
 | `Novolis.Audio.Voice.Phraseology` |
 | `Novolis.Audio.Voice.Platform.Abstractions` |
+| `Novolis.Audio.Voice.Platform.Android` |
 | `Novolis.Audio.Voice.Platform.Maui` |
 | `Novolis.Audio.Voice.Platform.Windows` |
 | `Novolis.Audio.Voice.Profiles` |

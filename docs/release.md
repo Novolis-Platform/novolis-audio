@@ -9,14 +9,11 @@ See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob
 - **Added** `Novolis.Audio.Live.Render` — v0 NAudio oscillators driven by `LiveSession`.
 - **NuGet-only** `Live.Protocol` → `Novolis.Transports.LocalIpc` (GPR).
 
-## 2026.1.x — Edge TTS typesafe voices
+## 2026.1.x — User-owned Azure Speech
 
-- **`Novolis.Audio.Voice.EdgeTts`** — `EdgeVoice` catalog, `ProsodyPercent` / `ProsodyHertz`, `EdgeVoiceProfiles.Narrator` (Ava / −4%). `EdgeTtsSynthesisOptions` is typed (no string Voice/Rate/Pitch/Volume).
-- **`Novolis.Audio.Voice.Manuscript`** — `ManuscriptVoiceSettings` uses curated voices; `VoiceMapStore` reads/writes books nested `narrator:` / `pauses:` / `generation:` YAML.
-
-## 2026.1.10 — Edge TTS + ATC removed from GPR
-
-- **Added** `Novolis.Audio.Voice.EdgeTts` — online Microsoft Edge Read Aloud TTS client (MP3; requires network; cross-platform).
+- **Added** `Novolis.Audio.Voice.AzureSpeech` — thin Azure Speech client accepting an Azure key or Microsoft Entra credential and returning MP3.
+- **Added** `Novolis.Audio.Voice.Platform.Android` — local Android device voice playback.
+- **`Novolis.Audio.Voice.Platform.Windows`** remains the local Windows device voice peer.
 - **Removed** `Novolis.Audio.Voice.Atc` — use `Novolis.Dogfooding.Voice` in dogfooding or copy `AtcVoiceProfile` into your app.
 - **`Novolis.Audio.Voice.Design`** — `VoicePresetCodeTemplate` is GPR-generic only (`ArchetypeCatalogEntry`, `UsageSnippet`).
 - **`Novolis.Avalonia.Voice`** — no `Platform.Windows` dependency; Windows hosts set `VoicePreviewController.PlatformPreviewFactory`.

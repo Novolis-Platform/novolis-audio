@@ -29,5 +29,7 @@
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageVersion Include="Microsoft.Maui.Essentials" Version="10.0.20" />
     <PackageVersion Include="System.Speech" Version="9.0.0" />
+    <PackageVersion Include="Azure.Core" Version="1.53.0" />
+    <PackageVersion Include="Microsoft.CognitiveServices.Speech" Version="1.51.2" />
   </ItemGroup>
 </Project>

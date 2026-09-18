@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Audio.Packaging.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Audio.Voice.Platform.Android</RootNamespace>
+    <AssemblyName>Novolis.Audio.Voice.Platform.Android</AssemblyName>
+    <PackageId>Novolis.Audio.Voice.Platform.Android</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>Android TextToSpeech IVoiceService adapter for local device playback.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Audio.Voice.Abstractions\Novolis.Audio.Voice.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Audio.Voice.Platform.Abstractions\Novolis.Audio.Voice.Platform.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

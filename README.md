@@ -65,12 +65,13 @@
 | `Novolis.Audio.Runtime` | `dotnet add package Novolis.Audio.Runtime` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Runtime/README.md) |
 | `Novolis.Audio.Voice` | `dotnet add package Novolis.Audio.Voice` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice/README.md) |
 | `Novolis.Audio.Voice.Abstractions` | `dotnet add package Novolis.Audio.Voice.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Abstractions/README.md) |
+| `Novolis.Audio.Voice.AzureSpeech` | `dotnet add package Novolis.Audio.Voice.AzureSpeech` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.AzureSpeech/README.md) |
 | `Novolis.Audio.Voice.Design` | `dotnet add package Novolis.Audio.Voice.Design` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Design/README.md) |
-| `Novolis.Audio.Voice.EdgeTts` | `dotnet add package Novolis.Audio.Voice.EdgeTts` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.EdgeTts/README.md) |
 | `Novolis.Audio.Voice.Kokoro` | `dotnet add package Novolis.Audio.Voice.Kokoro` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Kokoro/README.md) |
 | `Novolis.Audio.Voice.Manuscript` | `dotnet add package Novolis.Audio.Voice.Manuscript` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Manuscript/README.md) |
 | `Novolis.Audio.Voice.Phraseology` | `dotnet add package Novolis.Audio.Voice.Phraseology` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Phraseology/README.md) |
 | `Novolis.Audio.Voice.Platform.Abstractions` | `dotnet add package Novolis.Audio.Voice.Platform.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Abstractions/README.md) |
+| `Novolis.Audio.Voice.Platform.Android` | `dotnet add package Novolis.Audio.Voice.Platform.Android` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Android/README.md) |
 | `Novolis.Audio.Voice.Platform.Maui` | `dotnet add package Novolis.Audio.Voice.Platform.Maui` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Maui/README.md) |
 | `Novolis.Audio.Voice.Platform.Windows` | `dotnet add package Novolis.Audio.Voice.Platform.Windows` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Platform.Windows/README.md) |
 | `Novolis.Audio.Voice.Profiles` | `dotnet add package Novolis.Audio.Voice.Profiles` | [README](https://github.com/Novolis-Platform/novolis-audio/blob/main/src/Novolis.Audio.Voice.Profiles/README.md) |
@@ -109,15 +110,17 @@ Cross-platform audio for Novolis apps — **outside any graphics engine**.
 | `Novolis.Audio.Playback` | PCM playback (`NaudioPcmPlayback`) |
 | `Novolis.Audio.Voice` | **`SpeakAsync` / `WriteToFileAsync` facade** |
 | `Novolis.Audio.Voice.Abstractions` | TTS contracts |
+| `Novolis.Audio.Voice.AzureSpeech` | User-owned Azure Speech MP3 client |
 | `Novolis.Audio.Voice.SherpaOnnx` | Sherpa-ONNX synthesizer |
 | `Novolis.Audio.Voice.Kokoro` | Kokoro ONNX offline TTS |
-| `Novolis.Audio.Voice.EdgeTts` | Online Edge Read Aloud TTS (MP3; requires network) |
-| `Novolis.Audio.Voice.Manuscript` | Books / audiobook pipeline on EdgeTts |
+| `Novolis.Audio.Voice.Platform.Android` | Android device voice playback |
+| `Novolis.Audio.Voice.Platform.Windows` | Windows device voice playback |
+| `Novolis.Audio.Voice.Manuscript` | Books / audiobook voice integration |
 | `Novolis.Audio.Voice.Phraseology` | ICAO phraseology |
 | `Novolis.Audio.Voice.Profiles` | Neutral base-voice archetypes |
 | `Novolis.Audio.Voice.Design` | Preset drafts, validation, preview, GPR code export |
 
-Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack). Edge/Manuscript is a parallel **MP3** path (not `IVoiceSynthesizer`).
+Native game playback uses a **miniaudio** C shim (`novolis_audio.dll`). Voice uses **Sherpa ONNX** + **NAudio** (separate stack). Azure Speech is a parallel **MP3** path (not `IVoiceSynthesizer`).
 
 ### Live music
 
@@ -188,9 +191,5 @@ dotnet build Novolis.Audio.slnx -c Release
 
 This repository is licensed under the **MIT** license ([LICENSE](LICENSE)), except:
 
-| Package | License |
-|---------|---------|
-| `Novolis.Audio.Voice.EdgeTts` | **LGPL-3.0-only** (derived from [rany2/edge-tts](https://github.com/rany2/edge-tts); see [THIRD-PARTY-NOTICES.md](src/Novolis.Audio.Voice.EdgeTts/THIRD-PARTY-NOTICES.md) and [LICENSES/LGPL-3.0.txt](LICENSES/LGPL-3.0.txt)) |
-
-All other Novolis Audio packages retain MIT (or their own declared license).
+All Novolis Audio packages retain MIT (or their own declared license).
 
