@@ -7,15 +7,15 @@
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
-    <PackageVersion Include="MessagePack" Version="3.1.8" />
+    <PackageVersion Include="MessagePack" Version="3.1.9" />
     <PackageVersion Include="Novolis.Transports.LocalIpc" Version="2026.1.*" />
-    <PackageVersion Include="TUnit" Version="1.44.39" />
+    <PackageVersion Include="TUnit" Version="1.68.17" />
     <PackageVersion Include="Novolis.CodeGen.Bindings" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Bindings.Roslyn" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Pipeline" Version="2026.1.*" />
-    <PackageVersion Include="System.IO.Abstractions" Version="22.1.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
+    <PackageVersion Include="System.IO.Abstractions" Version="22.2.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.12" />
     <PackageVersion Include="NAudio" Version="2.3.0" />
     <PackageVersion Include="SkiaSharp" Version="3.116.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Win32" Version="3.116.1" />
@@ -24,12 +24,12 @@
     <PackageVersion Include="Svg.Skia" Version="3.7.0" />
     <PackageVersion Include="MeltySynth" Version="2.4.1" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
-    <PackageVersion Include="org.k2fsa.sherpa.onnx" Version="1.12.40" />
-    <PackageVersion Include="KokoroSharp.CPU" Version="0.6.7" />
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
-    <PackageVersion Include="Microsoft.Maui.Essentials" Version="10.0.20" />
+    <PackageVersion Include="org.k2fsa.sherpa.onnx" Version="1.13.8" />
+    <PackageVersion Include="KokoroSharp.CPU" Version="0.8.4" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.101" />
+    <PackageVersion Include="Microsoft.Maui.Essentials" Version="10.0.101" />
     <PackageVersion Include="System.Speech" Version="9.0.0" />
-    <PackageVersion Include="Azure.Core" Version="1.53.0" />
+    <PackageVersion Include="Azure.Core" Version="1.62.0" />
     <PackageVersion Include="Microsoft.CognitiveServices.Speech" Version="1.51.2" />
   </ItemGroup>
 </Project>
