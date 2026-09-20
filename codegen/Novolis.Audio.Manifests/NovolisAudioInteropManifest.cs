@@ -11,15 +11,7 @@ public static partial class NovolisAudioBindingManifests
         Description: "Cross-platform novolis_audio shim (miniaudio engine) LibraryImport surface.",
         DllName: "novolis_audio",
         Policy: new(
-            SuppressGcTransitionByTemplate: new string[]
-            {
-                "void_void",
-                "bool_void",
-                "void_float",
-                "void_nint",
-                "bool_nint",
-                "void_nint_float",
-            },
+            SuppressGcTransitionByFunction: [],
             NeverSuppressGcTransition: new string[]
             {
                 "na_LoadSound",
@@ -29,14 +21,15 @@ public static partial class NovolisAudioBindingManifests
         Structs: Array.Empty<InteropStructSpec>(),
         Imports: new InteropImportSpec[]
         {
-            new("na_Init", "bool_void", "Initialize the global audio engine."),
-            new("na_Uninit", "void_void", "Shut down the engine and release device resources."),
-            new("na_SetMasterVolume", "void_float", "Set master output volume in [0, 1]."),
-            new("na_LoadSound", "nint_string_utf8", "Load a sound from a UTF-8 file path."),
-            new("na_UnloadSound", "void_nint", "Release a sound loaded with na_LoadSound."),
-            new("na_PlaySound", "bool_nint", "Start one-shot playback."),
-            new("na_StopSound", "void_nint", "Stop playback for a sound."),
-            new("na_IsSoundPlaying", "bool_nint", "Whether the sound is currently playing."),
-            new("na_SetSoundVolume", "void_nint_float", "Set per-sound volume in [0, 1]."),
-        });
+            new("na_Init", AudioNativeSignatures.BoolVoid, "Initialize the global audio engine."),
+            new("na_Uninit", AudioNativeSignatures.VoidVoid, "Shut down the engine and release device resources."),
+            new("na_SetMasterVolume", AudioNativeSignatures.VoidFloat, "Set master output volume in [0, 1]."),
+            new("na_LoadSound", AudioNativeSignatures.NativeIntUtf8, "Load a sound from a UTF-8 file path."),
+            new("na_UnloadSound", AudioNativeSignatures.VoidHandle, "Release a sound loaded with na_LoadSound."),
+            new("na_PlaySound", AudioNativeSignatures.BoolHandle, "Start one-shot playback."),
+            new("na_StopSound", AudioNativeSignatures.VoidHandle, "Stop playback for a sound."),
+            new("na_IsSoundPlaying", AudioNativeSignatures.BoolHandle, "Whether the sound is currently playing."),
+            new("na_SetSoundVolume", AudioNativeSignatures.VoidHandleFloat, "Set per-sound volume in [0, 1]."),
+        },
+        Usings: ["Novolis.Audio.Interop"]);
 }
