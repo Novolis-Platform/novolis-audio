@@ -57,38 +57,28 @@ public sealed class AudioBindingCodegenHost : IBindingCodegenHost
         var project = BindingProject.Create("Novolis.Audio")
             .RequireCompanion("src/Novolis.Audio.Bindings/Interop/Utf8StringMarshaller.cs", "UTF-8 marshalling")
             .AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.LibraryImport(
                     "novolis-audio interop",
-                    FragmentKind.InteropExports,
                     "novolis-audio",
-                    new LibraryImportEmitter(),
-                    new EmitTarget(
-                        "NovolisAudioNative",
-                        EmitStrategy.LibraryImport,
-                        "src/Novolis.Audio.Bindings/Interop/NovolisAudioNative.g.cs",
-                        "Novolis.Audio.Interop",
-                        "Novolis.Audio.Bindings",
-                        LibraryConstantName: "AudioDll",
-                        TypeSummary: "Low-level novolis_audio entry points (manifest-generated <c>[LibraryImport]</c>).")));
+                    "NovolisAudioNative",
+                    "src/Novolis.Audio.Bindings/Interop/NovolisAudioNative.g.cs",
+                    "Novolis.Audio.Interop",
+                    "Novolis.Audio.Bindings",
+                    libraryConstantName: "AudioDll",
+                    typeSummary: "Low-level novolis_audio entry points (manifest-generated <c>[LibraryImport]</c>)."));
 
         var facades = _manifests.GetRequired<FacadeTypesFragment>(FragmentKind.FacadeTypes, "facades");
         foreach (var type in facades.Types)
         {
             project.AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.FacadeForward(
                     $"facades {type.Name}",
-                    FragmentKind.FacadeTypes,
                     "facades",
-                    new FacadeForwardEmitter(),
-                    new EmitTarget(
-                        type.Name,
-                        EmitStrategy.FacadeForward,
-                        Path.Combine("src/Novolis.Audio.Runtime", type.Folder, $"{type.Name}.g.cs"),
-                        type.Namespace,
-                        "Novolis.Audio.Runtime",
-                        FacadeMethodImpl: policy.FacadeMethodImpl),
-                    FormatPolicy: BindingFormatPolicy.NormalizeWhitespace,
-                    Slice: type.Name));
+                    type.Name,
+                    Path.Combine("src/Novolis.Audio.Runtime", type.Folder, $"{type.Name}.g.cs"),
+                    type.Namespace,
+                    "Novolis.Audio.Runtime",
+                    facadeMethodImpl: policy.FacadeMethodImpl));
         }
 
         return project;
