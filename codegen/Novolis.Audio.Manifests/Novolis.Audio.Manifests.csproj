@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <LibraryReference Include="Novolis.CodeGen.Bindings" />
   </ItemGroup>
 
 </Project>

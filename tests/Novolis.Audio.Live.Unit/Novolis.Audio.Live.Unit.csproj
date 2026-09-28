@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit" />
-    <PackageReference Include="Novolis.Transports.LocalIpc" />
+    <LibraryReference Include="Novolis.Transports.LocalIpc" />
   </ItemGroup>
 
   <ItemGroup>

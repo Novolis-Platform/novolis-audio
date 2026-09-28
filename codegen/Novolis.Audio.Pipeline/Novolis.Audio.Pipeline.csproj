@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.CodeGen.Abstractions\Novolis.Audio.CodeGen.Abstractions.csproj" />
     <ProjectReference Include="..\Novolis.Audio.CodeGen\Novolis.Audio.CodeGen.csproj" />
-    <PackageReference Include="Novolis.CodeGen.Pipeline" />
+    <LibraryReference Include="Novolis.CodeGen.Pipeline" />
   </ItemGroup>
 
 </Project>

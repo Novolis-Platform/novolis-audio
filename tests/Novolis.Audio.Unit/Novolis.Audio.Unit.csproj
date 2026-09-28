@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit" />
-    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <LibraryReference Include="Novolis.CodeGen.Bindings" />
   </ItemGroup>
 
   <ItemGroup>

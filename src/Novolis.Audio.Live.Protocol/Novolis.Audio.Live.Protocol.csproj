@@ -13,7 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MessagePack" />
-    <PackageReference Include="Novolis.Transports.LocalIpc" />
+    <LibraryReference Include="Novolis.Transports.LocalIpc" />
     <ProjectReference Include="..\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />
     <ProjectReference Include="..\Novolis.Audio.Live.Dsl\Novolis.Audio.Live.Dsl.csproj" />
   </ItemGroup>
