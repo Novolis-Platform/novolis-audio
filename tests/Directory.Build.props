@@ -4,4 +4,5 @@
     <IsTestingPlatformApplication>true</IsTestingPlatformApplication>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.OneTypePerFile.props" Condition="Exists('$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.OneTypePerFile.props')" />
 </Project>
