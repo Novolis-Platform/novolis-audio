@@ -1,4 +1,8 @@
-# step_04_codegen — 2026-09-19T08:55:55.5775081+00:00
+# step_04_codegen — 2026-09-29T21:35:20.4750073+00:00
 # force=False
 
-SKIPPED: outputs up to date
+emit: novolis-audio interop -> src/Novolis.Audio.Bindings/Interop/NovolisAudioNative.g.cs
+emit: facades AudioDevice -> src/Novolis.Audio.Runtime\Device\AudioDevice.g.cs
+emit: facades Sound -> src/Novolis.Audio.Runtime\Sound\Sound.g.cs
+Wrote d:\novolis\novolis-audio\src\Novolis.Audio.Voice.Abstractions\VoiceModelCatalog.g.cs
+Wrote d:\novolis\novolis-audio\src\Novolis.Audio.Voice.Abstractions\SpeechModelCatalog.g.cs

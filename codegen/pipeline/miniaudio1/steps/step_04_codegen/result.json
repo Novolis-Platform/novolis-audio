@@ -1,14 +1,15 @@
 {
   "stepId": "step_04_codegen",
-  "status": "Skipped",
-  "startedUtc": "2026-09-19T08:55:55.5775081+00:00",
-  "durationMs": 0,
+  "status": "Succeeded",
+  "startedUtc": "2026-09-29T21:35:20.4750073+00:00",
+  "durationMs": 1143,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Audio.Manifests/AudioBindingManifestSource.cs": "db55d4bfcd0ba8f931e1612cc02202e361fa91828f7f578e6495120d0f313e2b",
     "codegen/Novolis.Audio.Manifests/AudioManifestInputPaths.cs": "73a9f55a4f4532a4ebcb7e49a39df2b64cd5707b00ef875c1003c4cb63744c0a",
+    "codegen/Novolis.Audio.Manifests/AudioNativeSignatures.cs": "bf2e9b7913f6fb914356189389c08f4dc78046a741fe9116e8565e81725d5c68",
     "codegen/Novolis.Audio.Manifests/NovolisAudioFacadesManifest.cs": "6e8d5b00ae6810ae3645f0c70cfe15c7279956c7a3678ed21ac6762218fbc9cf",
-    "codegen/Novolis.Audio.Manifests/NovolisAudioInteropManifest.cs": "b1dc048af8bd97b8068ea8984ca7991468522d9aad4a08eae4b25bc70fed7449",
+    "codegen/Novolis.Audio.Manifests/NovolisAudioInteropManifest.cs": "1740cc9c83b76485fd499fb9a0599853da7057157f85b23b4a7c8eb810d6f587",
     "codegen/Novolis.Audio.Manifests/NovolisAudioSpeechModelsManifest.cs": "4e3e289e615868a661be7c6bc44f019478a6b71fb9e70704f401b5d0f79ca60b",
     "codegen/Novolis.Audio.Manifests/NovolisAudioVoiceModelsManifest.cs": "95a61bd4fc76f50096ee7d172c42348ee66ebd089f0657931c396fabaf25abca",
     "codegen/Novolis.Audio.Manifests/SpeechManifestInputPaths.cs": "c23fa0e872ed9c989bbe58cf55b8e33ad7409b44644821f74d70162deaac71b0",
@@ -20,8 +21,8 @@
   "outputs": [
     {
       "path": "src/Novolis.Audio.Bindings/Interop/NovolisAudioNative.g.cs",
-      "sha256": "73a58e27479f13629fcd9d3aef37d6a9ed8517a3f0e00e56969d349192031f62",
-      "bytes": 1591
+      "sha256": "e57406e43fdc6adcbc71fea16c5d294bc55fa5f586dc2304a1094a92f67e05f6",
+      "bytes": 1556
     },
     {
       "path": "src/Novolis.Audio.Runtime/Device/AudioDevice.g.cs",
@@ -43,6 +44,5 @@
       "sha256": "baeb78b0d461f06b63c87cef561eed5633f8393f242859909a98dee5447819c9",
       "bytes": 3061
     }
-  ],
-  "skipReason": "outputs up to date"
+  ]
 }

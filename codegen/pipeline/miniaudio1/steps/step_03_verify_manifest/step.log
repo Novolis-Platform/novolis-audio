@@ -1,4 +1,4 @@
-# step_03_verify_manifest — 2026-09-19T08:55:55.4665604+00:00
+# step_03_verify_manifest — 2026-09-29T21:35:20.3688299+00:00
 # force=False
 
-SKIPPED: outputs up to date
+verify-audio-manifest: OK
