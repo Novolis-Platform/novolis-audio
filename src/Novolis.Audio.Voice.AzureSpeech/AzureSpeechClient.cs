@@ -9,12 +9,16 @@ namespace Novolis.Audio.Voice.AzureSpeech;
 /// Thin Azure Speech client. It accepts standard Azure SDK credentials and returns
 /// the MP3 bytes produced by the Speech service.
 /// </summary>
-public sealed class AzureSpeechClient
+public sealed class AzureSpeechClient : IDisposable
 {
     readonly Uri _endpoint;
     readonly AzureSpeechClientOptions _clientOptions;
     readonly AzureKeyCredential? _keyCredential;
     readonly TokenCredential? _tokenCredential;
+    readonly SemaphoreSlim _synthesisGate = new(1, 1);
+    SpeechSynthesizer? _synthesizer;
+    bool _preconnected;
+    bool _disposed;
 
     /// <summary>Creates a client authenticated with an Azure Speech resource key.</summary>
     public AzureSpeechClient(
@@ -55,11 +59,41 @@ public sealed class AzureSpeechClient
         options ??= new AzureSpeechSynthesisOptions();
         options.Validate();
 
-        using var synthesizer = CreateSynthesizer(options);
-        using var result = await synthesizer
-            .SpeakSsmlAsync(BuildSsml(text, options))
-            .WaitAsync(cancellationToken)
-            .ConfigureAwait(false);
+        await _synthesisGate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var synthesizer = Synthesizer();
+            using var result = await synthesizer
+                .SpeakSsmlAsync(BuildSsml(text, options))
+                .WaitAsync(cancellationToken)
+                .ConfigureAwait(false);
+            return ReadAudio(result);
+        }
+        finally
+        {
+            _synthesisGate.Release();
+        }
+    }
+
+    /// <summary>Releases the reused Speech service connection.</summary>
+    public void Dispose()
+    {
+        _synthesisGate.Wait();
+        try
+        {
+            _synthesizer?.Dispose();
+            _synthesizer = null;
+            _preconnected = false;
+            _disposed = true;
+        }
+        finally
+        {
+            _synthesisGate.Release();
+        }
+    }
+
+    byte[] ReadAudio(SpeechSynthesisResult result)
+    {
 
         if (result.Reason == ResultReason.SynthesizingAudioCompleted &&
             result.AudioData is { Length: > 0 } audio)
@@ -86,39 +120,58 @@ public sealed class AzureSpeechClient
         string? locale = null,
         CancellationToken cancellationToken = default)
     {
-        using var synthesizer = CreateSynthesizer(new AzureSpeechSynthesisOptions());
-        using var result = await synthesizer
-            .GetVoicesAsync(locale ?? string.Empty)
-            .WaitAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        if (result.Reason != ResultReason.VoicesListRetrieved)
+        await _synthesisGate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
         {
-            throw new AzureSpeechException(
-                $"Azure Speech voice discovery returned {result.Reason}: {result.ErrorDetails}");
-        }
+            using var result = await Synthesizer()
+                .GetVoicesAsync(locale ?? string.Empty)
+                .WaitAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        return result.Voices
-            .Select(voice => new AzureSpeechVoice(
-                voice.Name,
-                voice.ShortName,
-                voice.Locale,
-                voice.LocalName,
-                voice.Gender.ToString(),
-                voice.StyleList ?? []))
-            .ToArray();
+            if (result.Reason != ResultReason.VoicesListRetrieved)
+            {
+                throw new AzureSpeechException(
+                    $"Azure Speech voice discovery returned {result.Reason}: {result.ErrorDetails}");
+            }
+
+            return result.Voices
+                .Select(voice => new AzureSpeechVoice(
+                    voice.Name,
+                    voice.ShortName,
+                    voice.Locale,
+                    voice.LocalName,
+                    voice.Gender.ToString(),
+                    voice.StyleList ?? []))
+                .ToArray();
+        }
+        finally
+        {
+            _synthesisGate.Release();
+        }
     }
 
-    SpeechSynthesizer CreateSynthesizer(AzureSpeechSynthesisOptions options)
+    SpeechSynthesizer Synthesizer()
     {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (_synthesizer is not null)
+            return _synthesizer;
+
         var config = _keyCredential is not null
             ? SpeechConfig.FromEndpoint(_endpoint, _keyCredential)
             : SpeechConfig.FromEndpoint(
                 _endpoint,
                 _tokenCredential ?? throw new InvalidOperationException("Azure credential is missing."));
-        config.SpeechSynthesisVoiceName = options.VoiceName;
+        config.SpeechSynthesisVoiceName = new AzureSpeechSynthesisOptions().VoiceName;
         config.SetSpeechSynthesisOutputFormat(_clientOptions.OutputFormat);
-        return new SpeechSynthesizer(config);
+        _synthesizer = new SpeechSynthesizer(config, audioConfig: null);
+        if (!_preconnected)
+        {
+            using var connection = Connection.FromSpeechSynthesizer(_synthesizer);
+            connection.Open(true);
+            _preconnected = true;
+        }
+
+        return _synthesizer;
     }
 
     static Uri ValidateEndpoint(Uri endpoint)
