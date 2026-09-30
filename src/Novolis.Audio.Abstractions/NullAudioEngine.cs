@@ -18,12 +18,3 @@ public sealed class NullAudioEngine : IAudioEngine
     /// <inheritdoc />
     public void Dispose() { }
 }
-
-/// <summary>Singleton null sound handle.</summary>
-public sealed class NullSoundHandle : ISoundHandle
-{
-    /// <summary>Shared instance.</summary>
-    public static NullSoundHandle Instance { get; } = new();
-
-    private NullSoundHandle() { }
-}

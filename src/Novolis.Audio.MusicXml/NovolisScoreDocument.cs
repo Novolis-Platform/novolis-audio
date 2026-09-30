@@ -29,36 +29,3 @@ public sealed class NovolisScoreDocument
     [JsonPropertyName("parts")]
     public List<NovolisScorePart> Parts { get; set; } = [];
 }
-
-public sealed class NovolisScorePart
-{
-    [JsonPropertyName("id")]
-    public string Id { get; set; } = "P1";
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = "Part";
-
-    [JsonPropertyName("patchId")]
-    public string? PatchId { get; set; }
-
-    [JsonPropertyName("clef")]
-    public string Clef { get; set; } = "treble";
-
-    [JsonPropertyName("notes")]
-    public List<NovolisScoreNote> Notes { get; set; } = [];
-}
-
-public sealed class NovolisScoreNote
-{
-    [JsonPropertyName("midi")]
-    public int Midi { get; set; }
-
-    [JsonPropertyName("startBeat")]
-    public double StartBeat { get; set; }
-
-    [JsonPropertyName("durationBeats")]
-    public double DurationBeats { get; set; } = 1;
-
-    [JsonPropertyName("velocity")]
-    public int Velocity { get; set; } = 100;
-}

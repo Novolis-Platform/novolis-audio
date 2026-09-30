@@ -1,4 +1,7 @@
-# step_03_voice_verify_models — 2026-09-19T08:55:55.5716456+00:00
+# step_03_voice_verify_models — 2026-09-30T09:42:55.8505656+00:00
 # force=False
 
-SKIPPED: outputs up to date
+voice-model: OK en-us-piper-amy (en_US-amy-low.onnx)
+voice-model: OK en-us-piper-lessac-low (en_US-lessac-low.onnx)
+voice-model: OK en-us-piper-kristin-medium (en_US-kristin-medium.onnx)
+verify-voice-models: OK

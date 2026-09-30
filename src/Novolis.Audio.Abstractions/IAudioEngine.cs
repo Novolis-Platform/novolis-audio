@@ -15,6 +15,3 @@ public interface IAudioEngine : IDisposable
     /// <summary>Plays a loaded sound once.</summary>
     bool Play(ISoundHandle sound);
 }
-
-/// <summary>Opaque sound handle.</summary>
-public interface ISoundHandle;

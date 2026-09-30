@@ -10,9 +10,3 @@ public sealed class AudioCodegenContext : BindingEmitContext
 
     public string? FacadeMethodImpl { get; init; }
 }
-
-public enum AudioCodegenPhase
-{
-    Interop,
-    Facade,
-}
