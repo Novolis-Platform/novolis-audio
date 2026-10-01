@@ -1,5 +1,9 @@
 <Project>
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+  <PropertyGroup>
+    <!-- Sherpa packs a model-extract script under buildTransitive; NuGet will not run it. -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU5110;NU5111</WarningsNotAsErrors>
+  </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props"
           Condition="Exists('$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props')" />
 </Project>
