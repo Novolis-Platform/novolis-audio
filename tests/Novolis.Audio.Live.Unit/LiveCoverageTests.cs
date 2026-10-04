@@ -100,6 +100,7 @@ public sealed class LiveCoverageTests
     public async Task Protocol_repl_ipc_and_mappings_cover_gaps()
     {
         await Assert.That(LiveTransportEndpoints.CreateDefault().Address.Length).IsGreaterThan(0);
+        await Assert.That(await LiveTransportEndpoints.IsListeningAsync()).IsFalse();
 
         var compiler = new LiveReplSyntaxCompiler();
         await Assert.That(compiler.Compile("""

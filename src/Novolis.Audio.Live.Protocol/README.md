@@ -35,6 +35,7 @@ It contains:
 - immutable program, track-effect, and diagnostic payloads
 - mapping helpers between domain objects and wire DTOs
 - endpoint helpers for the default local IPC address
+- readiness wait (`WaitUntilListeningAsync` / `IsListeningAsync`) for host startup
 - MessagePack serialization helpers
 
 The reusable transport implementation lives in `Novolis.Transports.LocalIpc`.
