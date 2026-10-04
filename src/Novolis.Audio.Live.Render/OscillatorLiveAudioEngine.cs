@@ -12,7 +12,9 @@ public sealed class OscillatorLiveAudioEngine : ILiveAudioEngine
 {
     readonly object _gate = new();
     LiveSession? _session;
-    WaveOutEvent? _waveOut;
+#pragma warning disable CS0618
+    WasapiOut? _waveOut;
+#pragma warning restore CS0618
     LiveMixSampleProvider? _provider;
     bool _started;
 
@@ -41,7 +43,9 @@ public sealed class OscillatorLiveAudioEngine : ILiveAudioEngine
             if (_session is not null)
                 _provider.Bind(_session);
 
-            _waveOut = new WaveOutEvent { DesiredLatency = 80 };
+#pragma warning disable CS0618
+            _waveOut = new WasapiOut();
+#pragma warning restore CS0618
             _waveOut.Init(_provider);
             _waveOut.Play();
             _started = true;

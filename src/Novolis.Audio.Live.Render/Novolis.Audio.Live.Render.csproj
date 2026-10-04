@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Novolis.Audio.Live.Render</RootNamespace>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CS0618;CA1416</NoWarn>
     <PackageId>Novolis.Audio.Live.Render</PackageId>
     <IsPackable>true</IsPackable>
     <Description>
@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NAudio" />
+    <PackageReference Include="NAudio.Wasapi" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Audio.Live\Novolis.Audio.Live.csproj" />

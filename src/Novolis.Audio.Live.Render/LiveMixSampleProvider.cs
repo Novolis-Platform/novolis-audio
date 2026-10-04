@@ -33,7 +33,7 @@ sealed class LiveMixSampleProvider : ISampleProvider
             _session = session;
     }
 
-    public int Read(float[] buffer, int offset, int count)
+    public int Read(Span<float> buffer)
     {
         LiveSession? session;
         lock (_gate)
@@ -41,8 +41,8 @@ sealed class LiveMixSampleProvider : ISampleProvider
 
         if (session is null)
         {
-            Array.Clear(buffer, offset, count);
-            return count;
+            buffer.Clear();
+            return buffer.Length;
         }
 
         var program = session.ActiveProgram;
@@ -55,19 +55,19 @@ sealed class LiveMixSampleProvider : ISampleProvider
         if (_loopBeats > 0)
             beat %= (float)_loopBeats;
 
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < buffer.Length; i++)
         {
             var tBeat = beat + (i / (float)LiveNoteScheduler.SampleRateHz) / secondsPerBeat;
             if (_loopBeats > 0)
                 tBeat %= (float)_loopBeats;
 
             SpawnNotesAt(tBeat);
-            buffer[offset + i] = MixSample();
+            buffer[i] = MixSample();
             _sampleIndex++;
         }
 
-        PublishAnalysis(buffer, offset, count, clock.Beat);
-        return count;
+        PublishAnalysis(buffer, clock.Beat);
+        return buffer.Length;
     }
 
     void EnsureSchedule(LiveProgram? program)
@@ -143,10 +143,10 @@ sealed class LiveMixSampleProvider : ISampleProvider
         return Math.Clamp(mix, -1f, 1f);
     }
 
-    void PublishAnalysis(float[] buffer, int offset, int count, decimal beat)
+    void PublishAnalysis(ReadOnlySpan<float> buffer, decimal beat)
     {
-        var copyLen = Math.Min(_analysisScratch.Length, count);
-        Array.Copy(buffer, offset, _analysisScratch, 0, copyLen);
+        var copyLen = Math.Min(_analysisScratch.Length, buffer.Length);
+        buffer[..copyLen].CopyTo(_analysisScratch);
         if (copyLen < _analysisScratch.Length)
             Array.Clear(_analysisScratch, copyLen, _analysisScratch.Length - copyLen);
 

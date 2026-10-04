@@ -43,7 +43,7 @@ public sealed class DecodePcmTransformer : IMediaTransformer
             var got = 0;
             while (got < srcFrames)
             {
-                var n = samples.Read(srcBuf, got, srcFrames - got);
+                var n = samples.Read(srcBuf.AsSpan(got, srcFrames - got));
                 if (n <= 0)
                     break;
                 got += n;

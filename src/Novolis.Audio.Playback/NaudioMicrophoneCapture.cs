@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using Novolis.Audio.Core;
 using Novolis.Audio.Voice;
@@ -26,11 +27,12 @@ public sealed class NaudioMicrophoneCapture : IAudioCapture, IDisposable
             SingleWriter = true,
         });
 
-        using var waveIn = new WaveInEvent
+#pragma warning disable CS0618
+        using var waveIn = new WasapiCapture
         {
             WaveFormat = new WaveFormat(sampleRate, 16, 1),
-            BufferMilliseconds = bufferMs,
         };
+#pragma warning restore CS0618
 
         waveIn.DataAvailable += (_, args) =>
         {

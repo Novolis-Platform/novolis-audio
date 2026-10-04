@@ -3,7 +3,7 @@ using Novolis.Audio.Core;
 
 namespace Novolis.Audio.Playback;
 
-/// <summary>Plays 16-bit PCM via NAudio <see cref="WaveOutEvent"/>.</summary>
+/// <summary>Plays 16-bit PCM via NAudio WASAPI output.</summary>
 public sealed class NaudioPcmPlayback : IAudioPlayback, IDisposable
 {
     /// <inheritdoc />
@@ -27,7 +27,9 @@ public sealed class NaudioPcmPlayback : IAudioPlayback, IDisposable
         var format = new WaveFormat(buffer.Format.SampleRate, 16, buffer.Format.Channels);
         var pcm = buffer.Samples.ToArray();
 
-        using var waveOut = new WaveOutEvent();
+#pragma warning disable CS0618
+        using var waveOut = new WasapiOut();
+#pragma warning restore CS0618
         using var finished = new ManualResetEventSlim(false);
         Exception? playbackError = null;
         waveOut.PlaybackStopped += (_, args) =>

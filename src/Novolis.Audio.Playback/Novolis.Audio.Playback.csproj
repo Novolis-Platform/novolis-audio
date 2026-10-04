@@ -11,10 +11,12 @@
     <PackageId>Novolis.Audio.Playback</PackageId>
     <IsPackable>true</IsPackable>
     <Description>PCM playback and microphone capture (decoupled from miniaudio runtime).</Description>
+    <NoWarn>$(NoWarn);CS0618;CA1416</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NAudio" />
+    <PackageReference Include="NAudio.Wasapi" />
   </ItemGroup>
 
   <ItemGroup>
