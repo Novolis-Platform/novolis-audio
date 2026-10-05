@@ -1,4 +1,5 @@
 name: Merge
+# Pack and publish run only when package inputs change. A later green dispatch does not clear an older failed check on the same commit.
 on:
   push:
     branches: [main]
