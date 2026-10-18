@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <LibraryReference Include="Novolis.MSBuild.CodeGen" />
     <ProjectReference Include="..\Novolis.Audio.Native\Novolis.Audio.Native.csproj">
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <Version>$(NovolisPlatformVersion)</Version>
