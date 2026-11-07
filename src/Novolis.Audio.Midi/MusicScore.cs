@@ -712,6 +712,115 @@ public sealed class MusicScore
         return score;
     }
 
+    /// <summary>
+    /// Original mid-2000s battlefield pastiche (~48s @ 118 BPM): martial brass, snare cadence,
+    /// minor-key horns. Reminiscent of classic console FPS menus — not a licensed theme.
+    /// </summary>
+    public static MusicScore CreateFrontlineRemnant()
+    {
+        var score = new MusicScore("Odderøya Frontline", tempoBpm: 118, beatsPerBar: 4, beatUnit: 4, barCount: 24)
+        {
+            Composer = "Novolis",
+            SnapBeats = 0.25,
+            DefaultDurationBeats = 0.5,
+            InstrumentName = "Orchestra · Frontline",
+        };
+
+        var kick = score.AddTrack(new ScoreTrack("Kick", "perc.kick", 0, clef: ScoreClef.Bass));
+        var snare = score.AddTrack(new ScoreTrack("Snare", "perc.snare", 1, clef: ScoreClef.Bass));
+        var toms = score.AddTrack(new ScoreTrack("Toms", "perc.tom", 2, clef: ScoreClef.Bass));
+        var trumpets = score.AddTrack(new ScoreTrack("Trumpets", "brass.trumpet", 3, clef: ScoreClef.Treble));
+        var horns = score.AddTrack(new ScoreTrack("Horns", "brass.horn", 4, clef: ScoreClef.Treble));
+        var trombones = score.AddTrack(new ScoreTrack("Trombones", "brass.trombone", 5, clef: ScoreClef.Bass));
+        var strings = score.AddTrack(new ScoreTrack("Strings", "pad.strings", 6, clef: ScoreClef.Grand));
+        var bass = score.AddTrack(new ScoreTrack("Bass", "bass.finger", 7, clef: ScoreClef.Bass));
+        var timp = score.AddTrack(new ScoreTrack("Timpani", "orch.timpani", 0, clef: ScoreClef.Bass));
+
+        void N(Guid t, int m, double s, double d, int v = 100) =>
+            score.Add(new ScoreNote(m, s, d, Math.Clamp(v, 1, 127), trackId: t));
+
+        void Chord(Guid t, ReadOnlySpan<int> midis, double s, double d, int v)
+        {
+            foreach (var m in midis)
+                N(t, m, s, d, v);
+        }
+
+        for (var bar = 0; bar < 24; bar++)
+        {
+            var b = bar * 4.0;
+            var drop = bar is 7 or 15 or 23;
+            N(kick.Id, 36, b + 0.0, 0.35, drop ? 127 : 118);
+            N(kick.Id, 36, b + 2.0, 0.3, 110);
+            N(snare.Id, 38, b + 1.0, 0.22, bar >= 8 ? 112 : 96);
+            N(snare.Id, 38, b + 3.0, 0.22, bar >= 8 ? 114 : 98);
+            if (bar % 4 == 3)
+            {
+                N(toms.Id, 47, b + 2.5, 0.18, 116);
+                N(toms.Id, 45, b + 2.75, 0.18, 118);
+                N(toms.Id, 43, b + 3.0, 0.18, 120);
+                N(toms.Id, 41, b + 3.25, 0.3, 122);
+            }
+
+            N(timp.Id, 36, b, 0.45, bar % 8 == 0 ? 112 : 92);
+        }
+
+        // Hook motif — rising minor fifths (original; BF2-era mood only).
+        int[] hookA = [62, 65, 69, 74, 69, 65, 62, 57];
+        int[] hookB = [65, 69, 72, 77, 72, 69, 65, 60];
+        for (var i = 0; i < hookA.Length; i++)
+        {
+            N(trumpets.Id, hookA[i], i * 0.5, 0.45, 108 + i);
+            N(trumpets.Id, hookB[i], 16 + i * 0.5, 0.45, 110 + i);
+            N(trumpets.Id, hookA[i], 48 + i * 0.5, 0.45, 112 + i);
+            N(trumpets.Id, hookB[i], 64 + i * 0.5, 0.45, 114 + i);
+        }
+
+        Chord(horns.Id, [50, 57, 62], 0, 8, 72);
+        Chord(horns.Id, [48, 55, 60], 8, 8, 76);
+        Chord(horns.Id, [53, 60, 65], 16, 8, 80);
+        Chord(horns.Id, [50, 57, 62, 69], 24, 8, 84);
+        Chord(horns.Id, [48, 55, 60], 32, 8, 78);
+        Chord(horns.Id, [45, 52, 57], 40, 8, 82);
+        Chord(horns.Id, [50, 57, 62, 69], 48, 8, 88);
+        Chord(horns.Id, [53, 60, 65, 72], 56, 8, 92);
+        Chord(horns.Id, [50, 57, 62, 69, 74], 64, 8, 96);
+        Chord(horns.Id, [48, 55, 60, 67], 72, 8, 90);
+        Chord(horns.Id, [50, 57, 62, 69], 80, 8, 94);
+        Chord(horns.Id, [53, 60, 65, 72], 88, 8, 100);
+
+        for (var i = 0; i < 24; i++)
+        {
+            var root = i % 4 switch
+            {
+                0 => 38,
+                1 => 36,
+                2 => 41,
+                _ => 38,
+            };
+            N(trombones.Id, root, i * 4.0, 1.8, 96);
+            N(trombones.Id, root + 7, i * 4.0 + 2, 1.8, 92);
+            N(bass.Id, root - 12, i * 4.0, 3.6, 110);
+        }
+
+        Chord(strings.Id, [38, 45, 50, 57], 0, 16, 52);
+        Chord(strings.Id, [36, 43, 48, 55], 16, 16, 56);
+        Chord(strings.Id, [41, 48, 53, 60], 32, 16, 60);
+        Chord(strings.Id, [38, 45, 50, 57, 62], 48, 16, 64);
+        Chord(strings.Id, [36, 43, 48, 55], 64, 16, 58);
+        Chord(strings.Id, [38, 45, 50, 57, 62, 69], 80, 16, 70);
+
+        // Closing brass punch
+        N(trumpets.Id, 74, 92, 0.5, 122);
+        N(trumpets.Id, 77, 92.5, 0.5, 124);
+        N(trumpets.Id, 81, 93, 1.2, 127);
+        Chord(horns.Id, [50, 57, 62, 69], 92, 4, 108);
+        N(kick.Id, 36, 94, 0.5, 127);
+        N(timp.Id, 36, 94, 1.5, 124);
+
+        score.SelectTrack(trumpets.Id);
+        return score;
+    }
+
     /// <summary>Light 3/4 waltz for piano trio.</summary>
     public static MusicScore CreateWaltzTrio()
     {
