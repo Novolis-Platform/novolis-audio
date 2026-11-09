@@ -68,7 +68,7 @@ PcmBuffer (Novolis.Audio.Core)
 
 Compose **archetype** (`Voice.Profiles`) then optional **delivery** (phraseology + effect chain in your app, or copy `Novolis.Dogfooding.Voice` from dogfooding).
 
-**Parallel MP3 path:** `Voice.AzureSpeech` returns user-owned Azure Speech MP3 bytes — not `IVoiceSynthesizer`. See the package README.
+**Parallel MP3 paths:** `Voice.AzureSpeech` (user-owned Azure) and `Voice.EdgeTts` (unofficial Edge Read Aloud; LGPL) return MP3 bytes — not `IVoiceSynthesizer`. See the package READMEs.
 
 **Live music:** separate family — see [live.md](live.md).
 

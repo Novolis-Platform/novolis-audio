@@ -9,6 +9,11 @@ See [release policy](https://github.com/Novolis-Platform/novolis-governance/blob
 - **Added** `Novolis.Audio.Live.Render` — v0 NAudio oscillators driven by `LiveSession`.
 - **NuGet-only** `Live.Protocol` → `Novolis.Transports.LocalIpc` (GPR).
 
+## 2026.1.x — EdgeTts Sec-MS-GEC v2
+
+- **Restored** `Novolis.Audio.Voice.EdgeTts` — unofficial Edge Read Aloud MP3 client (LGPL-3.0-only).
+- **Updated** Sec-MS-GEC handshake to v2 (`2-{chromium}` + CS64/SHA256 patent hash) so synthesis works after Microsoft’s October 2026 auth change.
+
 ## 2026.1.x — User-owned Azure Speech
 
 - **Added** `Novolis.Audio.Voice.AzureSpeech` — thin Azure Speech client accepting an Azure key or Microsoft Entra credential and returning MP3.

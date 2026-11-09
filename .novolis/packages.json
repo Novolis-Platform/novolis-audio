@@ -6,6 +6,19 @@
       ],
       "project": "src/Novolis.Audio.Voice.AzureSpeech/Novolis.Audio.Voice.AzureSpeech.csproj"
     },
+    "Novolis.Audio.Voice.EdgeTts": {
+      "paths": [
+        "src/Novolis.Audio.Voice.EdgeTts/**",
+        "tests/Novolis.Audio.Unit/EdgeTtsClientTests.cs",
+        "tests/Novolis.Audio.Unit/EdgeTtsDrmTests.cs",
+        "tests/Novolis.Audio.Unit/EdgeTtsProtocolTests.cs",
+        "tests/Novolis.Audio.Unit/EdgeTtsTextChunkerTests.cs",
+        "Directory.Build.props",
+        "Directory.Packages.props",
+        "global.json"
+      ],
+      "project": "src/Novolis.Audio.Voice.EdgeTts/Novolis.Audio.Voice.EdgeTts.csproj"
+    },
     "Novolis.Audio.Voice.Platform.Android": {
       "paths": [
         "src/Novolis.Audio.Voice.Platform.Android/**"
