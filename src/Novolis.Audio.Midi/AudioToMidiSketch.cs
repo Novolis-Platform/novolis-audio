@@ -26,6 +26,16 @@ public static class AudioToMidiSketch
         var bpm = EstimateTempoBpm(envelope, sr, hop);
         bpm = Math.Clamp(Math.Round(bpm / 2) * 2, 70, 160);
 
+        var (score, drums, lead, pad) = CreateSketchTracks(title, bpm);
+        var maxBeat = PopulateOnsetTracks(score, drums, lead, samples, envelope, sr, hop, win, bpm);
+        AddPadVoicingFromLead(score, lead, pad, maxBeat);
+        score.EnsureBarsFor(Math.Max(16, maxBeat + 2));
+        score.SelectTrack(lead.Id);
+        return score;
+    }
+
+    static (MusicScore Score, ScoreTrack Drums, ScoreTrack Lead, ScoreTrack Pad) CreateSketchTracks(string title, double bpm)
+    {
         var score = new MusicScore(title, tempoBpm: bpm, beatsPerBar: 4, beatUnit: 4, barCount: 8)
         {
             Composer = "Novolis · audio sketch",
@@ -36,7 +46,20 @@ public static class AudioToMidiSketch
         var drums = score.AddTrack(new ScoreTrack("Drums", "perc.kick", 0, clef: ScoreClef.Bass));
         var lead = score.AddTrack(new ScoreTrack("Lead", "lead.soft-sine", 1, clef: ScoreClef.Treble));
         var pad = score.AddTrack(new ScoreTrack("Pad", "pad.strings", 2, clef: ScoreClef.Grand));
+        return (score, drums, lead, pad);
+    }
 
+    static double PopulateOnsetTracks(
+        MusicScore score,
+        ScoreTrack drums,
+        ScoreTrack lead,
+        float[] samples,
+        float[] envelope,
+        int sampleRate,
+        int hop,
+        int win,
+        double bpm)
+    {
         var onsets = DetectOnsets(envelope, threshold: 0.18f);
         var secPerBeat = 60.0 / bpm;
         var maxBeat = 0.0;
@@ -44,7 +67,7 @@ public static class AudioToMidiSketch
         for (var i = 0; i < onsets.Count; i++)
         {
             var frame = onsets[i];
-            var tSec = frame * hop / (double)sr;
+            var tSec = frame * hop / (double)sampleRate;
             var beat = score.Snap(tSec / secPerBeat);
             if (beat > 48)
                 break;
@@ -55,11 +78,11 @@ public static class AudioToMidiSketch
             score.Add(new ScoreNote(drumMidi, beat, 0.25, vel, trackId: drums.Id));
 
             var startSample = Math.Clamp(frame * hop, 0, samples.Length - win - 1);
-            var midi = EstimateMidi(samples.AsSpan(startSample, win), sr);
+            var midi = EstimateMidi(samples.AsSpan(startSample, win), sampleRate);
             if (midi is >= 48 and <= 84)
             {
                 var nextT = i + 1 < onsets.Count
-                    ? onsets[i + 1] * hop / (double)sr
+                    ? onsets[i + 1] * hop / (double)sampleRate
                     : tSec + secPerBeat;
                 var durBeats = Math.Clamp(score.Snap((nextT - tSec) / secPerBeat), 0.25, 2.0);
                 score.Add(new ScoreNote(midi.Value, beat, durBeats, Math.Clamp(vel + 8, 1, 127), trackId: lead.Id));
@@ -68,26 +91,26 @@ public static class AudioToMidiSketch
             maxBeat = Math.Max(maxBeat, beat + 1);
         }
 
-        // Pad roots every 2 bars from modal average of lead notes
-        var leadNotes = score.Notes.Where(n => n.TrackId == lead.Id).ToList();
-        if (leadNotes.Count > 0)
-        {
-            for (var bar = 0; bar < Math.Max(4, (int)Math.Ceiling(maxBeat / 4)); bar += 2)
-            {
-                var window = leadNotes.Where(n => n.StartBeat >= bar * 4 && n.StartBeat < (bar + 2) * 4).ToList();
-                if (window.Count == 0)
-                    continue;
-                var root = window.Average(n => n.MidiNumber);
-                var r = (int)Math.Round(root / 12.0) * 12 + (int)Math.Round(root) % 12;
-                r = Math.Clamp(r - 12, 36, 60);
-                score.Add(new ScoreNote(r, bar * 4.0, 7.5, 62, trackId: pad.Id));
-                score.Add(new ScoreNote(r + 7, bar * 4.0, 7.5, 55, trackId: pad.Id));
-            }
-        }
+        return maxBeat;
+    }
 
-        score.EnsureBarsFor(Math.Max(16, maxBeat + 2));
-        score.SelectTrack(lead.Id);
-        return score;
+    static void AddPadVoicingFromLead(MusicScore score, ScoreTrack lead, ScoreTrack pad, double maxBeat)
+    {
+        var leadNotes = score.Notes.Where(n => n.TrackId == lead.Id).ToList();
+        if (leadNotes.Count == 0)
+            return;
+
+        for (var bar = 0; bar < Math.Max(4, (int)Math.Ceiling(maxBeat / 4)); bar += 2)
+        {
+            var window = leadNotes.Where(n => n.StartBeat >= bar * 4 && n.StartBeat < (bar + 2) * 4).ToList();
+            if (window.Count == 0)
+                continue;
+            var root = window.Average(n => n.MidiNumber);
+            var r = (int)Math.Round(root / 12.0) * 12 + (int)Math.Round(root) % 12;
+            r = Math.Clamp(r - 12, 36, 60);
+            score.Add(new ScoreNote(r, bar * 4.0, 7.5, 62, trackId: pad.Id));
+            score.Add(new ScoreNote(r + 7, bar * 4.0, 7.5, 55, trackId: pad.Id));
+        }
     }
 
     static MusicScore EmptyScore(string title) =>

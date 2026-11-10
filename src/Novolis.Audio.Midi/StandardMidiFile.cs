@@ -82,6 +82,24 @@ public static class StandardMidiFile
     /// <summary>Parses SMF bytes into a sequence.</summary>
     public static MidiSequence ReadBytes(ReadOnlySpan<byte> data, string title = "Imported")
     {
+        var (headerLen, format, trackCount, division) = ParseSmfHeader(data);
+        var sequence = new MidiSequence(title, tempoBpm: 120, ticksPerQuarter: division);
+        var offset = 8 + headerLen;
+        var openNotes = new Dictionary<(int Track, int Note), (int Tick, int Velocity)>();
+        var tempoBpm = 120.0;
+
+        for (var track = 0; track < trackCount && offset + 8 <= data.Length; track++)
+        {
+            tempoBpm = ReadTrackChunk(data, ref offset, track, sequence, openNotes, tempoBpm);
+        }
+
+        sequence.TempoBpm = tempoBpm;
+        _ = format; // format accepted for type 0/1
+        return sequence;
+    }
+
+    static (int HeaderLen, ushort Format, ushort TrackCount, short Division) ParseSmfHeader(ReadOnlySpan<byte> data)
+    {
         if (data.Length < 14 || !data.StartsWith("MThd"u8))
             throw new InvalidDataException("Not a Standard MIDI File.");
 
@@ -92,100 +110,143 @@ public static class StandardMidiFile
         if (division <= 0)
             throw new InvalidDataException("SMPTE MIDI timing is not supported.");
 
-        var sequence = new MidiSequence(title, tempoBpm: 120, ticksPerQuarter: division);
-        var offset = 8 + headerLen;
-        var openNotes = new Dictionary<(int Track, int Note), (int Tick, int Velocity)>();
-        var tempoBpm = 120.0;
+        return (headerLen, format, trackCount, division);
+    }
 
-        for (var track = 0; track < trackCount && offset + 8 <= data.Length; track++)
+    static double ReadTrackChunk(
+        ReadOnlySpan<byte> data,
+        ref int offset,
+        int trackIndex,
+        MidiSequence sequence,
+        Dictionary<(int Track, int Note), (int Tick, int Velocity)> openNotes,
+        double tempoBpm)
+    {
+        if (!data.Slice(offset).StartsWith("MTrk"u8))
+            throw new InvalidDataException("Expected MTrk chunk.");
+        var trackLen = BinaryPrimitives.ReadInt32BigEndian(data.Slice(offset + 4, 4));
+        offset += 8;
+        var trackEnd = offset + trackLen;
+        var tick = 0;
+        byte runningStatus = 0;
+
+        while (offset < trackEnd)
         {
-            if (!data.Slice(offset).StartsWith("MTrk"u8))
-                throw new InvalidDataException("Expected MTrk chunk.");
-            var trackLen = BinaryPrimitives.ReadInt32BigEndian(data.Slice(offset + 4, 4));
-            offset += 8;
-            var trackEnd = offset + trackLen;
-            var tick = 0;
-            byte runningStatus = 0;
+            tick += ReadVarLen(data, ref offset);
+            if (offset >= trackEnd)
+                break;
 
-            while (offset < trackEnd)
+            var status = ResolveMidiStatus(data, ref offset, trackEnd, ref runningStatus);
+            if (status == 0xFF)
             {
-                tick += ReadVarLen(data, ref offset);
-                if (offset >= trackEnd)
-                    break;
-
-                var status = data[offset];
-                if (status < 0x80)
-                {
-                    if (runningStatus == 0)
-                        throw new InvalidDataException("Missing MIDI running status.");
-                    status = runningStatus;
-                }
-                else
-                {
-                    offset++;
-                    if (status < 0xF0)
-                        runningStatus = status;
-                }
-
-                if (status == 0xFF)
-                {
-                    if (offset + 1 >= trackEnd)
-                        break;
-                    var metaType = data[offset++];
-                    var metaLen = ReadVarLen(data, ref offset);
-                    var metaData = data.Slice(offset, metaLen);
-                    offset += metaLen;
-                    if (metaType == 0x51 && metaLen == 3)
-                    {
-                        var micros = (metaData[0] << 16) | (metaData[1] << 8) | metaData[2];
-                        if (micros > 0)
-                            tempoBpm = 60_000_000.0 / micros;
-                    }
-                    else if (metaType is 0x03 or 0x01 && metaLen > 0)
-                    {
-                        sequence.Title = Encoding.ASCII.GetString(metaData);
-                    }
-
-                    continue;
-                }
-
-                if (status is >= 0xF0 and <= 0xF7)
-                {
-                    // SysEx — skip
-                    var sysexLen = ReadVarLen(data, ref offset);
-                    offset += sysexLen;
-                    continue;
-                }
-
-                var command = status & 0xF0;
-                int dataBytes = command is 0xC0 or 0xD0 ? 1 : 2;
-                if (offset + dataBytes > trackEnd)
-                    break;
-                var d1 = data[offset++];
-                var d2 = dataBytes == 2 ? data[offset++] : (byte)0;
-
-                if (command == 0x90 && d2 > 0)
-                {
-                    openNotes[(track, d1)] = (tick, d2);
-                }
-                else if (command is 0x80 || (command == 0x90 && d2 == 0))
-                {
-                    if (openNotes.Remove((track, d1), out var on))
-                    {
-                        var start = TicksToTime(on.Tick, tempoBpm, sequence.TicksPerQuarter);
-                        var end = TicksToTime(tick, tempoBpm, sequence.TicksPerQuarter);
-                        var dur = end > start ? end - start : TimeSpan.FromMilliseconds(50);
-                        sequence.Add(new MidiNoteEvent(d1, on.Velocity, start, dur));
-                    }
-                }
+                tempoBpm = ReadMetaEvent(data, ref offset, trackEnd, sequence, tempoBpm);
+                continue;
             }
 
-            offset = trackEnd;
+            if (status is >= 0xF0 and <= 0xF7)
+            {
+                SkipSysEx(data, ref offset);
+                continue;
+            }
+
+            if (TryReadChannelVoice(data, ref offset, trackEnd, status, trackIndex, tick, sequence, openNotes, tempoBpm))
+                continue;
         }
 
-        sequence.TempoBpm = tempoBpm;
-        _ = format; // format accepted for type 0/1
-        return sequence;
+        offset = trackEnd;
+        return tempoBpm;
+    }
+
+    static byte ResolveMidiStatus(
+        ReadOnlySpan<byte> data,
+        ref int offset,
+        int trackEnd,
+        ref byte runningStatus)
+    {
+        var status = data[offset];
+        if (status < 0x80)
+        {
+            if (runningStatus == 0)
+                throw new InvalidDataException("Missing MIDI running status.");
+            status = runningStatus;
+        }
+        else
+        {
+            offset++;
+            if (status < 0xF0)
+                runningStatus = status;
+        }
+
+        return status;
+    }
+
+    static double ReadMetaEvent(
+        ReadOnlySpan<byte> data,
+        ref int offset,
+        int trackEnd,
+        MidiSequence sequence,
+        double tempoBpm)
+    {
+        if (offset + 1 >= trackEnd)
+            return tempoBpm;
+        var metaType = data[offset++];
+        var metaLen = ReadVarLen(data, ref offset);
+        var metaData = data.Slice(offset, metaLen);
+        offset += metaLen;
+
+        if (metaType == 0x51 && metaLen == 3)
+        {
+            var micros = (metaData[0] << 16) | (metaData[1] << 8) | metaData[2];
+            if (micros > 0)
+                tempoBpm = 60_000_000.0 / micros;
+        }
+        else if (metaType is 0x03 or 0x01 && metaLen > 0)
+        {
+            sequence.Title = Encoding.ASCII.GetString(metaData);
+        }
+
+        return tempoBpm;
+    }
+
+    static void SkipSysEx(ReadOnlySpan<byte> data, ref int offset)
+    {
+        var sysexLen = ReadVarLen(data, ref offset);
+        offset += sysexLen;
+    }
+
+    static bool TryReadChannelVoice(
+        ReadOnlySpan<byte> data,
+        ref int offset,
+        int trackEnd,
+        byte status,
+        int trackIndex,
+        int tick,
+        MidiSequence sequence,
+        Dictionary<(int Track, int Note), (int Tick, int Velocity)> openNotes,
+        double tempoBpm)
+    {
+        var command = status & 0xF0;
+        int dataBytes = command is 0xC0 or 0xD0 ? 1 : 2;
+        if (offset + dataBytes > trackEnd)
+            return false;
+        var d1 = data[offset++];
+        var d2 = dataBytes == 2 ? data[offset++] : (byte)0;
+
+        if (command == 0x90 && d2 > 0)
+        {
+            openNotes[(trackIndex, d1)] = (tick, d2);
+        }
+        else if (command is 0x80 || (command == 0x90 && d2 == 0))
+        {
+            if (openNotes.Remove((trackIndex, d1), out var on))
+            {
+                var start = TicksToTime(on.Tick, tempoBpm, sequence.TicksPerQuarter);
+                var end = TicksToTime(tick, tempoBpm, sequence.TicksPerQuarter);
+                var dur = end > start ? end - start : TimeSpan.FromMilliseconds(50);
+                sequence.Add(new MidiNoteEvent(d1, on.Velocity, start, dur));
+            }
+        }
+
+        return true;
     }
 
     static TimeSpan TicksToTime(int ticks, double tempoBpm, int ppq)

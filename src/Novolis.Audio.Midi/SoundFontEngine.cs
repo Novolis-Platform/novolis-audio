@@ -110,58 +110,10 @@ public static class SoundFontEngine
                 var synth = new Synthesizer(_font, sr);
                 ConfigurePatch(synth, patch, midiNumber, out var channel, out var key);
                 velocity = Math.Clamp(velocity, 1, 127);
-                var hold = Math.Max(0.04, holdDuration.TotalSeconds);
-                var releasePad = 0.55;
-                var total = hold + releasePad;
-                var frames = Math.Max(1, (int)(sr * total));
-                var left = new float[frames];
-                var right = new float[frames];
-
-                var block = Math.Max(64, synth.BlockSize);
-                var onFrames = (int)(hold * sr);
-                var written = 0;
-                var noteOn = false;
-                var noteOff = false;
-
-                while (written < frames)
-                {
-                    var n = Math.Min(block, frames - written);
-                    if (!noteOn)
-                    {
-                        synth.NoteOn(channel, key, velocity);
-                        noteOn = true;
-                    }
-
-                    if (!noteOff && written >= onFrames)
-                    {
-                        synth.NoteOff(channel, key);
-                        noteOff = true;
-                    }
-
-                    synth.Render(left.AsSpan(written, n), right.AsSpan(written, n));
-                    written += n;
-                }
-
-                if (!noteOff)
-                    synth.NoteOff(channel, key);
-
-                // Mono mix + gentle gain (SoundFonts are often hot).
-                var mono = new float[frames];
-                var peak = 1e-6f;
-                for (var i = 0; i < frames; i++)
-                {
-                    var s = (left[i] + right[i]) * 0.5f * patch.Gain * 1.35f;
-                    mono[i] = s;
-                    peak = Math.Max(peak, Math.Abs(s));
-                }
-
-                if (peak > 0.95f)
-                {
-                    var scale = 0.92f / peak;
-                    for (var i = 0; i < frames; i++)
-                        mono[i] *= scale;
-                }
-
+                var frames = NoteRenderFrameCount(sr, holdDuration, releasePadSeconds: 0.55);
+                var (left, right) = RenderSingleNoteBuffers(
+                    synth, channel, key, velocity, sr, holdDuration, frames);
+                var mono = MixStereoToMono(left, right, perSampleGain: 0.5f * patch.Gain * 1.35f, peakTarget: 0.92f);
                 return ToPcm(format, mono);
             }
             catch (Exception ex)
@@ -186,96 +138,11 @@ public static class SoundFontEngine
             try
             {
                 score.EnsureDefaultTrack();
-                var endBeat = Math.Max(score.TotalBeats, score.ContentEndBeat);
-                var duration = TimeSpan.FromMinutes(endBeat / Math.Max(40, score.TempoBpm)) + TimeSpan.FromSeconds(1.2);
-                var sr = format.SampleRate;
-                var frames = Math.Max(1, (int)(sr * duration.TotalSeconds));
-                var left = new float[frames];
-                var right = new float[frames];
-                var synth = new Synthesizer(_font, sr);
-                var block = Math.Max(64, synth.BlockSize);
-
-                var anySolo = score.Tracks.Any(t => t.Solo);
-                var events = new List<(int Frame, bool On, int Channel, int Key, int Velocity, int Program, bool Drum)>();
-
-                var channel = 0;
-                foreach (var track in score.Tracks)
-                {
-                    if (track.Mute || (anySolo && !track.Solo))
-                        continue;
-                    var patch = bank.Find(track.PatchId) ?? bank.Patches[0];
-                    var program = GmProgramMap.TryGetProgram(patch.Id);
-                    var drum = program is null;
-                    var ch = drum ? 9 : channel % 9; // reserve 9 for drums; melodic 0–8
-                    if (!drum)
-                        channel++;
-
-                    foreach (var note in score.Notes.Where(n => n.TrackId == track.Id))
-                    {
-                        var start = (int)(TimeSpan.FromMinutes(note.StartBeat / score.TempoBpm).TotalSeconds * sr);
-                        var end = start + Math.Max(1, (int)(TimeSpan.FromMinutes(note.DurationBeats / score.TempoBpm).TotalSeconds * sr));
-                        var key = drum
-                            ? (note.MidiNumber is >= 35 and <= 81
-                                ? note.MidiNumber
-                                : GmProgramMap.DrumKey(patch.Id, note.MidiNumber))
-                            : note.MidiNumber;
-                        var prog = program ?? 0;
-                        events.Add((start, true, ch, key, note.Velocity, prog, drum));
-                        events.Add((end, false, ch, key, 0, prog, drum));
-                    }
-                }
-
-                events.Sort((a, b) =>
-                {
-                    var c = a.Frame.CompareTo(b.Frame);
-                    if (c != 0)
-                        return c;
-                    // NoteOff before NoteOn at same frame
-                    return a.On.CompareTo(b.On);
-                });
-
-                var ei = 0;
-                var programs = new int[16];
-                Array.Fill(programs, -1);
-
-                for (var written = 0; written < frames;)
-                {
-                    var n = Math.Min(block, frames - written);
-                    while (ei < events.Count && events[ei].Frame <= written)
-                    {
-                        var e = events[ei++];
-                        if (!e.Drum && programs[e.Channel] != e.Program)
-                        {
-                            synth.ProcessMidiMessage(e.Channel, 0xC0, e.Program, 0);
-                            programs[e.Channel] = e.Program;
-                        }
-
-                        if (e.On)
-                            synth.NoteOn(e.Channel, e.Key, Math.Clamp(e.Velocity, 1, 127));
-                        else
-                            synth.NoteOff(e.Channel, e.Key);
-                    }
-
-                    synth.Render(left.AsSpan(written, n), right.AsSpan(written, n));
-                    written += n;
-                }
-
-                var mono = new float[frames];
-                var peak = 1e-6f;
-                for (var i = 0; i < frames; i++)
-                {
-                    var s = (left[i] + right[i]) * 0.42f;
-                    mono[i] = s;
-                    peak = Math.Max(peak, Math.Abs(s));
-                }
-
-                if (peak > 0.95f)
-                {
-                    var scale = 0.9f / peak;
-                    for (var i = 0; i < frames; i++)
-                        mono[i] *= scale;
-                }
-
+                var frames = ScoreRenderFrameCount(format.SampleRate, score);
+                var synth = new Synthesizer(_font, format.SampleRate);
+                var events = BuildScoreRenderEvents(score, bank, format.SampleRate);
+                var (left, right) = RenderScoreEventBuffers(synth, events, frames);
+                var mono = MixStereoToMono(left, right, perSampleGain: 0.42f, peakTarget: 0.9f);
                 return ToPcm(format, mono);
             }
             catch (Exception ex)
@@ -284,6 +151,168 @@ public static class SoundFontEngine
                 return null;
             }
         }
+    }
+
+    static int NoteRenderFrameCount(int sampleRate, TimeSpan holdDuration, double releasePadSeconds)
+    {
+        var hold = Math.Max(0.04, holdDuration.TotalSeconds);
+        var total = hold + releasePadSeconds;
+        return Math.Max(1, (int)(sampleRate * total));
+    }
+
+    static (float[] Left, float[] Right) RenderSingleNoteBuffers(
+        Synthesizer synth,
+        int channel,
+        int key,
+        int velocity,
+        int sampleRate,
+        TimeSpan holdDuration,
+        int frames)
+    {
+        var left = new float[frames];
+        var right = new float[frames];
+        var block = Math.Max(64, synth.BlockSize);
+        var onFrames = (int)(Math.Max(0.04, holdDuration.TotalSeconds) * sampleRate);
+        var written = 0;
+        var noteOn = false;
+        var noteOff = false;
+
+        while (written < frames)
+        {
+            var n = Math.Min(block, frames - written);
+            if (!noteOn)
+            {
+                synth.NoteOn(channel, key, velocity);
+                noteOn = true;
+            }
+
+            if (!noteOff && written >= onFrames)
+            {
+                synth.NoteOff(channel, key);
+                noteOff = true;
+            }
+
+            synth.Render(left.AsSpan(written, n), right.AsSpan(written, n));
+            written += n;
+        }
+
+        if (!noteOff)
+            synth.NoteOff(channel, key);
+
+        return (left, right);
+    }
+
+    static int ScoreRenderFrameCount(int sampleRate, MusicScore score)
+    {
+        var endBeat = Math.Max(score.TotalBeats, score.ContentEndBeat);
+        var duration = TimeSpan.FromMinutes(endBeat / Math.Max(40, score.TempoBpm)) + TimeSpan.FromSeconds(1.2);
+        return Math.Max(1, (int)(sampleRate * duration.TotalSeconds));
+    }
+
+    static List<(int Frame, bool On, int Channel, int Key, int Velocity, int Program, bool Drum)> BuildScoreRenderEvents(
+        MusicScore score,
+        InstrumentBank bank,
+        int sampleRate)
+    {
+        var anySolo = score.Tracks.Any(t => t.Solo);
+        var events = new List<(int Frame, bool On, int Channel, int Key, int Velocity, int Program, bool Drum)>();
+        var channel = 0;
+
+        foreach (var track in score.Tracks)
+        {
+            if (track.Mute || (anySolo && !track.Solo))
+                continue;
+            var patch = bank.Find(track.PatchId) ?? bank.Patches[0];
+            var program = GmProgramMap.TryGetProgram(patch.Id);
+            var drum = program is null;
+            var ch = drum ? 9 : channel % 9; // reserve 9 for drums; melodic 0–8
+            if (!drum)
+                channel++;
+
+            foreach (var note in score.Notes.Where(n => n.TrackId == track.Id))
+            {
+                var start = (int)(TimeSpan.FromMinutes(note.StartBeat / score.TempoBpm).TotalSeconds * sampleRate);
+                var end = start + Math.Max(1, (int)(TimeSpan.FromMinutes(note.DurationBeats / score.TempoBpm).TotalSeconds * sampleRate));
+                var key = drum
+                    ? (note.MidiNumber is >= 35 and <= 81
+                        ? note.MidiNumber
+                        : GmProgramMap.DrumKey(patch.Id, note.MidiNumber))
+                    : note.MidiNumber;
+                var prog = program ?? 0;
+                events.Add((start, true, ch, key, note.Velocity, prog, drum));
+                events.Add((end, false, ch, key, 0, prog, drum));
+            }
+        }
+
+        events.Sort((a, b) =>
+        {
+            var c = a.Frame.CompareTo(b.Frame);
+            if (c != 0)
+                return c;
+            // NoteOff before NoteOn at same frame
+            return a.On.CompareTo(b.On);
+        });
+
+        return events;
+    }
+
+    static (float[] Left, float[] Right) RenderScoreEventBuffers(
+        Synthesizer synth,
+        List<(int Frame, bool On, int Channel, int Key, int Velocity, int Program, bool Drum)> events,
+        int frames)
+    {
+        var left = new float[frames];
+        var right = new float[frames];
+        var block = Math.Max(64, synth.BlockSize);
+        var ei = 0;
+        var programs = new int[16];
+        Array.Fill(programs, -1);
+
+        for (var written = 0; written < frames;)
+        {
+            var n = Math.Min(block, frames - written);
+            while (ei < events.Count && events[ei].Frame <= written)
+            {
+                var e = events[ei++];
+                if (!e.Drum && programs[e.Channel] != e.Program)
+                {
+                    synth.ProcessMidiMessage(e.Channel, 0xC0, e.Program, 0);
+                    programs[e.Channel] = e.Program;
+                }
+
+                if (e.On)
+                    synth.NoteOn(e.Channel, e.Key, Math.Clamp(e.Velocity, 1, 127));
+                else
+                    synth.NoteOff(e.Channel, e.Key);
+            }
+
+            synth.Render(left.AsSpan(written, n), right.AsSpan(written, n));
+            written += n;
+        }
+
+        return (left, right);
+    }
+
+    static float[] MixStereoToMono(float[] left, float[] right, float perSampleGain, float peakTarget)
+    {
+        var frames = left.Length;
+        var mono = new float[frames];
+        var peak = 1e-6f;
+        for (var i = 0; i < frames; i++)
+        {
+            var s = (left[i] + right[i]) * perSampleGain;
+            mono[i] = s;
+            peak = Math.Max(peak, Math.Abs(s));
+        }
+
+        if (peak > 0.95f)
+        {
+            var scale = peakTarget / peak;
+            for (var i = 0; i < frames; i++)
+                mono[i] *= scale;
+        }
+
+        return mono;
     }
 
     static void ConfigurePatch(Synthesizer synth, InstrumentPatch patch, int midiNumber, out int channel, out int key)
